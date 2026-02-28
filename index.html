@@ -1,0 +1,2010 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Manager — STOOM (Local)</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#0f1a33;
+      --panel2:#111f3f;
+      --text:#e9eefc;
+      --muted:#a9b6d8;
+      --border:rgba(255,255,255,.10);
+      --accent:#4aa3ff;
+      --danger:#ff5a73;
+      --ok:#5cffb1;
+      --warn:#ffd35a;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
+      --radius2:12px;
+      --gap:14px;
+      --font: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font);
+      background: radial-gradient(900px 500px at 15% 0%, rgba(74,163,255,.18), transparent 55%),
+                  radial-gradient(900px 500px at 80% 20%, rgba(92,255,177,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .wrap{
+      max-width:1200px;
+      margin:0 auto;
+      padding:18px 14px 40px;
+    }
+
+    header{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      justify-content:space-between;
+      margin-bottom:12px;
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .brand h1{
+      margin:0;
+      font-size:20px;
+      letter-spacing:.2px;
+    }
+    .brand p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+      max-width:900px;
+    }
+
+    .topActions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      border-radius:999px;
+      padding:8px 10px;
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      gap:8px;
+      align-items:center;
+      box-shadow: var(--shadow);
+    }
+
+    .nav{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin:12px 0 18px;
+    }
+    .tabBtn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:13px;
+      transition:transform .05s ease, background .2s ease, border-color .2s ease;
+      outline:none;
+    }
+    .tabBtn:focus{box-shadow:0 0 0 3px rgba(74,163,255,.25)}
+    .tabBtn:hover{background:rgba(255,255,255,.06)}
+    .tabBtn:active{transform:translateY(1px)}
+    .tabBtn.active{
+      background:rgba(74,163,255,.18);
+      border-color:rgba(74,163,255,.45);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:var(--gap);
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:14px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:16px;
+    }
+    .card h3{
+      margin:12px 0 10px;
+      font-size:14px;
+      color:var(--muted);
+      font-weight:700;
+      letter-spacing:.2px;
+      text-transform:uppercase;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    label{
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width: 160px;
+    }
+
+    input, select, textarea{
+      width:100%;
+      min-width: 160px;
+      border:1px solid var(--border);
+      background:rgba(15,26,51,.8);
+      color:var(--text);
+      padding:10px 10px;
+      border-radius:12px;
+      outline:none;
+      font-size:14px;
+    }
+    textarea{min-height:88px; resize:vertical}
+    input:focus, select:focus, textarea:focus{box-shadow:0 0 0 3px rgba(74,163,255,.25)}
+    input[type="checkbox"]{width:auto; min-width:auto; transform:translateY(1px)}
+    .small{min-width:120px}
+    .tiny{min-width:90px}
+
+    .btn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:13px;
+      transition:transform .05s ease, background .2s ease, border-color .2s ease;
+      outline:none;
+      user-select:none;
+    }
+    .btn:hover{background:rgba(255,255,255,.09)}
+    .btn:active{transform:translateY(1px)}
+    .btn:focus{box-shadow:0 0 0 3px rgba(74,163,255,.25)}
+    .btn.primary{
+      background:rgba(74,163,255,.22);
+      border-color:rgba(74,163,255,.55);
+    }
+    .btn.danger{
+      background:rgba(255,90,115,.18);
+      border-color:rgba(255,90,115,.40);
+    }
+    .btn.ok{
+      background:rgba(92,255,177,.12);
+      border-color:rgba(92,255,177,.35);
+    }
+    .btn.ghost{
+      background:transparent;
+    }
+
+    .hint{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+      margin-top:8px;
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 980px){ .kpis{grid-template-columns: repeat(2, 1fr);} }
+    .kpi{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+    }
+    .kpi .num{font-size:20px; font-weight:900}
+    .kpi .lab{color:var(--muted); font-size:12px; margin-top:2px}
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .item{
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+      border-radius:14px;
+      padding:10px;
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      align-items:flex-start;
+    }
+    .itemLeft{
+      flex:1;
+      min-width:0;
+    }
+    .titleRow{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .itemTitle{
+      font-weight:900;
+      font-size:14px;
+      line-height:1.25;
+      word-break:break-word;
+    }
+    .meta{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:6px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .badge{
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+      padding:5px 8px;
+      border-radius:999px;
+      font-size:11px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+      white-space:nowrap;
+    }
+    .badge.ok{border-color:rgba(92,255,177,.35); background:rgba(92,255,177,.12); color: #dbffef;}
+    .badge.warn{border-color:rgba(255,211,90,.35); background:rgba(255,211,90,.12); color: #fff0c2;}
+    .badge.danger{border-color:rgba(255,90,115,.35); background:rgba(255,90,115,.12); color: #ffe0e6;}
+    .badge.accent{border-color:rgba(74,163,255,.45); background:rgba(74,163,255,.14); color: #d9ecff;}
+
+    .itemActions{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      align-items:flex-end;
+      min-width:160px;
+    }
+    .itemActions .row{justify-content:flex-end}
+    .selectInline{
+      min-width:160px;
+      padding:8px 10px;
+      border-radius:12px;
+      font-size:13px;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:var(--gap);
+    }
+    @media (max-width: 980px){ .split{grid-template-columns:1fr;} }
+
+    .section{
+      display:none;
+    }
+    .section.active{display:block}
+
+    .hr{
+      height:1px;
+      background:var(--border);
+      margin:12px 0;
+    }
+
+    /* Planning */
+    .planWrap{
+      overflow:auto;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+    }
+    table.plan{
+      border-collapse:separate;
+      border-spacing:0;
+      width:100%;
+      min-width: 980px;
+      font-size:12px;
+    }
+    .plan th, .plan td{
+      border-bottom:1px solid rgba(255,255,255,.08);
+      border-right:1px solid rgba(255,255,255,.06);
+      padding:0;
+      vertical-align:middle;
+    }
+    .plan th:first-child, .plan td:first-child{
+      position:sticky;
+      left:0;
+      background:rgba(15,26,51,.95);
+      z-index:2;
+      border-right:1px solid rgba(255,255,255,.12);
+      padding:8px 10px;
+      min-width: 170px;
+      max-width: 220px;
+    }
+    .plan th{
+      position:sticky;
+      top:0;
+      z-index:3;
+      background:rgba(17,31,63,.95);
+      padding:10px;
+      text-align:left;
+      font-weight:900;
+    }
+    .slot{
+      width:28px;
+      height:22px;
+      cursor:pointer;
+      background:transparent;
+    }
+    .slot.on{background:rgba(74,163,255,.38)}
+    .slot.on2{background:rgba(92,255,177,.22)}
+    .slot:hover{background:rgba(255,255,255,.06)}
+    .timeCol{
+      width:74px;
+      padding:8px 10px !important;
+      color:var(--muted);
+      font-weight:800;
+    }
+
+    .footerNote{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+
+    /* Print planning only */
+    @media print{
+      body{background:#fff; color:#000}
+      header, .nav, .noPrint { display:none !important; }
+      .section{ display:none !important; }
+      #planningSection{ display:block !important; }
+      #planningSection .card{ box-shadow:none; border:none; background:#fff; padding:0; }
+      .planWrap{ border:none; }
+      .plan th, .plan td{ border:1px solid #ddd; }
+      .plan th:first-child, .plan td:first-child{ position:static; background:#fff; }
+      .slot{ height:10px; }
+      .slot.on{ background:#6aaef5 !important; }
+      .slot.on2{ background:#bfeedd !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>Manager — STOOM (Local)</h1>
+        <p>
+          Outil local (enregistrement dans ton navigateur). <b>Utilisation responsable</b> : évite d’y mettre des données sensibles (santé, infos perso détaillées).
+          Tu peux gérer : tâches/rappels, achats, suivi clients, plannings, vendeurs & motifs.
+        </p>
+      </div>
+      <div class="topActions">
+        <div class="pill" title="Stockage local">
+          <span>💾</span><span id="saveStatus">Prêt</span>
+        </div>
+        <button class="btn noPrint" id="exportBtn">Exporter</button>
+        <button class="btn noPrint" id="importBtn">Importer</button>
+        <button class="btn danger noPrint" id="resetBtn">Réinitialiser</button>
+      </div>
+    </header>
+
+    <nav class="nav noPrint" aria-label="Navigation">
+      <button class="tabBtn active" data-tab="dashboardSection">Dashboard</button>
+      <button class="tabBtn" data-tab="tasksSection">Tâches & rappels</button>
+      <button class="tabBtn" data-tab="purchasesSection">Achats magasin</button>
+      <button class="tabBtn" data-tab="clientsSection">Suivi clients</button>
+      <button class="tabBtn" data-tab="planningSection">Planning</button>
+      <button class="tabBtn" data-tab="settingsSection">Paramètres</button>
+    </nav>
+
+    <!-- DASHBOARD -->
+    <section id="dashboardSection" class="section active">
+      <div class="card">
+        <h2>Dashboard</h2>
+        <div class="kpis" id="kpis"></div>
+        <div class="hr"></div>
+        <div class="split">
+          <div>
+            <h3>À traiter aujourd’hui</h3>
+            <div class="list" id="todayList"></div>
+            <div class="hint">Raccourci : ce bloc montre les rappels/tâches dont l’échéance est aujourd’hui (ou en retard).</div>
+          </div>
+          <div>
+            <h3>Achats en attente</h3>
+            <div class="list" id="purchaseQuickList"></div>
+            <div class="hint">Pense “petits manques” : résistances, cartouches, consommables, emballage, etc.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TASKS -->
+    <section id="tasksSection" class="section">
+      <div class="grid">
+        <div class="card">
+          <h2>Créer une tâche / rappel</h2>
+          <div class="row">
+            <label>
+              Titre
+              <input id="taskTitle" placeholder="Ex: Relancer fournisseur OpenVape" />
+            </label>
+
+            <label>
+              Motif
+              <select id="taskMotif"></select>
+            </label>
+          </div>
+
+          <div class="row">
+            <label style="flex:1">
+              Notes (optionnel)
+              <textarea id="taskNotes" placeholder="Détails utiles…"></textarea>
+            </label>
+          </div>
+
+          <div class="row">
+            <label class="small">
+              Type
+              <select id="taskType">
+                <option value="todo">À faire</option>
+                <option value="reminder">Rappel</option>
+              </select>
+            </label>
+
+            <label class="small">
+              Date
+              <input type="date" id="taskDueDate" />
+            </label>
+
+            <label class="tiny">
+              Heure
+              <input type="time" id="taskDueTime" />
+            </label>
+          </div>
+
+          <div class="row">
+            <label style="min-width:auto; flex-direction:row; align-items:center; gap:10px; margin-top:4px;">
+              <input type="checkbox" id="taskIsSeller" />
+              Tâche vendeur ?
+            </label>
+
+            <label id="taskSellerWrap" style="display:none; min-width:220px;">
+              Quel vendeur
+              <select id="taskSeller"></select>
+            </label>
+          </div>
+
+          <div class="row">
+            <button class="btn primary" id="addTaskBtn">Ajouter</button>
+            <button class="btn" id="clearTaskFormBtn">Vider</button>
+          </div>
+
+          <p class="hint">
+            Statuts automatiques :
+            <b>En retard</b> si date/heure dépassées et non fait.
+            Passage en <b>Fait</b> ⇒ demande un commentaire.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2>Recherche / filtres</h2>
+
+          <div class="row">
+            <label style="flex:1">
+              Recherche (texte)
+              <input id="taskSearch" placeholder="Nom, notes, vendeur, motif…" />
+            </label>
+          </div>
+
+          <div class="row">
+            <label class="small">
+              Date de
+              <input type="date" id="taskDateFrom" />
+            </label>
+            <label class="small">
+              Date à
+              <input type="date" id="taskDateTo" />
+            </label>
+          </div>
+
+          <div class="row">
+            <button class="btn" id="taskTodayBtn">Aujourd’hui</button>
+            <button class="btn" id="taskWeekBtn">Cette semaine</button>
+            <button class="btn ghost" id="taskClearFiltersBtn">Réinitialiser filtres</button>
+          </div>
+
+          <div class="hr"></div>
+
+          <h3>Listes</h3>
+          <div class="row">
+            <label class="small">
+              Vue
+              <select id="taskView">
+                <option value="all">Tout</option>
+                <option value="todo">À faire</option>
+                <option value="reminder">Rappels</option>
+                <option value="late">En retard</option>
+                <option value="done">Fait</option>
+              </select>
+            </label>
+            <label class="small">
+              Trier
+              <select id="taskSort">
+                <option value="due">Échéance</option>
+                <option value="created">Création</option>
+                <option value="seller">Vendeur</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="list" id="tasksList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PURCHASES -->
+    <section id="purchasesSection" class="section">
+      <div class="grid">
+        <div class="card">
+          <h2>Ajouter un achat magasin</h2>
+          <div class="row">
+            <label style="flex:1">
+              Produit / besoin
+              <input id="buyTitle" placeholder="Ex: résistances X (pack de 5), sacs, étiquettes…" />
+            </label>
+            <label class="small">
+              Priorité
+              <select id="buyPriority">
+                <option value="normal">Normal</option>
+                <option value="urgent">Urgent</option>
+              </select>
+            </label>
+          </div>
+          <div class="row">
+            <label style="flex:1">
+              Notes (optionnel)
+              <input id="buyNotes" placeholder="Quantité, référence, fournisseur…" />
+            </label>
+          </div>
+          <div class="row">
+            <button class="btn primary" id="addBuyBtn">Ajouter</button>
+            <button class="btn" id="clearBuyBtn">Vider</button>
+          </div>
+          <p class="hint">Conseil : garde cette liste courte, et vide-la au fil des commandes.</p>
+        </div>
+
+        <div class="card">
+          <h2>Liste d’achats</h2>
+          <div class="row">
+            <label style="flex:1">
+              Recherche
+              <input id="buySearch" placeholder="Tape un mot…" />
+            </label>
+            <label class="small">
+              Filtre
+              <select id="buyFilter">
+                <option value="open">En attente</option>
+                <option value="done">Acheté</option>
+                <option value="all">Tout</option>
+              </select>
+            </label>
+          </div>
+          <div class="list" id="buyList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLIENT FOLLOWUPS -->
+    <section id="clientsSection" class="section">
+      <div class="grid">
+        <div class="card">
+          <h2>Créer un suivi client</h2>
+          <div class="row">
+            <label style="flex:1">
+              Nom / identifiant client
+              <input id="clientName" placeholder="Ex: M. Dupont (CBD), Mme X (MTL 12mg)…" />
+            </label>
+            <label class="small">
+              Motif
+              <select id="clientMotif"></select>
+            </label>
+          </div>
+
+          <div class="row">
+            <label style="flex:1">
+              Résumé
+              <input id="clientSummary" placeholder="Ex: vérifier confort, dosage, résistances, rechute…" />
+            </label>
+          </div>
+
+          <div class="row">
+            <label class="small">
+              Date
+              <input type="date" id="clientDueDate" />
+            </label>
+            <label class="tiny">
+              Heure
+              <input type="time" id="clientDueTime" />
+            </label>
+            <label class="small">
+              Vendeur
+              <select id="clientSeller"></select>
+            </label>
+          </div>
+
+          <div class="row">
+            <button class="btn primary" id="addClientBtn">Ajouter</button>
+            <button class="btn" id="clearClientBtn">Vider</button>
+          </div>
+
+          <p class="hint">Tu peux l’utiliser comme “rappel d’appel” / “suivi sevrage” / “SAV” / “commande spéciale”.</p>
+        </div>
+
+        <div class="card">
+          <h2>Recherche / filtre date</h2>
+          <div class="row">
+            <label style="flex:1">
+              Recherche
+              <input id="clientSearch" placeholder="Nom, résumé, vendeur, motif…" />
+            </label>
+          </div>
+          <div class="row">
+            <label class="small">
+              Date de
+              <input type="date" id="clientDateFrom" />
+            </label>
+            <label class="small">
+              Date à
+              <input type="date" id="clientDateTo" />
+            </label>
+          </div>
+
+          <div class="row">
+            <button class="btn" id="clientTodayBtn">Aujourd’hui</button>
+            <button class="btn" id="clientWeekBtn">Cette semaine</button>
+            <button class="btn ghost" id="clientClearFiltersBtn">Réinitialiser</button>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="row">
+            <label class="small">
+              Vue
+              <select id="clientView">
+                <option value="open">Ouverts</option>
+                <option value="late">En retard</option>
+                <option value="done">Clôturés</option>
+                <option value="all">Tout</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="list" id="clientList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLANNING -->
+    <section id="planningSection" class="section">
+      <div class="card">
+        <h2>Planning (clic demi-heures)</h2>
+
+        <div class="row noPrint">
+          <label class="small">
+            Semaine (lundi)
+            <input type="date" id="planWeekStart" />
+          </label>
+
+          <label class="small">
+            Plage horaires
+            <select id="planRange">
+              <option value="08:00-20:00">08:00 → 20:00</option>
+              <option value="08:30-19:30">08:30 → 19:30</option>
+              <option value="09:00-20:00">09:00 → 20:00</option>
+              <option value="10:00-19:00">10:00 → 19:00</option>
+            </select>
+          </label>
+
+          <label class="small">
+            Jours
+            <select id="planDays">
+              <option value="Lun,Mar,Mer,Jeu,Ven,Sam">Lun → Sam</option>
+              <option value="Lun,Mar,Mer,Jeu,Ven">Lun → Ven</option>
+              <option value="Mar,Mer,Jeu,Ven,Sam">Mar → Sam</option>
+            </select>
+          </label>
+
+          <button class="btn" id="planClearBtn">Vider semaine</button>
+          <button class="btn primary" id="planSaveBtn">Sauvegarder</button>
+          <button class="btn" id="planLoadBtn">Charger</button>
+          <button class="btn ok" id="planPrintBtn">Imprimer</button>
+        </div>
+
+        <div class="row noPrint">
+          <label class="small">
+            Nom du planning
+            <input id="planName" placeholder="Ex: Semaine 12 — Vacances / Renfort" />
+          </label>
+          <label class="small">
+            Astuce clic
+            <select id="planPaintMode">
+              <option value="toggle">Toggle (on/off)</option>
+              <option value="paintOn">Peindre ON</option>
+              <option value="paintOff">Peindre OFF</option>
+            </select>
+          </label>
+          <span class="hint" style="margin:0">Tu peux cliquer-glisser (souris) pour aller plus vite.</span>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="planWrap" id="planWrap"></div>
+        <div class="footerNote">
+          Convention : 1 case = 30 minutes. Total calculé par vendeur sur la semaine.
+          (Tu pourras ensuite ajouter des règles “35h auto” si tu veux, mais là c’est ultra flexible.)
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="settingsSection" class="section">
+      <div class="grid">
+        <div class="card">
+          <h2>Vendeurs</h2>
+          <div class="row">
+            <label style="flex:1">
+              Ajouter un vendeur
+              <input id="staffInput" placeholder="Ex: Evan" />
+            </label>
+            <button class="btn primary" id="addStaffBtn">Ajouter</button>
+          </div>
+          <div class="list" id="staffList"></div>
+          <p class="hint">La liste vendeurs sert partout : tâches vendeur, suivi clients, planning.</p>
+        </div>
+
+        <div class="card">
+          <h2>Motifs</h2>
+          <div class="row">
+            <label style="flex:1">
+              Ajouter un motif
+              <input id="motifInput" placeholder="Ex: SAV / Sevrage / Fournisseur / Stock / RH…" />
+            </label>
+            <button class="btn primary" id="addMotifBtn">Ajouter</button>
+          </div>
+          <div class="list" id="motifList"></div>
+          <p class="hint">Les motifs te permettent de trier et d’analyser rapidement.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+<script>
+/* =========================
+   Utilities
+========================= */
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+function uid(){
+  return Math.random().toString(16).slice(2) + "-" + Date.now().toString(16);
+}
+function nowISO(){
+  return new Date().toISOString();
+}
+function escapeHtml(s){
+  return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+function setSaveStatus(txt){
+  const el = $("#saveStatus");
+  if(!el) return;
+  el.textContent = txt;
+  el.style.opacity = "1";
+  clearTimeout(setSaveStatus._t);
+  setSaveStatus._t = setTimeout(()=>{ el.style.opacity="0.85"; }, 900);
+}
+function ymd(date){
+  const d = (date instanceof Date) ? date : new Date(date);
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const da = String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${da}`;
+}
+function startOfWeekMonday(d = new Date()){
+  const date = new Date(d);
+  const day = (date.getDay() + 6) % 7; // Monday=0
+  date.setDate(date.getDate() - day);
+  date.setHours(0,0,0,0);
+  return date;
+}
+function addDays(date, n){
+  const d = new Date(date);
+  d.setDate(d.getDate()+n);
+  return d;
+}
+function toMinutes(t){
+  if(!t) return null;
+  const [h,m] = t.split(":").map(Number);
+  if(Number.isNaN(h)||Number.isNaN(m)) return null;
+  return h*60 + m;
+}
+function minutesToTime(min){
+  const h = String(Math.floor(min/60)).padStart(2,"0");
+  const m = String(min%60).padStart(2,"0");
+  return `${h}:${m}`;
+}
+function isPast(dueDate, dueTime){
+  if(!dueDate) return false;
+  const dt = new Date(`${dueDate}T${dueTime || "23:59"}:00`);
+  return dt.getTime() < Date.now();
+}
+function isToday(dueDate){
+  if(!dueDate) return false;
+  return dueDate === ymd(new Date());
+}
+function inThisWeek(dueDate){
+  if(!dueDate) return false;
+  const w0 = startOfWeekMonday(new Date());
+  const w6 = addDays(w0, 6);
+  const d = new Date(dueDate + "T00:00:00");
+  return d >= w0 && d <= w6;
+}
+
+/* =========================
+   State + Storage
+========================= */
+const STORAGE_KEY = "stoom_manager_v1";
+
+let state = loadState();
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const s = JSON.parse(raw);
+      return normalizeState(s);
+    }
+  }catch(e){}
+  return normalizeState({});
+}
+function normalizeState(s){
+  s = s || {};
+  s.staff = Array.isArray(s.staff) && s.staff.length ? s.staff : ["Evan", "Noémie"];
+  s.motifs = Array.isArray(s.motifs) && s.motifs.length ? s.motifs : ["Général", "Stock", "Fournisseur", "SAV", "Sevrage", "RH"];
+  s.tasks = Array.isArray(s.tasks) ? s.tasks : [];
+  s.purchases = Array.isArray(s.purchases) ? s.purchases : [];
+  s.clientFollowups = Array.isArray(s.clientFollowups) ? s.clientFollowups : [];
+  s.plannings = Array.isArray(s.plannings) ? s.plannings : []; // saved planning snapshots
+
+  // current planning draft
+  s.planningDraft = s.planningDraft || {
+    weekStart: ymd(startOfWeekMonday()),
+    range: "08:30-19:30",
+    days: "Lun,Mar,Mer,Jeu,Ven,Sam",
+    grid: {} // grid[vendor][day][slotIndex]=1
+  };
+  return s;
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  setSaveStatus("Sauvegardé");
+}
+
+/* =========================
+   Tabs
+========================= */
+function bindTabs(){
+  $$(".tabBtn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const target = btn.getAttribute("data-tab");
+      $$(".tabBtn").forEach(b=>b.classList.toggle("active", b===btn));
+      $$(".section").forEach(sec=>sec.classList.toggle("active", sec.id===target));
+      // refresh visible section
+      refreshAll();
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+  });
+}
+
+/* =========================
+   Settings (staff & motifs)
+========================= */
+function renderStaff(){
+  const list = $("#staffList");
+  if(!list) return;
+  list.innerHTML = state.staff.map(name=>`
+    <div class="item">
+      <div class="itemLeft">
+        <div class="itemTitle">${escapeHtml(name)}</div>
+        <div class="meta"><span class="badge">Vendeur</span></div>
+      </div>
+      <div class="itemActions">
+        <button class="btn danger" data-delstaff="${escapeHtml(name)}">Supprimer</button>
+      </div>
+    </div>
+  `).join("");
+
+  list.querySelectorAll("[data-delstaff]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const n = btn.getAttribute("data-delstaff");
+      // Remove + clean assignments
+      state.staff = state.staff.filter(x=>x!==n);
+      // Clean tasks / clients vendor fields
+      state.tasks.forEach(t=>{ if(t.vendor===n) t.vendor=""; });
+      state.clientFollowups.forEach(f=>{ if(f.vendor===n) f.vendor=""; });
+      // Clean planning draft
+      if(state.planningDraft?.grid?.[n]) delete state.planningDraft.grid[n];
+      saveState();
+      renderStaff();
+      hydrateSelects();
+      renderPlanning();
+      refreshAll();
+    });
+  });
+}
+function renderMotifs(){
+  const list = $("#motifList");
+  if(!list) return;
+  list.innerHTML = state.motifs.map(m=>`
+    <div class="item">
+      <div class="itemLeft">
+        <div class="itemTitle">${escapeHtml(m)}</div>
+        <div class="meta"><span class="badge">Motif</span></div>
+      </div>
+      <div class="itemActions">
+        <button class="btn danger" data-delmotif="${escapeHtml(m)}">Supprimer</button>
+      </div>
+    </div>
+  `).join("");
+
+  list.querySelectorAll("[data-delmotif]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const m = btn.getAttribute("data-delmotif");
+      state.motifs = state.motifs.filter(x=>x!==m);
+      // Clean tasks/clients
+      state.tasks.forEach(t=>{ if(t.motif===m) t.motif="Général"; });
+      state.clientFollowups.forEach(f=>{ if(f.motif===m) f.motif="Général"; });
+      saveState();
+      renderMotifs();
+      hydrateSelects();
+      refreshAll();
+    });
+  });
+}
+function hydrateSelects(){
+  // tasks motifs
+  const motifSel = $("#taskMotif");
+  const clientMotifSel = $("#clientMotif");
+  if(motifSel){
+    motifSel.innerHTML = state.motifs.map(m=>`<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join("");
+  }
+  if(clientMotifSel){
+    clientMotifSel.innerHTML = state.motifs.map(m=>`<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join("");
+  }
+
+  // staff selects
+  const taskSeller = $("#taskSeller");
+  const clientSeller = $("#clientSeller");
+  const staffOptions = ['<option value="">—</option>'].concat(state.staff.map(n=>`<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`));
+  if(taskSeller) taskSeller.innerHTML = staffOptions.join("");
+  if(clientSeller) clientSeller.innerHTML = staffOptions.join("");
+}
+
+/* =========================
+   Tasks
+========================= */
+function clearTaskForm(){
+  $("#taskTitle").value = "";
+  $("#taskNotes").value = "";
+  $("#taskType").value = "todo";
+  $("#taskDueDate").value = "";
+  $("#taskDueTime").value = "";
+  $("#taskIsSeller").checked = false;
+  $("#taskSellerWrap").style.display = "none";
+  $("#taskSeller").value = "";
+  $("#taskMotif").value = state.motifs[0] || "Général";
+}
+
+function addTask(){
+  const title = ($("#taskTitle").value||"").trim();
+  if(!title) return alert("Il manque le titre.");
+  const motif = $("#taskMotif").value || "Général";
+  const notes = ($("#taskNotes").value||"").trim();
+  const type = $("#taskType").value; // todo / reminder
+  const dueDate = ($("#taskDueDate").value||"").trim();
+  const dueTime = ($("#taskDueTime").value||"").trim();
+  const isSellerTask = $("#taskIsSeller").checked;
+  const vendor = isSellerTask ? ($("#taskSeller").value||"") : "";
+
+  const t = {
+    id: uid(),
+    title, motif, notes,
+    type,
+    dueDate, dueTime,
+    status: "open", // open/done
+    createdAt: nowISO(),
+    doneAt: "",
+    doneComment: "",
+    isSellerTask,
+    vendor
+  };
+
+  state.tasks.unshift(t);
+  saveState();
+  clearTaskForm();
+  renderTasks();
+  refreshAll();
+}
+
+function computeTaskBucket(t){
+  if(t.status==="done") return "done";
+  const late = (t.dueDate && isPast(t.dueDate, t.dueTime));
+  if(late) return "late";
+  return t.type; // todo/reminder
+}
+
+function taskMatchesFilters(t){
+  const q = ($("#taskSearch").value||"").toLowerCase().trim();
+  const from = ($("#taskDateFrom").value||"").trim();
+  const to = ($("#taskDateTo").value||"").trim();
+
+  // date filter on dueDate
+  if(from && (!t.dueDate || t.dueDate < from)) return false;
+  if(to && (!t.dueDate || t.dueDate > to)) return false;
+
+  if(!q) return true;
+  const hay = [
+    t.title, t.notes, t.vendor, t.motif,
+    t.type, t.status, t.doneComment
+  ].join(" ").toLowerCase();
+  return hay.includes(q);
+}
+
+function renderTasks(){
+  const list = $("#tasksList");
+  if(!list) return;
+
+  const view = $("#taskView").value;
+  const sort = $("#taskSort").value;
+
+  let rows = state.tasks.slice().filter(taskMatchesFilters);
+
+  // view filter
+  rows = rows.filter(t=>{
+    const bucket = computeTaskBucket(t);
+    if(view==="all") return true;
+    if(view==="late") return bucket==="late";
+    if(view==="done") return bucket==="done";
+    return bucket===view; // todo/reminder
+  });
+
+  // sorting
+  rows.sort((a,b)=>{
+    if(sort==="created"){
+      return (b.createdAt||"").localeCompare(a.createdAt||"");
+    }
+    if(sort==="seller"){
+      return (a.vendor||"").localeCompare(b.vendor||"") || (a.dueDate||"").localeCompare(b.dueDate||"");
+    }
+    // due
+    const ad = a.dueDate || "9999-12-31";
+    const bd = b.dueDate || "9999-12-31";
+    if(ad!==bd) return ad.localeCompare(bd);
+    return (a.dueTime||"").localeCompare(b.dueTime||"");
+  });
+
+  if(!rows.length){
+    list.innerHTML = `<div class="hint">Aucune tâche ne correspond aux filtres.</div>`;
+    return;
+  }
+
+  list.innerHTML = rows.map(t=>{
+    const bucket = computeTaskBucket(t);
+    const dueLabel = t.dueDate ? `${t.dueDate}${t.dueTime?(" "+t.dueTime):""}` : "—";
+    const badges = [];
+    if(bucket==="late") badges.push(`<span class="badge danger">En retard</span>`);
+    else if(bucket==="reminder") badges.push(`<span class="badge warn">Rappel</span>`);
+    else if(bucket==="todo") badges.push(`<span class="badge accent">À faire</span>`);
+    if(t.status==="done") badges.push(`<span class="badge ok">Fait</span>`);
+    if(t.isSellerTask) badges.push(`<span class="badge">Vendeur: ${escapeHtml(t.vendor||"—")}</span>`);
+    if(t.motif) badges.push(`<span class="badge">${escapeHtml(t.motif)}</span>`);
+    if(t.dueDate && isToday(t.dueDate) && t.status!=="done") badges.push(`<span class="badge warn">Aujourd’hui</span>`);
+
+    return `
+      <div class="item">
+        <div class="itemLeft">
+          <div class="titleRow">
+            <div class="itemTitle">${escapeHtml(t.title)}</div>
+          </div>
+          <div class="meta">
+            ${badges.join("")}
+            <span class="badge">Échéance: ${escapeHtml(dueLabel)}</span>
+          </div>
+          ${t.notes ? `<div class="hint" style="margin-top:8px">${escapeHtml(t.notes)}</div>` : ""}
+          ${t.status==="done" ? `<div class="hint" style="margin-top:8px"><b>Commentaire :</b> ${escapeHtml(t.doneComment||"")}</div>` : ""}
+        </div>
+
+        <div class="itemActions noPrint">
+          <select class="selectInline" data-taskstatus="${t.id}">
+            ${t.status==="done"
+              ? `<option value="done" selected>Fait</option><option value="open">Réouvrir</option>`
+              : `<option value="open" selected>Ouvert</option><option value="done">Passer en fait…</option>`
+            }
+          </select>
+          <div class="row">
+            <button class="btn" data-edittask="${t.id}">Éditer</button>
+            <button class="btn danger" data-deltask="${t.id}">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  // bind actions
+  list.querySelectorAll("[data-deltask]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.getAttribute("data-deltask");
+      if(!confirm("Supprimer cette tâche ?")) return;
+      state.tasks = state.tasks.filter(t=>t.id!==id);
+      saveState();
+      renderTasks();
+      refreshAll();
+    });
+  });
+
+  list.querySelectorAll("[data-taskstatus]").forEach(sel=>{
+    sel.addEventListener("change", ()=>{
+      const id = sel.getAttribute("data-taskstatus");
+      const t = state.tasks.find(x=>x.id===id);
+      if(!t) return;
+
+      if(sel.value==="done"){
+        const comment = prompt("Commentaire (obligatoire) : qu’est-ce qui a été fait ?");
+        if(!comment || !comment.trim()){
+          alert("Commentaire obligatoire.");
+          sel.value = "open";
+          return;
+        }
+        t.status = "done";
+        t.doneAt = nowISO();
+        t.doneComment = comment.trim();
+      }else{
+        t.status = "open";
+        t.doneAt = "";
+        t.doneComment = "";
+      }
+      saveState();
+      renderTasks();
+      refreshAll();
+    });
+  });
+
+  list.querySelectorAll("[data-edittask]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.getAttribute("data-edittask");
+      const t = state.tasks.find(x=>x.id===id);
+      if(!t) return;
+
+      // simple edit via prompt (pour rester 1 fichier, rapide)
+      const newTitle = prompt("Titre :", t.title);
+      if(newTitle===null) return;
+      const newNotes = prompt("Notes (optionnel) :", t.notes || "");
+      if(newNotes===null) return;
+
+      t.title = newTitle.trim() || t.title;
+      t.notes = (newNotes||"").trim();
+
+      saveState();
+      renderTasks();
+      refreshAll();
+    });
+  });
+}
+
+function taskSetToday(){
+  $("#taskDateFrom").value = ymd(new Date());
+  $("#taskDateTo").value = ymd(new Date());
+  renderTasks();
+}
+function taskSetWeek(){
+  const w0 = startOfWeekMonday(new Date());
+  const w6 = addDays(w0, 6);
+  $("#taskDateFrom").value = ymd(w0);
+  $("#taskDateTo").value = ymd(w6);
+  renderTasks();
+}
+function taskClearFilters(){
+  $("#taskSearch").value="";
+  $("#taskDateFrom").value="";
+  $("#taskDateTo").value="";
+  $("#taskView").value="all";
+  $("#taskSort").value="due";
+  renderTasks();
+}
+
+/* =========================
+   Purchases
+========================= */
+function clearBuyForm(){
+  $("#buyTitle").value="";
+  $("#buyNotes").value="";
+  $("#buyPriority").value="normal";
+}
+function addPurchase(){
+  const title = ($("#buyTitle").value||"").trim();
+  if(!title) return alert("Il manque le produit/besoin.");
+  const notes = ($("#buyNotes").value||"").trim();
+  const priority = $("#buyPriority").value;
+
+  state.purchases.unshift({
+    id: uid(),
+    title, notes, priority,
+    status: "open",
+    createdAt: nowISO(),
+    doneAt: ""
+  });
+  saveState();
+  clearBuyForm();
+  renderPurchases();
+  refreshAll();
+}
+function renderPurchases(){
+  const list = $("#buyList");
+  if(!list) return;
+
+  const q = ($("#buySearch").value||"").toLowerCase().trim();
+  const filter = $("#buyFilter").value;
+
+  let rows = state.purchases.slice().filter(p=>{
+    if(filter==="open" && p.status!=="open") return false;
+    if(filter==="done" && p.status!=="done") return false;
+    if(!q) return true;
+    const hay = [p.title,p.notes,p.priority,p.status].join(" ").toLowerCase();
+    return hay.includes(q);
+  });
+
+  if(!rows.length){
+    list.innerHTML = `<div class="hint">Liste vide (ou aucun match).</div>`;
+    return;
+  }
+
+  list.innerHTML = rows.map(p=>{
+    const badges = [];
+    if(p.priority==="urgent") badges.push(`<span class="badge danger">Urgent</span>`);
+    else badges.push(`<span class="badge">Normal</span>`);
+    if(p.status==="done") badges.push(`<span class="badge ok">Acheté</span>`);
+    return `
+      <div class="item">
+        <div class="itemLeft">
+          <div class="itemTitle">${escapeHtml(p.title)}</div>
+          <div class="meta">${badges.join("")}</div>
+          ${p.notes ? `<div class="hint" style="margin-top:8px">${escapeHtml(p.notes)}</div>` : ""}
+        </div>
+        <div class="itemActions noPrint">
+          <select class="selectInline" data-buystatus="${p.id}">
+            ${p.status==="done"
+              ? `<option value="done" selected>Acheté</option><option value="open">Remettre</option>`
+              : `<option value="open" selected>En attente</option><option value="done">Marquer acheté</option>`
+            }
+          </select>
+          <button class="btn danger" data-delbuy="${p.id}">Supprimer</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  list.querySelectorAll("[data-delbuy]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.getAttribute("data-delbuy");
+      if(!confirm("Supprimer cet achat ?")) return;
+      state.purchases = state.purchases.filter(p=>p.id!==id);
+      saveState();
+      renderPurchases();
+      refreshAll();
+    });
+  });
+  list.querySelectorAll("[data-buystatus]").forEach(sel=>{
+    sel.addEventListener("change", ()=>{
+      const id = sel.getAttribute("data-buystatus");
+      const p = state.purchases.find(x=>x.id===id);
+      if(!p) return;
+      if(sel.value==="done"){
+        p.status="done";
+        p.doneAt = nowISO();
+      }else{
+        p.status="open";
+        p.doneAt = "";
+      }
+      saveState();
+      renderPurchases();
+      refreshAll();
+    });
+  });
+}
+
+/* =========================
+   Client followups
+========================= */
+function clearClientForm(){
+  $("#clientName").value="";
+  $("#clientSummary").value="";
+  $("#clientMotif").value = state.motifs[0] || "Général";
+  $("#clientDueDate").value="";
+  $("#clientDueTime").value="";
+  $("#clientSeller").value="";
+}
+function addClientFollowup(){
+  const name = ($("#clientName").value||"").trim();
+  const summary = ($("#clientSummary").value||"").trim();
+  if(!name || !summary) return alert("Nom client + résumé sont nécessaires.");
+
+  const motif = $("#clientMotif").value || "Général";
+  const dueDate = ($("#clientDueDate").value||"").trim();
+  const dueTime = ($("#clientDueTime").value||"").trim();
+  const vendor = $("#clientSeller").value || "";
+
+  state.clientFollowups.unshift({
+    id: uid(),
+    name, summary, motif,
+    dueDate, dueTime,
+    vendor,
+    status: "open",
+    createdAt: nowISO(),
+    doneAt: "",
+    doneComment: ""
+  });
+  saveState();
+  clearClientForm();
+  renderClients();
+  refreshAll();
+}
+function computeClientBucket(f){
+  if(f.status==="done") return "done";
+  if(f.dueDate && isPast(f.dueDate, f.dueTime)) return "late";
+  return "open";
+}
+function clientMatchesFilters(f){
+  const q = ($("#clientSearch").value||"").toLowerCase().trim();
+  const from = ($("#clientDateFrom").value||"").trim();
+  const to = ($("#clientDateTo").value||"").trim();
+
+  if(from && (!f.dueDate || f.dueDate < from)) return false;
+  if(to && (!f.dueDate || f.dueDate > to)) return false;
+
+  if(!q) return true;
+  const hay = [f.name,f.summary,f.vendor,f.motif,f.doneComment].join(" ").toLowerCase();
+  return hay.includes(q);
+}
+function renderClients(){
+  const list = $("#clientList");
+  if(!list) return;
+
+  const view = $("#clientView").value; // open/late/done/all
+  let rows = state.clientFollowups.slice().filter(clientMatchesFilters);
+
+  rows = rows.filter(f=>{
+    const bucket = computeClientBucket(f);
+    if(view==="all") return true;
+    return bucket===view;
+  });
+
+  rows.sort((a,b)=>{
+    const ad = a.dueDate || "9999-12-31";
+    const bd = b.dueDate || "9999-12-31";
+    if(ad!==bd) return ad.localeCompare(bd);
+    return (a.dueTime||"").localeCompare(b.dueTime||"");
+  });
+
+  if(!rows.length){
+    list.innerHTML = `<div class="hint">Aucun suivi ne correspond aux filtres.</div>`;
+    return;
+  }
+
+  list.innerHTML = rows.map(f=>{
+    const bucket = computeClientBucket(f);
+    const badges = [];
+    if(bucket==="late") badges.push(`<span class="badge danger">En retard</span>`);
+    if(bucket==="done") badges.push(`<span class="badge ok">Clôturé</span>`);
+    if(f.vendor) badges.push(`<span class="badge">Vendeur: ${escapeHtml(f.vendor)}</span>`);
+    if(f.motif) badges.push(`<span class="badge">${escapeHtml(f.motif)}</span>`);
+    const dueLabel = f.dueDate ? `${f.dueDate}${f.dueTime?(" "+f.dueTime):""}` : "—";
+
+    return `
+      <div class="item">
+        <div class="itemLeft">
+          <div class="itemTitle">${escapeHtml(f.name)}</div>
+          <div class="meta">
+            ${badges.join("")}
+            <span class="badge">Rappel: ${escapeHtml(dueLabel)}</span>
+          </div>
+          <div class="hint" style="margin-top:8px">${escapeHtml(f.summary)}</div>
+          ${f.status==="done" ? `<div class="hint" style="margin-top:8px"><b>Commentaire :</b> ${escapeHtml(f.doneComment||"")}</div>` : ""}
+        </div>
+
+        <div class="itemActions noPrint">
+          <select class="selectInline" data-clientstatus="${f.id}">
+            ${f.status==="done"
+              ? `<option value="done" selected>Clôturé</option><option value="open">Réouvrir</option>`
+              : `<option value="open" selected>Ouvert</option><option value="done">Clôturer…</option>`
+            }
+          </select>
+          <div class="row">
+            <button class="btn" data-editclient="${f.id}">Éditer</button>
+            <button class="btn danger" data-delclient="${f.id}">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  list.querySelectorAll("[data-delclient]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.getAttribute("data-delclient");
+      if(!confirm("Supprimer ce suivi client ?")) return;
+      state.clientFollowups = state.clientFollowups.filter(f=>f.id!==id);
+      saveState();
+      renderClients();
+      refreshAll();
+    });
+  });
+
+  list.querySelectorAll("[data-clientstatus]").forEach(sel=>{
+    sel.addEventListener("change", ()=>{
+      const id = sel.getAttribute("data-clientstatus");
+      const f = state.clientFollowups.find(x=>x.id===id);
+      if(!f) return;
+
+      if(sel.value==="done"){
+        const comment = prompt("Commentaire (obligatoire) : résultat du suivi ?");
+        if(!comment || !comment.trim()){
+          alert("Commentaire obligatoire.");
+          sel.value = "open";
+          return;
+        }
+        f.status="done";
+        f.doneAt = nowISO();
+        f.doneComment = comment.trim();
+      }else{
+        f.status="open";
+        f.doneAt = "";
+        f.doneComment = "";
+      }
+      saveState();
+      renderClients();
+      refreshAll();
+    });
+  });
+
+  list.querySelectorAll("[data-editclient]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.getAttribute("data-editclient");
+      const f = state.clientFollowups.find(x=>x.id===id);
+      if(!f) return;
+
+      const newSummary = prompt("Résumé :", f.summary);
+      if(newSummary===null) return;
+      f.summary = newSummary.trim() || f.summary;
+
+      saveState();
+      renderClients();
+      refreshAll();
+    });
+  });
+}
+
+function clientSetToday(){
+  $("#clientDateFrom").value = ymd(new Date());
+  $("#clientDateTo").value = ymd(new Date());
+  renderClients();
+}
+function clientSetWeek(){
+  const w0 = startOfWeekMonday(new Date());
+  const w6 = addDays(w0, 6);
+  $("#clientDateFrom").value = ymd(w0);
+  $("#clientDateTo").value = ymd(w6);
+  renderClients();
+}
+function clientClearFilters(){
+  $("#clientSearch").value="";
+  $("#clientDateFrom").value="";
+  $("#clientDateTo").value="";
+  $("#clientView").value="open";
+  renderClients();
+}
+
+/* =========================
+   Dashboard
+========================= */
+function renderDashboard(){
+  const kpis = $("#kpis");
+  if(!kpis) return;
+
+  const tasksOpen = state.tasks.filter(t=>t.status!=="done");
+  const late = tasksOpen.filter(t=>t.dueDate && isPast(t.dueDate, t.dueTime));
+  const today = tasksOpen.filter(t=>t.dueDate && isToday(t.dueDate));
+  const clientOpen = state.clientFollowups.filter(f=>f.status!=="done");
+  const buyOpen = state.purchases.filter(p=>p.status!=="done");
+
+  kpis.innerHTML = `
+    <div class="kpi"><div class="num">${tasksOpen.length}</div><div class="lab">Tâches ouvertes</div></div>
+    <div class="kpi"><div class="num">${late.length}</div><div class="lab">Tâches en retard</div></div>
+    <div class="kpi"><div class="num">${today.length}</div><div class="lab">Échéance aujourd’hui</div></div>
+    <div class="kpi"><div class="num">${clientOpen.length}</div><div class="lab">Suivis clients ouverts</div></div>
+  `;
+
+  // Today list: tasks + clients due today or late
+  const todayList = $("#todayList");
+  if(todayList){
+    const rows = [];
+
+    state.tasks.forEach(t=>{
+      if(t.status==="done") return;
+      const lateOrToday = (t.dueDate && (isToday(t.dueDate) || isPast(t.dueDate, t.dueTime)));
+      if(!lateOrToday) return;
+      rows.push({
+        kind:"Tâche",
+        title:t.title,
+        due:t.dueDate ? `${t.dueDate}${t.dueTime?(" "+t.dueTime):""}` : "—",
+        badge: computeTaskBucket(t)
+      });
+    });
+    state.clientFollowups.forEach(f=>{
+      if(f.status==="done") return;
+      const lateOrToday = (f.dueDate && (isToday(f.dueDate) || isPast(f.dueDate, f.dueTime)));
+      if(!lateOrToday) return;
+      rows.push({
+        kind:"Client",
+        title:`${f.name} — ${f.summary}`,
+        due:f.dueDate ? `${f.dueDate}${f.dueTime?(" "+f.dueTime):""}` : "—",
+        badge: computeClientBucket(f)
+      });
+    });
+
+    rows.sort((a,b)=> a.due.localeCompare(b.due));
+    if(!rows.length){
+      todayList.innerHTML = `<div class="hint">Rien de critique pour l’instant. (ou pas d’échéances renseignées)</div>`;
+    }else{
+      todayList.innerHTML = rows.slice(0,8).map(r=>{
+        const badgeClass = r.badge==="late" ? "danger" : (r.badge==="reminder" ? "warn" : "accent");
+        return `
+          <div class="item">
+            <div class="itemLeft">
+              <div class="itemTitle">${escapeHtml(r.title)}</div>
+              <div class="meta">
+                <span class="badge">${escapeHtml(r.kind)}</span>
+                <span class="badge ${badgeClass}">${r.badge==="late"?"En retard":(r.badge==="open"?"Ouvert":r.badge)}</span>
+                <span class="badge">Échéance: ${escapeHtml(r.due)}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+  }
+
+  // Purchase quick list
+  const purchaseQuick = $("#purchaseQuickList");
+  if(purchaseQuick){
+    const rows = state.purchases.filter(p=>p.status!=="done");
+    if(!rows.length){
+      purchaseQuick.innerHTML = `<div class="hint">Aucun achat en attente.</div>`;
+    }else{
+      purchaseQuick.innerHTML = rows.slice(0,6).map(p=>{
+        const b = p.priority==="urgent" ? `<span class="badge danger">Urgent</span>` : `<span class="badge">Normal</span>`;
+        return `
+          <div class="item">
+            <div class="itemLeft">
+              <div class="itemTitle">${escapeHtml(p.title)}</div>
+              <div class="meta">${b}</div>
+              ${p.notes ? `<div class="hint" style="margin-top:6px">${escapeHtml(p.notes)}</div>` : ""}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+  }
+}
+
+/* =========================
+   Planning (half-hour grid)
+========================= */
+function ensureDraftGrid(){
+  state.planningDraft.grid = state.planningDraft.grid || {};
+  state.staff.forEach(v=>{
+    state.planningDraft.grid[v] = state.planningDraft.grid[v] || {};
+  });
+}
+function parseRange(rangeStr){
+  const [a,b] = (rangeStr||"08:30-19:30").split("-");
+  const start = toMinutes(a);
+  const end = toMinutes(b);
+  return {start, end};
+}
+function getDaysArray(){
+  const s = state.planningDraft.days || "Lun,Mar,Mer,Jeu,Ven,Sam";
+  return s.split(",").map(x=>x.trim()).filter(Boolean);
+}
+function buildSlots(rangeStr){
+  const {start, end} = parseRange(rangeStr);
+  const slots = [];
+  for(let m=start; m<end; m+=30) slots.push(m);
+  return slots; // each is start minute
+}
+function toggleSlot(vendor, day, slotIndex, force=null){
+  ensureDraftGrid();
+  const grid = state.planningDraft.grid;
+  grid[vendor] = grid[vendor] || {};
+  grid[vendor][day] = grid[vendor][day] || {};
+  const cur = !!grid[vendor][day][slotIndex];
+  const next = (force===null) ? !cur : !!force;
+  if(next) grid[vendor][day][slotIndex] = 1;
+  else delete grid[vendor][day][slotIndex];
+}
+function vendorTotalMinutes(vendor){
+  ensureDraftGrid();
+  const grid = state.planningDraft.grid[vendor] || {};
+  let count = 0;
+  Object.values(grid).forEach(dayObj=>{
+    count += Object.keys(dayObj||{}).length;
+  });
+  return count * 30;
+}
+function renderPlanning(){
+  const wrap = $("#planWrap");
+  if(!wrap) return;
+
+  ensureDraftGrid();
+  // hydrate controls from state
+  $("#planWeekStart").value = state.planningDraft.weekStart || ymd(startOfWeekMonday());
+  $("#planRange").value = state.planningDraft.range || "08:30-19:30";
+  $("#planDays").value = state.planningDraft.days || "Lun,Mar,Mer,Jeu,Ven,Sam";
+
+  const days = getDaysArray();
+  const slots = buildSlots(state.planningDraft.range);
+  const vendors = state.staff.slice();
+
+  let html = `<table class="plan" aria-label="Planning">
+    <thead>
+      <tr>
+        <th>Vendeur</th>
+        <th class="timeCol">Heure</th>
+        ${days.map(d=>`<th>${escapeHtml(d)}</th>`).join("")}
+      </tr>
+    </thead>
+    <tbody>`;
+
+  vendors.forEach(v=>{
+    // One block per vendor: rows = slots length
+    slots.forEach((min, i)=>{
+      const timeLab = minutesToTime(min);
+      html += `<tr>`;
+      if(i===0){
+        const totalH = Math.round((vendorTotalMinutes(v)/60)*100)/100;
+        html += `<td rowspan="${slots.length}">
+          <div style="font-weight:900">${escapeHtml(v)}</div>
+          <div class="meta" style="margin-top:8px">
+            <span class="badge">Total: <b>${totalH} h</b></span>
+          </div>
+          <div class="hint" style="margin-top:8px">Clique les demi-heures pour activer.</div>
+        </td>`;
+      }
+      html += `<td class="timeCol">${escapeHtml(timeLab)}</td>`;
+
+      days.forEach(day=>{
+        const on = !!(state.planningDraft.grid?.[v]?.[day]?.[i]);
+        const cls = on ? "slot on" : "slot";
+        html += `<td><div class="${cls}" role="button" tabindex="0"
+                  aria-label="${escapeHtml(v)} ${escapeHtml(day)} ${escapeHtml(timeLab)}"
+                  data-slot="${escapeHtml(v)}|${escapeHtml(day)}|${i}"></div></td>`;
+      });
+
+      html += `</tr>`;
+    });
+  });
+
+  html += `</tbody></table>`;
+  wrap.innerHTML = html;
+
+  // Click + drag paint
+  let mouseDown = false;
+  let paintMode = $("#planPaintMode")?.value || "toggle";
+  let force = null; // for paintOn/paintOff
+
+  function modeToForce(){
+    paintMode = $("#planPaintMode")?.value || "toggle";
+    if(paintMode==="paintOn") return true;
+    if(paintMode==="paintOff") return false;
+    return null;
+  }
+
+  wrap.querySelectorAll("[data-slot]").forEach(cell=>{
+    const handler = (ev)=>{
+      const [vendor, day, idx] = cell.getAttribute("data-slot").split("|");
+      force = modeToForce();
+      toggleSlot(vendor, day, Number(idx), force);
+      saveState();
+      renderPlanning();
+    };
+
+    cell.addEventListener("click", handler);
+
+    cell.addEventListener("keydown", (e)=>{
+      if(e.key==="Enter" || e.key===" "){
+        e.preventDefault();
+        handler(e);
+      }
+    });
+
+    // drag paint
+    cell.addEventListener("mousedown", (e)=>{
+      mouseDown = true;
+      force = modeToForce();
+      const [vendor, day, idx] = cell.getAttribute("data-slot").split("|");
+      toggleSlot(vendor, day, Number(idx), force);
+      saveState();
+      renderPlanning();
+    });
+    cell.addEventListener("mouseenter", ()=>{
+      if(!mouseDown) return;
+      force = modeToForce();
+      const [vendor, day, idx] = cell.getAttribute("data-slot").split("|");
+      toggleSlot(vendor, day, Number(idx), force);
+      saveState();
+      renderPlanning();
+    });
+  });
+
+  document.addEventListener("mouseup", ()=>{ mouseDown=false; }, {once:true});
+}
+
+function clearPlanningWeek(){
+  if(!confirm("Vider le planning de la semaine (draft) ?")) return;
+  state.planningDraft.grid = {};
+  ensureDraftGrid();
+  saveState();
+  renderPlanning();
+}
+
+function savePlanningSnapshot(){
+  const name = ($("#planName").value||"").trim();
+  if(!name) return alert("Donne un nom au planning (ex: Semaine 12).");
+
+  const snap = {
+    id: uid(),
+    name,
+    savedAt: nowISO(),
+    draft: JSON.parse(JSON.stringify(state.planningDraft)),
+    staff: state.staff.slice()
+  };
+  state.plannings.unshift(snap);
+  saveState();
+  $("#planName").value="";
+  alert("Planning sauvegardé.");
+}
+
+function loadPlanningSnapshot(){
+  if(!state.plannings.length){
+    alert("Aucun planning sauvegardé.");
+    return;
+  }
+  const names = state.plannings.slice(0,12).map((p,i)=>`${i+1}. ${p.name} (${p.draft.weekStart})`).join("\n");
+  const pick = prompt("Quel planning charger ?\n\n" + names + "\n\nTape le numéro (1..)");
+  if(!pick) return;
+  const idx = Number(pick)-1;
+  const snap = state.plannings[idx];
+  if(!snap) return alert("Numéro invalide.");
+
+  state.planningDraft = JSON.parse(JSON.stringify(snap.draft));
+  saveState();
+  renderPlanning();
+  alert("Planning chargé.");
+}
+
+function printPlanning(){
+  window.print();
+}
+
+/* =========================
+   Export / Import / Reset
+========================= */
+function exportData(){
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `stoom-manager-export-${ymd(new Date())}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function importData(){
+  const inp = document.createElement("input");
+  inp.type = "file";
+  inp.accept = "application/json";
+  inp.addEventListener("change", async ()=>{
+    const file = inp.files && inp.files[0];
+    if(!file) return;
+    const txt = await file.text();
+    try{
+      const obj = JSON.parse(txt);
+      state = normalizeState(obj);
+      saveState();
+      hydrateSelects();
+      refreshAll();
+      alert("Import réussi.");
+    }catch(e){
+      alert("Fichier invalide.");
+    }
+  });
+  inp.click();
+}
+
+function resetAll(){
+  if(!confirm("Réinitialiser TOUT ? (perte des données locales)")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state = normalizeState({});
+  saveState();
+  hydrateSelects();
+  refreshAll();
+}
+
+/* =========================
+   Bind buttons & init
+========================= */
+function bindAll(){
+  bindTabs();
+
+  // toggles
+  $("#taskIsSeller").addEventListener("change", ()=>{
+    $("#taskSellerWrap").style.display = $("#taskIsSeller").checked ? "block" : "none";
+  });
+
+  // Tasks
+  $("#addTaskBtn").addEventListener("click", addTask);
+  $("#clearTaskFormBtn").addEventListener("click", clearTaskForm);
+  $("#taskSearch").addEventListener("input", renderTasks);
+  $("#taskDateFrom").addEventListener("input", renderTasks);
+  $("#taskDateTo").addEventListener("input", renderTasks);
+  $("#taskView").addEventListener("change", renderTasks);
+  $("#taskSort").addEventListener("change", renderTasks);
+  $("#taskTodayBtn").addEventListener("click", taskSetToday);
+  $("#taskWeekBtn").addEventListener("click", taskSetWeek);
+  $("#taskClearFiltersBtn").addEventListener("click", taskClearFilters);
+
+  // Purchases
+  $("#addBuyBtn").addEventListener("click", addPurchase);
+  $("#clearBuyBtn").addEventListener("click", clearBuyForm);
+  $("#buySearch").addEventListener("input", renderPurchases);
+  $("#buyFilter").addEventListener("change", renderPurchases);
+
+  // Clients
+  $("#addClientBtn").addEventListener("click", addClientFollowup);
+  $("#clearClientBtn").addEventListener("click", clearClientForm);
+  $("#clientSearch").addEventListener("input", renderClients);
+  $("#clientDateFrom").addEventListener("input", renderClients);
+  $("#clientDateTo").addEventListener("input", renderClients);
+  $("#clientView").addEventListener("change", renderClients);
+  $("#clientTodayBtn").addEventListener("click", clientSetToday);
+  $("#clientWeekBtn").addEventListener("click", clientSetWeek);
+  $("#clientClearFiltersBtn").addEventListener("click", clientClearFilters);
+
+  // Planning
+  $("#planWeekStart").addEventListener("input", ()=>{
+    state.planningDraft.weekStart = $("#planWeekStart").value || ymd(startOfWeekMonday());
+    saveState();
+  });
+  $("#planRange").addEventListener("change", ()=>{
+    state.planningDraft.range = $("#planRange").value;
+    saveState();
+    renderPlanning();
+  });
+  $("#planDays").addEventListener("change", ()=>{
+    state.planningDraft.days = $("#planDays").value;
+    saveState();
+    renderPlanning();
+  });
+  $("#planClearBtn").addEventListener("click", clearPlanningWeek);
+  $("#planSaveBtn").addEventListener("click", savePlanningSnapshot);
+  $("#planLoadBtn").addEventListener("click", loadPlanningSnapshot);
+  $("#planPrintBtn").addEventListener("click", printPlanning);
+
+  // Settings staff/motifs
+  $("#addStaffBtn").addEventListener("click", ()=>{
+    const n = ($("#staffInput").value||"").trim();
+    if(!n) return;
+    if(state.staff.includes(n)) return alert("Déjà présent.");
+    state.staff.push(n);
+    $("#staffInput").value="";
+    saveState();
+    renderStaff();
+    hydrateSelects();
+    renderPlanning();
+    refreshAll();
+  });
+  $("#addMotifBtn").addEventListener("click", ()=>{
+    const m = ($("#motifInput").value||"").trim();
+    if(!m) return;
+    if(state.motifs.includes(m)) return alert("Déjà présent.");
+    state.motifs.push(m);
+    $("#motifInput").value="";
+    saveState();
+    renderMotifs();
+    hydrateSelects();
+    refreshAll();
+  });
+
+  // Export/import/reset
+  $("#exportBtn").addEventListener("click", exportData);
+  $("#importBtn").addEventListener("click", importData);
+  $("#resetBtn").addEventListener("click", resetAll);
+}
+
+function refreshAll(){
+  hydrateSelects();
+  renderStaff();
+  renderMotifs();
+  renderTasks();
+  renderPurchases();
+  renderClients();
+  renderPlanning();
+  renderDashboard();
+}
+
+/* =========================
+   Init
+========================= */
+(function init(){
+  hydrateSelects();
+  bindAll();
+
+  // default UI states
+  $("#taskMotif").value = state.motifs[0] || "Général";
+  $("#clientMotif").value = state.motifs[0] || "Général";
+  $("#taskSellerWrap").style.display = "none";
+
+  // planning draft defaults
+  state.planningDraft.weekStart = state.planningDraft.weekStart || ymd(startOfWeekMonday());
+  saveState();
+
+  refreshAll();
+  setSaveStatus("Prêt");
+})();
+</script>
+
+</body>
+</html>
