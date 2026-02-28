@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STOOM Manager — Suivi clients</title>
+<style>
+:root{--bg:#0a1222;--panel:#0f1b34;--line:rgba(255,255,255,.10);--line2:rgba(255,255,255,.06);--text:#e9efff;--muted:#a9b6da;--accent:#3ea2ff;--ok:#38e08f;--warn:#ffd35a;--bad:#ff5a73;--shadow:0 14px 40px rgba(0,0,0,.38);--r1:18px;--font:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+*{box-sizing:border-box} html,body{height:100%}
+body{margin:0;font-family:var(--font);color:var(--text);background:radial-gradient(1000px 520px at 12% -8%, rgba(62,162,255,.20), transparent 58%),radial-gradient(1000px 520px at 88% 10%, rgba(56,224,143,.10), transparent 58%),var(--bg)}
+.wrap{max-width:1400px;margin:0 auto;padding:18px 16px 42px}
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px;flex-wrap:wrap}
+.brand h1{margin:0;font-size:20px} .brand p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.35}
+.topbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.pill{border:1px solid var(--line);background:rgba(255,255,255,.04);padding:9px 10px;border-radius:999px;font-size:12px;color:var(--muted);box-shadow:var(--shadow);display:flex;gap:8px;align-items:center}
+a.tab{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:10px 12px;border-radius:999px;text-decoration:none;font-weight:900;font-size:13px}
+.card{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));border:1px solid var(--line);border-radius:var(--r1);box-shadow:var(--shadow);padding:14px}
+.grid2{display:grid;grid-template-columns:1fr 1.4fr;gap:14px} @media (max-width:1100px){.grid2{grid-template-columns:1fr}}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+label{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:6px;min-width:170px}
+input,select,textarea{border:1px solid var(--line);background:rgba(13,23,48,.85);color:var(--text);padding:10px 10px;border-radius:12px;outline:none;font-size:14px;min-width:170px}
+textarea{min-height:92px;resize:vertical}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:900;font-size:13px;outline:none}
+.btn.primary{background:rgba(62,162,255,.22);border-color:rgba(62,162,255,.55)}
+.btn.ok{background:rgba(56,224,143,.14);border-color:rgba(56,224,143,.38)}
+.btn.danger{background:rgba(255,90,115,.18);border-color:rgba(255,90,115,.40)}
+.list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.item{border:1px solid var(--line);background:rgba(0,0,0,.18);border-radius:14px;padding:10px;display:flex;gap:10px;justify-content:space-between;align-items:flex-start}
+.itemTitle{font-weight:1100;font-size:14px;line-height:1.25;word-break:break-word}
+.meta{color:var(--muted);font-size:12px;margin-top:6px;display:flex;gap:8px;flex-wrap:wrap}
+.badge{display:inline-flex;gap:6px;align-items:center;padding:5px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);white-space:nowrap;font-size:11px}
+.badge.ok{border-color:rgba(56,224,143,.38);background:rgba(56,224,143,.14);color:#ddffef}
+.badge.warn{border-color:rgba(255,211,90,.40);background:rgba(255,211,90,.12);color:#fff1c9}
+.badge.bad{border-color:rgba(255,90,115,.40);background:rgba(255,90,115,.12);color:#ffe0e6}
+.badge.acc{border-color:rgba(62,162,255,.52);background:rgba(62,162,255,.14);color:#dbeeff}
+.hr{height:1px;background:var(--line);margin:12px 0}
+.hint{color:var(--muted);font-size:12px;line-height:1.35;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>STOOM Manager — Suivi clients</h1>
+      <p>Rappels clients, motifs, prochaine action, statut.</p>
+    </div>
+    <div class="topbar">
+      <div class="pill"><span>💾</span><span id="saveStatus">Prêt</span></div>
+      <a class="tab" href="./index.html">⬅ Accueil</a>
+      <a class="tab" href="./taches.html">✅ Tâches</a>
+      <a class="tab" href="./planning.html">📅 Planning</a>
+    </div>
+  </header>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Créer un rappel client</h2>
+      <div class="row">
+        <label style="flex:1;min-width:240px">Client (nom / pseudo)
+          <input id="cName" placeholder="Ex : M. Dupont / Julie / Client DIY..." />
+        </label>
+      </div>
+      <div class="row">
+        <label class="small">Date rappel
+          <input type="date" id="cDate" />
+        </label>
+        <label class="small">Motif
+          <select id="cMotif">
+            <option value="suivi_sevrage">Suivi sevrage</option>
+            <option value="sav">SAV</option>
+            <option value="commande">Commande</option>
+            <option value="devis">Devis</option>
+            <option value="autre">Autre</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <label style="flex:1;min-width:240px">Prochaine action
+          <input id="cNext" placeholder="Ex : rappeler pour dosage / prévenir arrivée commande..." />
+        </label>
+      </div>
+      <div class="row">
+        <label style="flex:1;min-width:240px">Note
+          <textarea id="cNote" placeholder="Infos utiles, préférences, matériel, contexte…"></textarea>
+        </label>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="addBtn">Ajouter</button>
+        <button class="btn" id="clearBtn">Vider</button>
+      </div>
+      <div class="hint">Statuts : À rappeler / Fait / Annulé.</div>
+    </div>
+
+    <div class="card">
+      <h2>Liste + filtres</h2>
+      <div class="row">
+        <label style="flex:1;min-width:240px">Recherche
+          <input id="q" placeholder="Nom / motif / note..." />
+        </label>
+      </div>
+      <div class="row">
+        <label class="small">Statut
+          <select id="fStatus">
+            <option value="all">Tous</option>
+            <option value="todo">À rappeler</option>
+            <option value="done">Fait</option>
+            <option value="canceled">Annulé</option>
+          </select>
+        </label>
+        <label class="small">Motif
+          <select id="fMotif">
+            <option value="all">Tous</option>
+            <option value="suivi_sevrage">Suivi sevrage</option>
+            <option value="sav">SAV</option>
+            <option value="commande">Commande</option>
+            <option value="devis">Devis</option>
+            <option value="autre">Autre</option>
+          </select>
+        </label>
+        <label class="small">Date (de)
+          <input type="date" id="fFrom" />
+        </label>
+        <label class="small">Date (à)
+          <input type="date" id="fTo" />
+        </label>
+      </div>
+
+      <div class="hr"></div>
+      <div class="list" id="list"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $=(s)=>document.querySelector(s);
+const KEY="stoom_manager_shared_v1";
+
+function uid(){return Math.random().toString(16).slice(2)+"-"+Date.now().toString(16)}
+function nowISO(){return new Date().toISOString()}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]))}
+function ymd(d){ const x=(d instanceof Date)?d:new Date(d); const y=x.getFullYear(); const m=String(x.getMonth()+1).padStart(2,"0"); const a=String(x.getDate()).padStart(2,"0"); return `${y}-${m}-${a}`; }
+function setSaveStatus(txt){ const el=$("#saveStatus"); if(!el) return; el.textContent=txt; clearTimeout(setSaveStatus.t); setSaveStatus.t=setTimeout(()=>{el.style.opacity=".86"},900); }
+
+function normalize(s){
+  s=s||{};
+  s.options=s.options||{};
+  if(!s.options.shopName) s.options.shopName="STOOM Manager";
+  s.clientFollowups=Array.isArray(s.clientFollowups)?s.clientFollowups:[];
+  return s;
+}
+function load(){ try{return normalize(JSON.parse(localStorage.getItem(KEY)||"{}"));}catch(e){return normalize({});} }
+let state=load();
+function save(){ localStorage.setItem(KEY, JSON.stringify(state)); setSaveStatus("Sauvegardé"); }
+
+function clearForm(){
+  $("#cName").value="";
+  $("#cDate").value=ymd(new Date());
+  $("#cMotif").value="suivi_sevrage";
+  $("#cNext").value="";
+  $("#cNote").value="";
+}
+
+function motifLabel(m){
+  if(m==="suivi_sevrage") return "Suivi sevrage";
+  if(m==="sav") return "SAV";
+  if(m==="commande") return "Commande";
+  if(m==="devis") return "Devis";
+  return "Autre";
+}
+
+function add(){
+  const name=($("#cName").value||"").trim();
+  const date=$("#cDate").value;
+  const motif=$("#cMotif").value;
+  const next=($("#cNext").value||"").trim();
+  const note=($("#cNote").value||"").trim();
+  if(!name) return alert("Client requis.");
+  if(!date) return alert("Date requise.");
+  state.clientFollowups.unshift({
+    id:uid(), name, date, motif, next, note,
+    status:"todo", // todo | done | canceled
+    closedAt:"", closedNote:"",
+    createdAt:nowISO()
+  });
+  save(); clearForm(); render();
+}
+
+function applyFilters(rows){
+  const q=($("#q").value||"").trim().toLowerCase();
+  const st=$("#fStatus").value;
+  const m=$("#fMotif").value;
+  const from=$("#fFrom").value;
+  const to=$("#fTo").value;
+
+  return rows.filter(r=>{
+    if(st!=="all" && r.status!==st) return false;
+    if(m!=="all" && r.motif!==m) return false;
+    if(from && String(r.date||"")<from) return false;
+    if(to && String(r.date||"")>to) return false;
+
+    if(q){
+      const hay=[r.name,motifLabel(r.motif),r.next,r.note,r.closedNote].join(" ").toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function render(){
+  const rows=applyFilters(state.clientFollowups.slice());
+  const host=$("#list");
+  if(!rows.length){ host.innerHTML=`<div class="hint">Aucun rappel client.</div>`; return; }
+
+  host.innerHTML=rows.map(r=>{
+    const stBadge = r.status==="done" ? `<span class="badge ok">Fait</span>`
+      : r.status==="canceled" ? `<span class="badge bad">Annulé</span>`
+      : `<span class="badge warn">À rappeler</span>`;
+    const dueBadge = `<span class="badge">${esc(r.date)}</span>`;
+    const motif = `<span class="badge acc">${esc(motifLabel(r.motif))}</span>`;
+    const closed = (r.status!=="todo") ? `<div class="hint" style="margin-top:8px"><b>Clôture :</b> ${esc(r.closedNote||"")}</div>` : "";
+    return `
+      <div class="item">
+        <div style="flex:1;min-width:0">
+          <div class="itemTitle">${esc(r.name)} — ${esc(r.next||"Rappel")}</div>
+          <div class="meta">${stBadge}${dueBadge}${motif}</div>
+          ${r.note?`<div class="hint" style="margin-top:8px">${esc(r.note)}</div>`:""}
+          ${closed}
+        </div>
+        <div>
+          ${r.status==="todo" ? `
+            <button class="btn ok" data-done="${esc(r.id)}">Fait</button>
+            <button class="btn danger" data-cancel="${esc(r.id)}">Annuler</button>
+          ` : `
+            <button class="btn" data-reopen="${esc(r.id)}">Réouvrir</button>
+          `}
+          <button class="btn" data-edit="${esc(r.id)}">Éditer</button>
+          <button class="btn danger" data-del="${esc(r.id)}">Supprimer</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  host.querySelectorAll("[data-del]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const id=b.getAttribute("data-del");
+      if(!confirm("Supprimer ce rappel ?")) return;
+      state.clientFollowups=state.clientFollowups.filter(x=>x.id!==id);
+      save(); render();
+    });
+  });
+
+  host.querySelectorAll("[data-done]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const id=b.getAttribute("data-done");
+      const r=state.clientFollowups.find(x=>x.id===id); if(!r) return;
+      const c=prompt("Note de clôture :", r.closedNote||""); if(c===null) return;
+      r.status="done"; r.closedAt=nowISO(); r.closedNote=String(c||"").trim();
+      save(); render();
+    });
+  });
+
+  host.querySelectorAll("[data-cancel]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const id=b.getAttribute("data-cancel");
+      const r=state.clientFollowups.find(x=>x.id===id); if(!r) return;
+      const c=prompt("Motif annulation (optionnel) :", r.closedNote||""); if(c===null) return;
+      r.status="canceled"; r.closedAt=nowISO(); r.closedNote=String(c||"").trim();
+      save(); render();
+    });
+  });
+
+  host.querySelectorAll("[data-reopen]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const id=b.getAttribute("data-reopen");
+      const r=state.clientFollowups.find(x=>x.id===id); if(!r) return;
+      r.status="todo"; r.closedAt=""; save(); render();
+    });
+  });
+
+  host.querySelectorAll("[data-edit]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const id=b.getAttribute("data-edit");
+      const r=state.clientFollowups.find(x=>x.id===id); if(!r) return;
+      const n=prompt("Client :", r.name); if(n===null) return;
+      const d=prompt("Date (YYYY-MM-DD) :", r.date); if(d===null) return;
+      const m=prompt("Motif (suivi_sevrage/sav/commande/devis/autre) :", r.motif); if(m===null) return;
+      const nx=prompt("Prochaine action :", r.next||""); if(nx===null) return;
+      const no=prompt("Note :", r.note||""); if(no===null) return;
+
+      const mm=String(m||"").trim();
+      if(!["suivi_sevrage","sav","commande","devis","autre"].includes(mm)) return alert("Motif invalide.");
+
+      r.name=String(n||"").trim();
+      r.date=String(d||"").trim();
+      r.motif=mm;
+      r.next=String(nx||"").trim();
+      r.note=String(no||"").trim();
+      save(); render();
+    });
+  });
+}
+
+(function init(){
+  if(!$("#cDate").value) $("#cDate").value=ymd(new Date());
+  clearForm();
+  $("#addBtn").addEventListener("click", add);
+  $("#clearBtn").addEventListener("click", clearForm);
+
+  ["q","fStatus","fMotif","fFrom","fTo"].forEach(id=>{
+    $("#"+id).addEventListener("input", render);
+    $("#"+id).addEventListener("change", render);
+  });
+
+  setSaveStatus("Prêt");
+  render();
+})();
+</script>
+</body>
+</html>
