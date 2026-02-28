@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>STOOM Manager</title>
+<style>
+:root{
+  --bg:#0a1222; --panel:#0f1b34; --line:rgba(255,255,255,.10);
+  --text:#e9efff; --muted:#a9b6da; --accent:#3ea2ff;
+  --ok:#38e08f; --warn:#ffd35a; --bad:#ff5a73;
+  --shadow:0 14px 40px rgba(0,0,0,.38); --r1:18px; --r2:12px;
+  --font:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:var(--font); color:var(--text);
+  background:
+    radial-gradient(1000px 520px at 12% -8%, rgba(62,162,255,.20), transparent 58%),
+    radial-gradient(1000px 520px at 88% 10%, rgba(56,224,143,.10), transparent 58%),
+    var(--bg);
+}
+.wrap{max-width:1200px;margin:0 auto;padding:18px 16px 42px}
+header{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}
+.brand h1{margin:0;font-size:20px;letter-spacing:.2px}
+.brand p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.35;max-width:980px}
+.pill{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  padding:9px 10px;border-radius:999px;
+  font-size:12px;color:var(--muted);
+  box-shadow:var(--shadow);
+  display:flex;gap:8px;align-items:center;
+}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media (max-width: 900px){.grid{grid-template-columns:1fr}}
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+  border:1px solid var(--line);
+  border-radius:var(--r1);
+  box-shadow:var(--shadow);
+  padding:14px;
+}
+.card h2{margin:0 0 6px;font-size:16px}
+.card p{margin:0;color:var(--muted);font-size:12px;line-height:1.35}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.btn{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  padding:10px 12px;border-radius:12px;
+  cursor:pointer;font-weight:900;font-size:13px;
+  outline:none; transition:transform .05s ease, background .2s ease, border-color .2s ease;
+  user-select:none; text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+}
+.btn:hover{background:rgba(255,255,255,.09)}
+.btn:active{transform:translateY(1px)}
+.btn:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25)}
+.btn.primary{background:rgba(62,162,255,.22);border-color:rgba(62,162,255,.55)}
+.btn.ok{background:rgba(56,224,143,.14);border-color:rgba(56,224,143,.38)}
+.btn.danger{background:rgba(255,90,115,.18);border-color:rgba(255,90,115,.40)}
+.hr{height:1px;background:rgba(255,255,255,.10);margin:14px 0}
+.small{font-size:12px;color:var(--muted)}
+code.k{padding:2px 6px;border:1px solid rgba(255,255,255,.10);border-radius:8px;background:rgba(0,0,0,.18);color:var(--text)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>STOOM Manager</h1>
+      <p>Logiciel local (PC). Toutes les données sont enregistrées sur ce poste. Modules séparés par fichier.</p>
+      <div class="small" style="margin-top:10px">Raccourci clavier : <code class="k">Ctrl</code> + <code class="k">F</code> (recherche dans la page)</div>
+    </div>
+    <div class="pill"><span>💾</span><span id="status">Prêt</span></div>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Planning</h2>
+      <p>Planning semaine imprimable A4 paysage + retards/absences + édition fin de mois.</p>
+      <div class="row">
+        <a class="btn primary" href="./planning.html">Ouvrir Planning</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Tâches & rappels magasin</h2>
+      <p>À faire / en retard / fait (+ commentaire) + assignation vendeur + filtres par date + boutons Aujourd’hui / Cette semaine.</p>
+      <div class="row">
+        <a class="btn primary" href="./taches.html">Ouvrir Tâches</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Achats magasin</h2>
+      <p>Liste d’achats, priorités, statut, historique rapide.</p>
+      <div class="row">
+        <a class="btn primary" href="./achats.html">Ouvrir Achats</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Suivi clients</h2>
+      <p>Rappels clients, motifs, prochaine action, statut (à rappeler / fait / annulé).</p>
+      <div class="row">
+        <a class="btn primary" href="./clients.html">Ouvrir Clients</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hr"></div>
+  <div class="small">Astuce : dans Firefox, pour l’impression en couleurs, active “Imprimer l’arrière-plan / couleurs”.</div>
+</div>
+
+<script>
+(() => {
+  const KEY="stoom_manager_shared_v1";
+  const el=document.getElementById("status");
+  function load(){
+    try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; }
+  }
+  const s=load();
+  const shop=(s.options && s.options.shopName) ? s.options.shopName : "STOOM Manager";
+  el.textContent = "Prêt — " + shop;
+})();
+</script>
+</body>
+</html>
