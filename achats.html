@@ -5,35 +5,77 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>STOOM Manager — Achats</title>
 <style>
-:root{--bg:#0a1222;--panel:#0f1b34;--line:rgba(255,255,255,.10);--line2:rgba(255,255,255,.06);--text:#e9efff;--muted:#a9b6da;--accent:#3ea2ff;--ok:#38e08f;--warn:#ffd35a;--bad:#ff5a73;--shadow:0 14px 40px rgba(0,0,0,.38);--r1:18px;--font:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+:root{
+  --bg:#0a1222;--panel:#0f1b34;--line:rgba(255,255,255,.10);--line2:rgba(255,255,255,.06);
+  --text:#e9efff;--muted:#a9b6da;--accent:#3ea2ff;--ok:#38e08f;--warn:#ffd35a;--bad:#ff5a73;
+  --shadow:0 14px 40px rgba(0,0,0,.38);--r1:18px;--font:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif
+}
 *{box-sizing:border-box} html,body{height:100%}
-body{margin:0;font-family:var(--font);color:var(--text);background:radial-gradient(1000px 520px at 12% -8%, rgba(62,162,255,.20), transparent 58%),radial-gradient(1000px 520px at 88% 10%, rgba(56,224,143,.10), transparent 58%),var(--bg)}
-.wrap{max-width:1400px;margin:0 auto;padding:18px 16px 42px}
+body{
+  margin:0;font-family:var(--font);color:var(--text);
+  background:
+    radial-gradient(1000px 520px at 12% -8%, rgba(62,162,255,.20), transparent 58%),
+    radial-gradient(1000px 520px at 88% 10%, rgba(56,224,143,.10), transparent 58%),
+    var(--bg)
+}
+.wrap{max-width:1450px;margin:0 auto;padding:18px 16px 42px}
 header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px;flex-wrap:wrap}
 .brand h1{margin:0;font-size:20px} .brand p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.35}
 .topbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
 .pill{border:1px solid var(--line);background:rgba(255,255,255,.04);padding:9px 10px;border-radius:999px;font-size:12px;color:var(--muted);box-shadow:var(--shadow);display:flex;gap:8px;align-items:center}
 a.tab{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:10px 12px;border-radius:999px;text-decoration:none;font-weight:900;font-size:13px}
 .card{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));border:1px solid var(--line);border-radius:var(--r1);box-shadow:var(--shadow);padding:14px}
-.grid2{display:grid;grid-template-columns:1fr 1.4fr;gap:14px} @media (max-width:1100px){.grid2{grid-template-columns:1fr}}
+.grid2{display:grid;grid-template-columns:1fr 1.55fr;gap:14px}
+@media (max-width:1150px){.grid2{grid-template-columns:1fr}}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 label{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:6px;min-width:170px}
-input,select,textarea{border:1px solid var(--line);background:rgba(13,23,48,.85);color:var(--text);padding:10px 10px;border-radius:12px;outline:none;font-size:14px;min-width:170px}
+input,select,textarea{
+  border:1px solid var(--line);background:rgba(13,23,48,.85);color:var(--text);
+  padding:10px 10px;border-radius:12px;outline:none;font-size:14px;min-width:170px
+}
 textarea{min-height:92px;resize:vertical}
-.btn{border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:900;font-size:13px;outline:none}
+.btn{
+  border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);
+  padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:900;font-size:13px;outline:none;
+  user-select:none
+}
 .btn.primary{background:rgba(62,162,255,.22);border-color:rgba(62,162,255,.55)}
 .btn.ok{background:rgba(56,224,143,.14);border-color:rgba(56,224,143,.38)}
+.btn.warn{background:rgba(255,211,90,.12);border-color:rgba(255,211,90,.40)}
 .btn.danger{background:rgba(255,90,115,.18);border-color:rgba(255,90,115,.40)}
+.btn.ghost{background:transparent}
+.btn.small{padding:7px 10px;border-radius:11px;font-size:12px}
+
 .list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
-.item{border:1px solid var(--line);background:rgba(0,0,0,.18);border-radius:14px;padding:10px;display:flex;gap:10px;justify-content:space-between;align-items:flex-start}
+.item{
+  border:1px solid var(--line);background:rgba(0,0,0,.18);border-radius:14px;
+  padding:10px;display:flex;gap:10px;justify-content:space-between;align-items:flex-start
+}
 .itemTitle{font-weight:1100;font-size:14px;line-height:1.25;word-break:break-word}
-.meta{color:var(--muted);font-size:12px;margin-top:6px;display:flex;gap:8px;flex-wrap:wrap}
-.badge{display:inline-flex;gap:6px;align-items:center;padding:5px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);white-space:nowrap;font-size:11px}
+.meta{color:var(--muted);font-size:12px;margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.badge{
+  display:inline-flex;gap:6px;align-items:center;padding:5px 8px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);
+  white-space:nowrap;font-size:11px
+}
 .badge.ok{border-color:rgba(56,224,143,.38);background:rgba(56,224,143,.14);color:#ddffef}
 .badge.warn{border-color:rgba(255,211,90,.40);background:rgba(255,211,90,.12);color:#fff1c9}
 .badge.bad{border-color:rgba(255,90,115,.40);background:rgba(255,90,115,.12);color:#ffe0e6}
+.badge.acc{border-color:rgba(62,162,255,.42);background:rgba(62,162,255,.12);color:#dbeeff}
+
 .hr{height:1px;background:var(--line);margin:12px 0}
 .hint{color:var(--muted);font-size:12px;line-height:1.35;margin-top:8px}
+.quick{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+.inlineEdit{
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px
+}
+.inlineEdit .chip{
+  border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:999px;
+  padding:6px 10px;font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:center
+}
+.inlineEdit input[type="date"]{min-width:160px;padding:8px 10px;border-radius:11px;font-size:13px}
+.inlineEdit select{min-width:200px;padding:8px 10px;border-radius:11px;font-size:13px}
 </style>
 </head>
 <body>
@@ -41,7 +83,7 @@ textarea{min-height:92px;resize:vertical}
   <header>
     <div class="brand">
       <h1>STOOM Manager — Achats</h1>
-      <p>Liste d’achats magasin avec priorités et statuts.</p>
+      <p>Achats magasin (fournitures / commandes matériel), fournisseurs, dates (souhaitée / commandée / reçue), workflow au clic.</p>
     </div>
     <div class="topbar">
       <div class="pill"><span>💾</span><span id="saveStatus">Prêt</span></div>
@@ -54,56 +96,106 @@ textarea{min-height:92px;resize:vertical}
   <div class="grid2">
     <div class="card">
       <h2>Ajouter un achat</h2>
+
       <div class="row">
-        <label style="flex:1;min-width:240px">Article / besoin
-          <input id="aTitle" placeholder="Ex : Gants nitrile / Essuie-tout / Pack résistances..." />
+        <label style="flex:1;min-width:260px">Article / besoin
+          <input id="aTitle" placeholder="Ex : Essuie-tout / Cartouches / Résistances / PG/VG…" />
         </label>
       </div>
+
       <div class="row">
-        <label class="small">Priorité
+        <label>Type
+          <select id="aKind">
+            <option value="fourniture">Fourniture magasin</option>
+            <option value="commande">Commande matériel</option>
+          </select>
+        </label>
+
+        <label>Fournisseur
+          <select id="aSupplier"></select>
+        </label>
+      </div>
+
+      <div class="row">
+        <label>Priorité
           <select id="aPrio">
             <option value="normale">Normale</option>
             <option value="haute">Haute</option>
             <option value="critique">Critique</option>
           </select>
         </label>
-        <label class="small">Statut
+
+        <label>Statut
           <select id="aStatus">
-            <option value="todo">À acheter</option>
+            <option value="todo">À commander</option>
             <option value="ordered">Commandé</option>
             <option value="received">Reçu</option>
           </select>
         </label>
-      </div>
-      <div class="row">
-        <label style="flex:1;min-width:240px">Note
-          <textarea id="aNote" placeholder="Référence, fournisseur, urgence, quantité…"></textarea>
+
+        <label>Date souhaitée
+          <input type="date" id="aDue" />
         </label>
       </div>
+
+      <div class="row">
+        <label style="flex:1;min-width:260px">Note
+          <textarea id="aNote" placeholder="Quantité, référence, infos fournisseur…"></textarea>
+        </label>
+      </div>
+
       <div class="row">
         <button class="btn primary" id="addBtn">Ajouter</button>
         <button class="btn" id="clearBtn">Vider</button>
       </div>
-      <div class="hint">Astuce : passe “Commandé” quand c’est fait, “Reçu” à la livraison.</div>
+
+      <div class="hr"></div>
+      <h3 style="margin:0 0 10px;font-size:12px;color:var(--muted);font-weight:1000;letter-spacing:.22px;text-transform:uppercase">Fournisseurs</h3>
+
+      <div class="row">
+        <label style="flex:1;min-width:260px">Ajouter un fournisseur
+          <input id="supInput" placeholder="Ex : FP / Flavour Power / …" />
+        </label>
+        <button class="btn" id="addSupBtn">Ajouter</button>
+      </div>
+
+      <div class="hint">Les fournisseurs sont partagés avec le HUB. Tu peux en ajouter à tout moment.</div>
     </div>
 
     <div class="card">
       <h2>Liste + filtres</h2>
+
       <div class="row">
-        <label style="flex:1;min-width:240px">Recherche
-          <input id="q" placeholder="Mot-clé..." />
+        <label style="flex:1;min-width:260px">Recherche
+          <input id="q" placeholder="Mot-clé (article, note, fournisseur)..." />
         </label>
       </div>
+
       <div class="row">
-        <label class="small">Statut
+        <label>Statut
           <select id="fStatus">
             <option value="all">Tous</option>
-            <option value="todo">À acheter</option>
+            <option value="todo">À commander</option>
             <option value="ordered">Commandé</option>
             <option value="received">Reçu</option>
           </select>
         </label>
-        <label class="small">Priorité
+
+        <label>Type
+          <select id="fKind">
+            <option value="all">Tous</option>
+            <option value="fourniture">Fourniture</option>
+            <option value="commande">Commande matériel</option>
+          </select>
+        </label>
+
+        <label>Fournisseur
+          <select id="fSupplier"></select>
+        </label>
+      </div>
+
+      <div class="row">
+        <label>Priorité
           <select id="fPrio">
             <option value="all">Toutes</option>
             <option value="normale">Normale</option>
@@ -111,6 +203,24 @@ textarea{min-height:92px;resize:vertical}
             <option value="critique">Critique</option>
           </select>
         </label>
+
+        <label>Échéance
+          <select id="fDue">
+            <option value="all">Toutes</option>
+            <option value="late">En retard</option>
+            <option value="today">Aujourd’hui</option>
+            <option value="week">7 jours</option>
+            <option value="nodate">Sans date</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="quick">
+        <button class="btn warn small" data-quick="late">En retard</button>
+        <button class="btn small" data-quick="today">Aujourd’hui</button>
+        <button class="btn small" data-quick="week">7 jours</button>
+        <button class="btn ghost small" data-quick="all">Reset</button>
+        <span class="hint" style="margin:0">Astuce : clique sur “Avancer” pour passer rapidement À commander → Commandé → Reçu (dates auto).</span>
       </div>
 
       <div class="hr"></div>
@@ -125,77 +235,267 @@ const KEY="stoom_manager_shared_v1";
 
 function uid(){return Math.random().toString(16).slice(2)+"-"+Date.now().toString(16)}
 function nowISO(){return new Date().toISOString()}
+function ymd(d){ const x=(d instanceof Date)?d:new Date(d); return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`; }
+function fmtFR(iso){ const p=(iso||"").split("-"); if(p.length!==3) return iso||""; return `${p[2]}/${p[1]}/${p[0]}`; }
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]))}
-function setSaveStatus(txt){ const el=$("#saveStatus"); if(!el) return; el.textContent=txt; clearTimeout(setSaveStatus.t); setSaveStatus.t=setTimeout(()=>{el.style.opacity=".86"},900); }
+function setSaveStatus(txt){ const el=$("#saveStatus"); if(!el) return; el.textContent=txt; el.style.opacity="1"; clearTimeout(setSaveStatus.t); setSaveStatus.t=setTimeout(()=>{el.style.opacity=".86"},900); }
 
 function normalize(s){
   s=s||{};
   s.options=s.options||{};
   if(!s.options.shopName) s.options.shopName="STOOM Manager";
+
+  s.suppliers=Array.isArray(s.suppliers)&&s.suppliers.length ? s.suppliers : ["KMLS PRO","GFC","AUVERGNE PHYTO","OPENVAP","ADNS"];
+  s.suppliers=s.suppliers.map(x=>String(x||"").trim()).filter(Boolean);
+
   s.purchases=Array.isArray(s.purchases)?s.purchases:[];
+  s.purchases=s.purchases.map(a=>{
+    a=a||{};
+    if(!a.id) a.id=uid();
+    a.title=String(a.title||"").trim();
+    a.kind=(a.kind==="commande"?"commande":"fourniture");
+    a.supplier=String(a.supplier||"").trim();
+    if(!s.suppliers.includes(a.supplier) && a.supplier) s.suppliers.push(a.supplier);
+    a.prio=(["normale","haute","critique"].includes(a.prio)?a.prio:"normale");
+    a.status=(["todo","ordered","received"].includes(a.status)?a.status:"todo");
+    a.due=String(a.due||"").trim();
+    a.orderedAt=String(a.orderedAt||"").trim();
+    a.receivedAt=String(a.receivedAt||"").trim();
+    a.note=String(a.note||"").trim();
+    a.createdAt=a.createdAt||nowISO();
+    a.updatedAt=a.updatedAt||nowISO();
+    return a;
+  });
+
   return s;
 }
 function load(){ try{return normalize(JSON.parse(localStorage.getItem(KEY)||"{}"));}catch(e){return normalize({});} }
 let state=load();
 function save(){ localStorage.setItem(KEY, JSON.stringify(state)); setSaveStatus("Sauvegardé"); }
 
-function clearForm(){
-  $("#aTitle").value="";
-  $("#aPrio").value="normale";
-  $("#aStatus").value="todo";
-  $("#aNote").value="";
-}
-function add(){
-  const title=($("#aTitle").value||"").trim();
-  const prio=$("#aPrio").value;
-  const status=$("#aStatus").value;
-  const note=($("#aNote").value||"").trim();
-  if(!title) return alert("Article requis.");
-  state.purchases.unshift({id:uid(),title,prio,status,note,createdAt:nowISO(),updatedAt:nowISO()});
-  save(); clearForm(); render();
+function kindLabel(k){ return k==="commande" ? "Commande matériel" : "Fourniture magasin"; }
+function prioBadge(p){ return p==="critique"?"bad":(p==="haute"?"warn":"ok"); }
+function statusLabel(s){ return s==="todo"?"À commander":(s==="ordered"?"Commandé":"Reçu"); }
+function statusBadge(s){ return s==="todo"?"warn":(s==="ordered"?"acc":"ok"); }
+
+function dueBadge(a){
+  const d=(a.due||"").trim();
+  if(!d) return `<span class="badge">📅 Souhaitée : —</span>`;
+  const today=ymd(new Date());
+  if(a.status!=="received" && d<today) return `<span class="badge bad">📅 Souhaitée : ${esc(fmtFR(d))} • en retard</span>`;
+  if(d===today) return `<span class="badge warn">📅 Souhaitée : ${esc(fmtFR(d))} • aujourd’hui</span>`;
+  return `<span class="badge acc">📅 Souhaitée : ${esc(fmtFR(d))}</span>`;
 }
 
-function prioBadge(p){ return p==="critique"?"bad":(p==="haute"?"warn":"ok"); }
-function statusLabel(s){ return s==="todo"?"À acheter":(s==="ordered"?"Commandé":"Reçu"); }
-function statusBadge(s){ return s==="todo"?"warn":(s==="ordered"?"acc":"ok"); }
+function fillSupplierSelects(){
+  const opts=state.suppliers
+    .slice()
+    .sort((a,b)=>a.localeCompare(b,'fr',{sensitivity:'base'}))
+    .map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");
+
+  $("#aSupplier").innerHTML = `<option value="">—</option>` + opts;
+  const cur=$("#aSupplier").value;
+  if(!cur && state.suppliers.length) $("#aSupplier").value=state.suppliers[0];
+
+  $("#fSupplier").innerHTML = `<option value="all">Tous</option><option value="none">Sans fournisseur</option>` + opts;
+}
+
+function clearForm(){
+  $("#aTitle").value="";
+  $("#aKind").value="fourniture";
+  $("#aSupplier").value=state.suppliers[0]||"";
+  $("#aPrio").value="normale";
+  $("#aStatus").value="todo";
+  $("#aDue").value="";
+  $("#aNote").value="";
+}
+
+function addPurchase(){
+  const title=($("#aTitle").value||"").trim();
+  if(!title) return alert("Article requis.");
+  const kind=$("#aKind").value;
+  const supplier=($("#aSupplier").value||"").trim();
+  const prio=$("#aPrio").value;
+  const status=$("#aStatus").value;
+  const due=($("#aDue").value||"").trim();
+  const note=($("#aNote").value||"").trim();
+
+  const today=ymd(new Date());
+  let orderedAt="", receivedAt="";
+  if(status==="ordered") orderedAt=today;
+  if(status==="received"){ orderedAt=today; receivedAt=today; }
+
+  state.purchases.unshift({
+    id:uid(),
+    title,kind,supplier,prio,status,
+    due,
+    orderedAt,
+    receivedAt,
+    note,
+    createdAt:nowISO(),
+    updatedAt:nowISO()
+  });
+
+  if(supplier && !state.suppliers.includes(supplier)){ state.suppliers.push(supplier); }
+
+  save();
+  fillSupplierSelects();
+  clearForm();
+  render();
+}
+
+function addSupplier(){
+  const n=($("#supInput").value||"").trim();
+  if(!n) return;
+  if(state.suppliers.some(x=>x.toLowerCase()===n.toLowerCase())){ $("#supInput").value=""; return; }
+  state.suppliers.push(n);
+  $("#supInput").value="";
+  save();
+  fillSupplierSelects();
+  render();
+}
 
 function applyFilters(rows){
   const q=($("#q").value||"").trim().toLowerCase();
   const fs=$("#fStatus").value;
+  const fk=$("#fKind").value;
+  const fsp=$("#fSupplier").value;
   const fp=$("#fPrio").value;
+  const fd=$("#fDue").value;
+
+  const today=ymd(new Date());
+  const week=ymd(new Date(Date.now()+7*24*60*60*1000));
+
   return rows.filter(a=>{
     if(fs!=="all" && a.status!==fs) return false;
+    if(fk!=="all" && a.kind!==fk) return false;
     if(fp!=="all" && a.prio!==fp) return false;
+
+    if(fsp==="none"){ if((a.supplier||"").trim()) return false; }
+    else if(fsp!=="all"){ if((a.supplier||"").trim()!==fsp) return false; }
+
+    const d=(a.due||"").trim();
+    if(fd==="late"){ if(!d || a.status==="received" || d>=today) return false; }
+    if(fd==="today"){ if(!d || d!==today) return false; }
+    if(fd==="week"){ if(!d || d<today || d>week) return false; }
+    if(fd==="nodate"){ if(d) return false; }
+
     if(q){
-      const hay=[a.title,a.note].join(" ").toLowerCase();
+      const hay=[a.title,a.note,a.supplier,a.kind,a.prio,a.status,a.due,a.orderedAt,a.receivedAt].join(" ").toLowerCase();
       if(!hay.includes(q)) return false;
     }
     return true;
   });
 }
 
+function sortRows(rows){
+  const today=ymd(new Date());
+  const prioRank={critique:0,haute:1,normale:2};
+  const statusRank={todo:0,ordered:1,received:2};
+
+  return rows.sort((a,b)=>{
+    const ad=(a.due||"").trim() || "9999-12-31";
+    const bd=(b.due||"").trim() || "9999-12-31";
+    const aLate = (a.status!=="received" && ad!=="9999-12-31" && ad<today) ? 0 : 1;
+    const bLate = (b.status!=="received" && bd!=="9999-12-31" && bd<today) ? 0 : 1;
+    if(aLate!==bLate) return aLate-bLate;
+
+    const as=statusRank[a.status]??9, bs=statusRank[b.status]??9;
+    if(as!==bs) return as-bs;
+
+    const ap=prioRank[a.prio]??9, bp=prioRank[b.prio]??9;
+    if(ap!==bp) return ap-bp;
+
+    if(ad!==bd) return ad.localeCompare(bd);
+
+    return (b.updatedAt||"").localeCompare(a.updatedAt||"");
+  });
+}
+
+function advanceStatus(a){
+  const today=ymd(new Date());
+  if(a.status==="todo"){
+    a.status="ordered";
+    if(!a.orderedAt) a.orderedAt=today;
+  }else if(a.status==="ordered"){
+    a.status="received";
+    if(!a.receivedAt) a.receivedAt=today;
+    if(!a.orderedAt) a.orderedAt=today;
+  }
+  a.updatedAt=nowISO();
+}
+
+function setStatus(a, status){
+  const today=ymd(new Date());
+  a.status=status;
+  if(status==="todo"){
+    a.receivedAt="";
+  }
+  if(status==="ordered"){
+    if(!a.orderedAt) a.orderedAt=today;
+    a.receivedAt="";
+  }
+  if(status==="received"){
+    if(!a.orderedAt) a.orderedAt=today;
+    if(!a.receivedAt) a.receivedAt=today;
+  }
+  a.updatedAt=nowISO();
+}
+
 function render(){
-  const rows=applyFilters(state.purchases.slice());
+  let rows=applyFilters(state.purchases.slice());
+  rows=sortRows(rows);
+
   const host=$("#list");
   if(!rows.length){ host.innerHTML=`<div class="hint">Aucun achat.</div>`; return; }
 
-  host.innerHTML=rows.map(a=>`
-    <div class="item">
-      <div style="flex:1;min-width:0">
-        <div class="itemTitle">${esc(a.title)}</div>
-        <div class="meta">
-          <span class="badge ${prioBadge(a.prio)}">Priorité : ${esc(a.prio)}</span>
-          <span class="badge ${statusBadge(a.status)}">${esc(statusLabel(a.status))}</span>
+  host.innerHTML=rows.map(a=>{
+    const sup = (a.supplier||"").trim() ? a.supplier : "—";
+    const ordered = (a.orderedAt||"").trim() ? fmtFR(a.orderedAt) : "—";
+    const received = (a.receivedAt||"").trim() ? fmtFR(a.receivedAt) : "—";
+    return `
+      <div class="item">
+        <div style="flex:1;min-width:0">
+          <div class="itemTitle">${esc(a.title)}</div>
+          <div class="meta">
+            <span class="badge ${statusBadge(a.status)}">${esc(statusLabel(a.status))}</span>
+            <span class="badge ${prioBadge(a.prio)}">Priorité : ${esc(a.prio)}</span>
+            <span class="badge acc">${esc(kindLabel(a.kind))}</span>
+            <span class="badge">🏷️ ${esc(sup)}</span>
+            ${dueBadge(a)}
+            <span class="badge">🧾 Cmd : ${esc(ordered)}</span>
+            <span class="badge">📦 Reçu : ${esc(received)}</span>
+          </div>
+
+          ${a.note?`<div class="hint" style="margin-top:8px">${esc(a.note)}</div>`:""}
+
+          <div class="inlineEdit">
+            <span class="chip">Statut :
+              <select data-st="${esc(a.id)}">
+                <option value="todo" ${a.status==="todo"?"selected":""}>À commander</option>
+                <option value="ordered" ${a.status==="ordered"?"selected":""}>Commandé</option>
+                <option value="received" ${a.status==="received"?"selected":""}>Reçu</option>
+              </select>
+            </span>
+
+            <span class="chip">Date commandée :
+              <input type="date" value="${esc(a.orderedAt||"")}" data-od="${esc(a.id)}" />
+            </span>
+
+            <span class="chip">Date reçue :
+              <input type="date" value="${esc(a.receivedAt||"")}" data-rd="${esc(a.id)}" />
+            </span>
+          </div>
         </div>
-        ${a.note?`<div class="hint" style="margin-top:8px">${esc(a.note)}</div>`:""}
+
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+          <button class="btn ok" data-next="${esc(a.id)}">Avancer</button>
+          <button class="btn" data-edit="${esc(a.id)}">Éditer</button>
+          <button class="btn danger" data-del="${esc(a.id)}">Supprimer</button>
+        </div>
       </div>
-      <div>
-        <button class="btn" data-next="${esc(a.id)}">Avancer</button>
-        <button class="btn" data-edit="${esc(a.id)}">Éditer</button>
-        <button class="btn danger" data-del="${esc(a.id)}">Supprimer</button>
-      </div>
-    </div>
-  `).join("");
+    `;
+  }).join("");
 
   host.querySelectorAll("[data-del]").forEach(b=>{
     b.addEventListener("click",()=>{
@@ -210,9 +510,44 @@ function render(){
     b.addEventListener("click",()=>{
       const id=b.getAttribute("data-next");
       const a=state.purchases.find(x=>x.id===id); if(!a) return;
-      a.status = a.status==="todo" ? "ordered" : (a.status==="ordered" ? "received" : "received");
-      a.updatedAt=nowISO();
+      advanceStatus(a);
       save(); render();
+    });
+  });
+
+  host.querySelectorAll("[data-st]").forEach(sel=>{
+    sel.addEventListener("change",()=>{
+      const id=sel.getAttribute("data-st");
+      const a=state.purchases.find(x=>x.id===id); if(!a) return;
+      setStatus(a, sel.value);
+      save(); render();
+    });
+  });
+
+  host.querySelectorAll("[data-od]").forEach(inp=>{
+    inp.addEventListener("change",()=>{
+      const id=inp.getAttribute("data-od");
+      const a=state.purchases.find(x=>x.id===id); if(!a) return;
+      const v=(inp.value||"").trim();
+      a.orderedAt=v;
+      if(v && a.status==="todo") a.status="ordered";
+      a.updatedAt=nowISO();
+      save();
+    });
+  });
+
+  host.querySelectorAll("[data-rd]").forEach(inp=>{
+    inp.addEventListener("change",()=>{
+      const id=inp.getAttribute("data-rd");
+      const a=state.purchases.find(x=>x.id===id); if(!a) return;
+      const v=(inp.value||"").trim();
+      a.receivedAt=v;
+      if(v){
+        if(a.status!=="received") a.status="received";
+        if(!a.orderedAt) a.orderedAt=ymd(new Date());
+      }
+      a.updatedAt=nowISO();
+      save();
     });
   });
 
@@ -220,33 +555,73 @@ function render(){
     b.addEventListener("click",()=>{
       const id=b.getAttribute("data-edit");
       const a=state.purchases.find(x=>x.id===id); if(!a) return;
+
       const t=prompt("Article :", a.title); if(t===null) return;
+      const k=prompt("Type (fourniture/commande) :", a.kind); if(k===null) return;
+      const sp=prompt("Fournisseur (libre) :", a.supplier||""); if(sp===null) return;
       const p=prompt("Priorité (normale/haute/critique) :", a.prio); if(p===null) return;
       const s=prompt("Statut (todo/ordered/received) :", a.status); if(s===null) return;
+      const d=prompt("Date souhaitée (YYYY-MM-DD ou vide) :", (a.due||"")); if(d===null) return;
+      const od=prompt("Date commandée (YYYY-MM-DD ou vide) :", (a.orderedAt||"")); if(od===null) return;
+      const rd=prompt("Date reçue (YYYY-MM-DD ou vide) :", (a.receivedAt||"")); if(rd===null) return;
       const n=prompt("Note :", a.note||""); if(n===null) return;
 
+      const kk=String(k||"").trim();
       const pp=String(p||"").trim();
       const ss=String(s||"").trim();
+      const dd=String(d||"").trim();
+      const ood=String(od||"").trim();
+      const rrd=String(rd||"").trim();
+      const ssp=String(sp||"").trim();
+
+      if(!["fourniture","commande"].includes(kk)) return alert("Type invalide.");
       if(!["normale","haute","critique"].includes(pp)) return alert("Priorité invalide.");
       if(!["todo","ordered","received"].includes(ss)) return alert("Statut invalide.");
+      if(dd && !/^\d{4}-\d{2}-\d{2}$/.test(dd)) return alert("Date souhaitée invalide.");
+      if(ood && !/^\d{4}-\d{2}-\d{2}$/.test(ood)) return alert("Date commandée invalide.");
+      if(rrd && !/^\d{4}-\d{2}-\d{2}$/.test(rrd)) return alert("Date reçue invalide.");
 
       a.title=String(t||"").trim();
+      a.kind=kk;
+      a.supplier=ssp;
       a.prio=pp;
-      a.status=ss;
+      setStatus(a, ss);
+      a.due=dd;
+      a.orderedAt=ood;
+      a.receivedAt=rrd;
       a.note=String(n||"").trim();
       a.updatedAt=nowISO();
-      save(); render();
+
+      if(a.supplier && !state.suppliers.includes(a.supplier)) state.suppliers.push(a.supplier);
+
+      save();
+      fillSupplierSelects();
+      render();
     });
   });
 }
 
 (function init(){
-  $("#addBtn").addEventListener("click", add);
+  fillSupplierSelects();
+
+  $("#addBtn").addEventListener("click", addPurchase);
   $("#clearBtn").addEventListener("click", clearForm);
-  ["q","fStatus","fPrio"].forEach(id=>{
+
+  $("#addSupBtn").addEventListener("click", addSupplier);
+  $("#supInput").addEventListener("keydown",(e)=>{ if(e.key==="Enter") addSupplier(); });
+
+  ["q","fStatus","fKind","fSupplier","fPrio","fDue"].forEach(id=>{
     $("#"+id).addEventListener("input", render);
     $("#"+id).addEventListener("change", render);
   });
+
+  document.querySelectorAll("[data-quick]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      $("#fDue").value=b.getAttribute("data-quick");
+      render();
+    });
+  });
+
   setSaveStatus("Prêt");
   clearForm();
   render();
