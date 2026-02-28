@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>STOOM Manager</title>
+
 <style>
 :root{
   --bg:#0a1222;
@@ -21,10 +22,18 @@
   --r1:18px;
   --r2:12px;
   --font:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  --cell:22px;
-  --namew:120px;
-  --dayw:84px;
-  --sumw:52px;
+
+  --slotW:12px;
+  --slotH:22px;
+  --colDay:92px;
+  --colVend:120px;
+  --colSum:58px;
+
+  --printSlotW:10.6mm;
+  --printSlotH:6.2mm;
+  --printColDay:22mm;
+  --printColVend:28mm;
+  --printColSum:14mm;
 }
 
 *{box-sizing:border-box}
@@ -39,7 +48,7 @@ body{
     var(--bg);
 }
 
-.wrap{max-width:1320px;margin:0 auto;padding:18px 16px 42px}
+.wrap{max-width:1400px;margin:0 auto;padding:18px 16px 42px}
 header{
   display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px
 }
@@ -65,7 +74,7 @@ header{
   padding:10px 12px;
   border-radius:999px;
   cursor:pointer;
-  font-weight:800;
+  font-weight:900;
   font-size:13px;
   transition:transform .05s ease, background .2s ease, border-color .2s ease;
   outline:none;
@@ -73,10 +82,7 @@ header{
 .tab:hover{background:rgba(255,255,255,.06)}
 .tab:active{transform:translateY(1px)}
 .tab:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25)}
-.tab.active{
-  background:rgba(62,162,255,.18);
-  border-color:rgba(62,162,255,.55);
-}
+.tab.active{background:rgba(62,162,255,.18);border-color:rgba(62,162,255,.55)}
 
 .card{
   background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
@@ -90,13 +96,11 @@ header{
   margin:12px 0 10px;
   font-size:12px;
   color:var(--muted);
-  font-weight:900;
+  font-weight:1000;
   letter-spacing:.22px;
   text-transform:uppercase
 }
 
-.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
-@media (max-width: 1040px){.grid{grid-template-columns:1fr}}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 label{
   font-size:12px;color:var(--muted);
@@ -141,12 +145,13 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25
 .btn.ghost{background:transparent}
 
 .hr{height:1px;background:var(--line);margin:12px 0}
+.hint{color:var(--muted);font-size:12px;line-height:1.35;margin-top:8px}
 
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-@media (max-width: 1040px){.kpis{grid-template-columns:repeat(2,1fr)}}
-.kpi{padding:12px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
-.kpi .num{font-size:20px;font-weight:1000}
-.kpi .lab{color:var(--muted);font-size:12px;margin-top:2px}
+.section{display:none}
+.section.active{display:block}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width: 1100px){.grid2{grid-template-columns:1fr}}
 
 .list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
 .item{
@@ -175,21 +180,11 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25
 .badge.warn{border-color:rgba(255,211,90,.40);background:rgba(255,211,90,.12);color:#fff1c9}
 .badge.bad{border-color:rgba(255,90,115,.40);background:rgba(255,90,115,.12);color:#ffe0e6}
 .badge.acc{border-color:rgba(62,162,255,.52);background:rgba(62,162,255,.14);color:#dbeeff}
-.hint{color:var(--muted);font-size:12px;line-height:1.35;margin-top:8px}
 
-.actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end;min-width:170px}
-.selInline{
-  min-width:170px;
-  padding:8px 10px;
-  border-radius:12px;
-  font-size:13px
+.colorTag{
+  width:12px;height:12px;border-radius:4px;display:inline-block;margin-right:8px;transform:translateY(1px);
+  border:1px solid rgba(255,255,255,.18)
 }
-
-.section{display:none}
-.section.active{display:block}
-
-.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media (max-width: 1040px){.split{grid-template-columns:1fr}}
 
 .plWrap{
   border:1px solid var(--line);
@@ -199,27 +194,33 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25
   padding:10px;
 }
 
-.plHeader{
-  display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:10px
+.plTop{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px 0
 }
-.plHeader .left{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.plHeader .right{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
-.plTitle{
-  font-weight:1000;
-  font-size:14px;
-  letter-spacing:.2px
-}
+.plTitle{font-weight:1100;font-size:14px;letter-spacing:.2px}
 .plSub{color:var(--muted);font-size:12px}
+
+.legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.legend .chip{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:12px;
+  color:var(--muted);
+  display:flex;align-items:center;gap:8px
+}
+.swatch{width:14px;height:14px;border-radius:4px;border:1px solid rgba(255,255,255,.22)}
 
 table.pl{
   border-collapse:separate;
   border-spacing:0;
   width:100%;
-  min-width:1080px;
+  table-layout:fixed;
   font-size:11px;
-  background:rgba(255,255,255,.02);
   border-radius:12px;
   overflow:hidden;
+  background:rgba(255,255,255,.02);
 }
 .pl th,.pl td{border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:0}
 .pl thead th{
@@ -228,16 +229,13 @@ table.pl{
   z-index:4;
   background:rgba(15,27,52,.96);
   color:var(--muted);
-  font-weight:1000;
+  font-weight:1100;
 }
-.pl .thDay{width:var(--dayw);min-width:var(--dayw);padding:8px 8px;text-align:left;color:var(--text)}
-.pl .thName{width:var(--namew);min-width:var(--namew);padding:8px 8px;text-align:left;color:var(--text)}
-.pl .thTime{
-  width:var(--cell);
-  min-width:var(--cell);
-  height:54px;
-  vertical-align:bottom;
-}
+.pl .thDay{width:var(--colDay);padding:8px 8px;text-align:left;color:var(--text)}
+.pl .thVend{width:var(--colVend);padding:8px 8px;text-align:left;color:var(--text)}
+.pl .thSum{width:var(--colSum);padding:8px 6px;text-align:center;color:var(--text)}
+
+.pl .thTime{width:var(--slotW);height:54px;vertical-align:bottom}
 .pl .thTime > div{
   writing-mode:vertical-rl;
   transform:rotate(180deg);
@@ -246,65 +244,81 @@ table.pl{
   margin:auto;
   font-size:10px;
   letter-spacing:.1px;
+  white-space:nowrap;
 }
-.pl .thSum{width:var(--sumw);min-width:var(--sumw);padding:8px 6px;text-align:center;color:var(--text)}
 .pl .dayRow th{
-  position:sticky;
-  top:54px;
-  z-index:3;
   background:rgba(13,23,48,.96);
   color:var(--text);
   padding:8px 10px;
   text-align:left;
-  font-weight:1000;
+  font-weight:1100;
   border-bottom:1px solid rgba(255,255,255,.12);
 }
-.pl .name{
-  padding:8px 8px;
-  font-weight:1000;
-  color:var(--text);
-  background:rgba(255,255,255,.03);
-}
-.pl .dayCell{
-  padding:8px 8px;
-  color:var(--muted);
-  background:rgba(255,255,255,.02);
-  font-weight:900;
-}
+.pl .dayCell{padding:8px 8px;color:var(--muted);background:rgba(255,255,255,.02);font-weight:900}
+.pl .vendCell{padding:8px 8px;font-weight:1100;color:var(--text);background:rgba(255,255,255,.03)}
 .pl .slot{
-  width:var(--cell);
-  height:20px;
+  width:var(--slotW);
+  height:var(--slotH);
   cursor:pointer;
   background:transparent;
+  position:relative;
 }
 .pl .slot:hover{background:rgba(255,255,255,.06)}
-.pl .slot.on{background:rgba(62,162,255,.36)}
-.pl .slot.on2{background:rgba(56,224,143,.20)}
-.pl .sum{
+
+.pl .slot.work{background:rgba(62,162,255,.35)}
+.pl .slot.work2{background:rgba(56,224,143,.22)}
+
+.pl .slot.abs{
+  background:
+    repeating-linear-gradient(45deg, rgba(255,255,255,.00) 0 6px, rgba(255,255,255,.10) 6px 12px);
+}
+.pl .slot.abs.maladie{background:
+  repeating-linear-gradient(45deg, rgba(255,90,115,.22) 0 6px, rgba(255,90,115,.08) 6px 12px);
+}
+.pl .slot.abs.conge{background:
+  repeating-linear-gradient(45deg, rgba(255,255,255,.14) 0 6px, rgba(255,255,255,.06) 6px 12px);
+}
+.pl .slot.abs.formation{background:
+  repeating-linear-gradient(45deg, rgba(62,162,255,.18) 0 6px, rgba(62,162,255,.08) 6px 12px);
+}
+.pl .slot.abs.autre{background:
+  repeating-linear-gradient(45deg, rgba(255,211,90,.20) 0 6px, rgba(255,211,90,.08) 6px 12px);
+}
+
+.pl .slot.retard::after{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(90deg, rgba(255,211,90,.25), rgba(255,211,90,.08));
+}
+.pl .slot.retard::before{
+  content:"";
+  position:absolute;left:2px;top:2px;
+  width:6px;height:6px;border-radius:3px;
+  background:rgba(255,211,90,.95);
+}
+
+.pl .sumCell{
   text-align:center;
-  font-weight:1000;
+  font-weight:1100;
   color:var(--text);
   background:rgba(255,255,255,.02);
   padding:0 6px;
 }
-.pl tfoot td{
-  background:rgba(15,27,52,.92);
-  color:var(--text);
-  font-weight:1000;
-  padding:10px 10px;
-}
-.pl tfoot .footBox{
+
+.plFooter{
   display:flex;
   justify-content:space-between;
   gap:14px;
   flex-wrap:wrap;
-  align-items:center
+  align-items:center;
+  padding:10px 10px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:rgba(255,255,255,.03);
+  margin-top:10px;
 }
 .plTotals{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center
 }
 .plTotals .chip{
   border:1px solid var(--line);
@@ -316,31 +330,60 @@ table.pl{
 }
 .plTotals .chip b{color:var(--text)}
 
-@page{size:A4 landscape;margin:8mm}
+.noPrint{}
+
+@page{size:A4 landscape;margin:6mm}
 @media print{
   body{background:#fff;color:#000}
-  .noPrint{display:none !important}
+  .noPrint, header, .nav{display:none !important}
   .wrap{max-width:none;padding:0;margin:0}
-  header,.nav{display:none !important}
   .section{display:none !important}
   #planningSection{display:block !important}
   #planningSection .card{box-shadow:none;border:none;background:#fff;padding:0}
   .plWrap{border:none;background:#fff;padding:0}
-  table.pl{min-width:0;width:100%}
-  :root{--cell:17px;--namew:105px;--dayw:78px;--sumw:46px}
+  .plTop{margin:0 0 4mm 0}
+  .plSub{color:#222}
+  .legend .chip{border:1px solid #ddd;background:#fff;color:#222}
+  table.pl{width:100%;table-layout:fixed}
+  :root{
+    --slotW:var(--printSlotW);
+    --slotH:var(--printSlotH);
+    --colDay:var(--printColDay);
+    --colVend:var(--printColVend);
+    --colSum:var(--printColSum);
+  }
   .pl thead th{background:#f2f3f6 !important;color:#333 !important}
   .pl .dayRow th{background:#f7f8fb !important;color:#111 !important}
-  .pl .name{background:#fff !important;color:#111 !important}
-  .pl .dayCell{background:#fff !important;color:#444 !important}
-  .pl .slot.on{background:#87bdf4 !important}
-  .pl .slot.on2{background:#ccefe0 !important}
-  .pl tfoot td{background:#f2f3f6 !important;color:#111 !important}
+  .pl .vendCell,.pl .dayCell,.pl .sumCell{background:#fff !important;color:#111 !important}
+  .pl .slot.work{background:#8bbff2 !important}
+  .pl .slot.work2{background:#bfeedd !important}
+  .pl .slot.abs.maladie{background:repeating-linear-gradient(45deg, #f7c0ca 0 6px, #ffdfe6 6px 12px) !important}
+  .pl .slot.abs.conge{background:repeating-linear-gradient(45deg, #e9ebf0 0 6px, #f7f8fb 6px 12px) !important}
+  .pl .slot.abs.formation{background:repeating-linear-gradient(45deg, #cfe6ff 0 6px, #e9f2ff 6px 12px) !important}
+  .pl .slot.abs.autre{background:repeating-linear-gradient(45deg, #ffe7ad 0 6px, #fff3d1 6px 12px) !important}
+  .pl .slot.retard::after{background:linear-gradient(90deg, #ffe08a, #fff1c7) !important}
+  .plFooter{display:none !important}
 }
 
-.colorTag{
-  width:12px;height:12px;border-radius:4px;display:inline-block;margin-right:8px;transform:translateY(1px);
-  border:1px solid rgba(255,255,255,.18)
+.reportTable{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  overflow:hidden;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:rgba(0,0,0,.18);
 }
+.reportTable th,.reportTable td{
+  padding:10px 10px;
+  border-bottom:1px solid var(--line2);
+  border-right:1px solid var(--line2);
+  font-size:13px;
+}
+.reportTable th{color:var(--muted);text-align:left;font-weight:1000}
+.reportTable td{color:var(--text);font-weight:800}
+.reportTable tr:last-child td{border-bottom:none}
+.reportTable td:last-child,.reportTable th:last-child{border-right:none}
 </style>
 </head>
 
@@ -349,7 +392,7 @@ table.pl{
   <header class="noPrint">
     <div class="brand">
       <h1>STOOM Manager</h1>
-      <p>Interface PC. Données enregistrées localement sur ce poste. Impression planning en A4 paysage (1 semaine) format tableau.</p>
+      <p>PC. Données enregistrées localement sur ce poste. Planning imprimable en A4 paysage sur 1 page (semaine). Ajoute retards / maladie / congés pour édition fin de mois.</p>
     </div>
     <div class="topbar">
       <div class="pill"><span>💾</span><span id="saveStatus">Prêt</span></div>
@@ -359,271 +402,182 @@ table.pl{
     </div>
   </header>
 
-  <nav class="nav noPrint" aria-label="Navigation">
-    <button class="tab active" data-tab="dashboardSection">Dashboard</button>
-    <button class="tab" data-tab="tasksSection">Tâches</button>
-    <button class="tab" data-tab="purchasesSection">Achats</button>
-    <button class="tab" data-tab="clientsSection">Suivi clients</button>
-    <button class="tab" data-tab="planningSection">Planning</button>
+  <nav class="nav noPrint">
+    <button class="tab active" data-tab="planningSection">Planning</button>
+    <button class="tab" data-tab="eventsSection">Retards / Absences</button>
+    <button class="tab" data-tab="reportSection">Édition fin de mois</button>
     <button class="tab" data-tab="settingsSection">Paramètres</button>
   </nav>
 
-  <section id="dashboardSection" class="section active">
-    <div class="card">
-      <h2>Dashboard</h2>
-      <div class="kpis" id="kpis"></div>
-      <div class="hr"></div>
-      <div class="split">
-        <div>
-          <h3>À traiter aujourd’hui</h3>
-          <div class="list" id="todayList"></div>
-        </div>
-        <div>
-          <h3>Achats en attente</h3>
-          <div class="list" id="purchaseQuickList"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="tasksSection" class="section">
-    <div class="grid">
-      <div class="card">
-        <h2>Créer une tâche</h2>
-        <div class="row">
-          <label class="full">Titre<input id="taskTitle" placeholder="Ex : Relancer fournisseur"></label>
-          <label>Motif<select id="taskMotif"></select></label>
-        </div>
-        <div class="row">
-          <label class="full">Détails<textarea id="taskNotes" placeholder="Infos utiles…"></textarea></label>
-        </div>
-        <div class="row">
-          <label class="small">Type
-            <select id="taskType">
-              <option value="todo">À faire</option>
-              <option value="reminder">Rappel</option>
-            </select>
-          </label>
-          <label class="small">Date<input type="date" id="taskDueDate"></label>
-          <label class="tiny">Heure<input type="time" id="taskDueTime"></label>
-        </div>
-        <div class="row">
-          <label style="min-width:auto;flex-direction:row;align-items:center;gap:10px;margin-top:2px">
-            <input type="checkbox" id="taskIsSeller">
-            Tâche vendeur
-          </label>
-          <label id="taskSellerWrap" style="display:none;min-width:240px">Vendeur<select id="taskSeller"></select></label>
-        </div>
-        <div class="row">
-          <button class="btn primary" id="addTaskBtn">Ajouter</button>
-          <button class="btn" id="clearTaskFormBtn">Vider</button>
-        </div>
-        <div class="hint">Passage en “Fait” : commentaire obligatoire.</div>
-      </div>
-
-      <div class="card">
-        <h2>Recherche / filtres</h2>
-        <div class="row">
-          <label class="full">Recherche<input id="taskSearch" placeholder="Texte, vendeur, motif…"></label>
-        </div>
-        <div class="row">
-          <label class="small">Date de<input type="date" id="taskDateFrom"></label>
-          <label class="small">Date à<input type="date" id="taskDateTo"></label>
-        </div>
-        <div class="row">
-          <button class="btn" id="taskTodayBtn">Aujourd’hui</button>
-          <button class="btn" id="taskWeekBtn">Cette semaine</button>
-          <button class="btn ghost" id="taskClearFiltersBtn">Réinitialiser</button>
-        </div>
-        <div class="hr"></div>
-        <div class="row">
-          <label class="small">Vue
-            <select id="taskView">
-              <option value="all">Tout</option>
-              <option value="todo">À faire</option>
-              <option value="reminder">Rappels</option>
-              <option value="late">En retard</option>
-              <option value="done">Fait</option>
-            </select>
-          </label>
-          <label class="small">Trier
-            <select id="taskSort">
-              <option value="due">Échéance</option>
-              <option value="created">Création</option>
-              <option value="seller">Vendeur</option>
-            </select>
-          </label>
-        </div>
-        <div class="list" id="tasksList"></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="purchasesSection" class="section">
-    <div class="grid">
-      <div class="card">
-        <h2>Ajouter un achat</h2>
-        <div class="row">
-          <label class="full">Produit / besoin<input id="buyTitle" placeholder="Ex : résistances X (pack de 5)"></label>
-          <label class="small">Priorité
-            <select id="buyPriority">
-              <option value="normal">Normal</option>
-              <option value="urgent">Urgent</option>
-            </select>
-          </label>
-        </div>
-        <div class="row">
-          <label class="full">Notes<input id="buyNotes" placeholder="Quantité, référence, fournisseur…"></label>
-        </div>
-        <div class="row">
-          <button class="btn primary" id="addBuyBtn">Ajouter</button>
-          <button class="btn" id="clearBuyBtn">Vider</button>
-        </div>
-      </div>
-      <div class="card">
-        <h2>Liste</h2>
-        <div class="row">
-          <label class="full">Recherche<input id="buySearch" placeholder="Tape un mot…"></label>
-          <label class="small">Filtre
-            <select id="buyFilter">
-              <option value="open">En attente</option>
-              <option value="done">Acheté</option>
-              <option value="all">Tout</option>
-            </select>
-          </label>
-        </div>
-        <div class="list" id="buyList"></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="clientsSection" class="section">
-    <div class="grid">
-      <div class="card">
-        <h2>Créer un suivi client</h2>
-        <div class="row">
-          <label class="full">Client<input id="clientName" placeholder="Ex : Mme X / M. Y"></label>
-          <label>Motif<select id="clientMotif"></select></label>
-        </div>
-        <div class="row">
-          <label class="full">Résumé<input id="clientSummary" placeholder="Ex : vérifier confort, dosage, matériel…"></label>
-        </div>
-        <div class="row">
-          <label class="small">Date<input type="date" id="clientDueDate"></label>
-          <label class="tiny">Heure<input type="time" id="clientDueTime"></label>
-          <label class="small">Vendeur<select id="clientSeller"></select></label>
-        </div>
-        <div class="row">
-          <button class="btn primary" id="addClientBtn">Ajouter</button>
-          <button class="btn" id="clearClientBtn">Vider</button>
-        </div>
-        <div class="hint">Clôture : commentaire obligatoire.</div>
-      </div>
-
-      <div class="card">
-        <h2>Recherche / filtres</h2>
-        <div class="row">
-          <label class="full">Recherche<input id="clientSearch" placeholder="Client, vendeur, motif…"></label>
-        </div>
-        <div class="row">
-          <label class="small">Date de<input type="date" id="clientDateFrom"></label>
-          <label class="small">Date à<input type="date" id="clientDateTo"></label>
-        </div>
-        <div class="row">
-          <button class="btn" id="clientTodayBtn">Aujourd’hui</button>
-          <button class="btn" id="clientWeekBtn">Cette semaine</button>
-          <button class="btn ghost" id="clientClearFiltersBtn">Réinitialiser</button>
-        </div>
-        <div class="hr"></div>
-        <div class="row">
-          <label class="small">Vue
-            <select id="clientView">
-              <option value="open">Ouverts</option>
-              <option value="late">En retard</option>
-              <option value="done">Clôturés</option>
-              <option value="all">Tout</option>
-            </select>
-          </label>
-        </div>
-        <div class="list" id="clientList"></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="planningSection" class="section">
+  <section id="planningSection" class="section active">
     <div class="card">
       <h2>Planning semaine</h2>
 
-      <div class="plHeader noPrint">
-        <div class="left">
-          <label class="small">Semaine (lundi)
-            <input type="date" id="planWeekStart">
-          </label>
-          <label class="small">Horaires
-            <select id="planRange">
-              <option value="08:30-19:00">08:30 → 19:00</option>
-              <option value="08:30-19:30">08:30 → 19:30</option>
-              <option value="09:00-19:00">09:00 → 19:00</option>
-              <option value="10:00-19:00">10:00 → 19:00</option>
-            </select>
-          </label>
-          <label class="small">Jours
-            <select id="planDays">
-              <option value="Lun,Mar,Mer,Jeu,Ven,Sam">Lun → Sam</option>
-              <option value="Lun,Mar,Mer,Jeu,Ven">Lun → Ven</option>
-              <option value="Mar,Mer,Jeu,Ven,Sam">Mar → Sam</option>
-            </select>
-          </label>
-          <label class="small">Mode
-            <select id="planPaintMode">
-              <option value="toggle">Toggle</option>
-              <option value="paintOn">Peindre ON</option>
-              <option value="paintOff">Peindre OFF</option>
-            </select>
-          </label>
-        </div>
-        <div class="right">
-          <label class="small">Nom
-            <input id="planName" placeholder="Ex : Semaine 10">
-          </label>
-          <button class="btn" id="planClearBtn">Vider</button>
-          <button class="btn primary" id="planSaveBtn">Sauvegarder</button>
-          <button class="btn" id="planLoadBtn">Charger</button>
-          <button class="btn ok" id="planPrintBtn">Imprimer A4</button>
-        </div>
+      <div class="row noPrint">
+        <label class="small">Semaine (lundi)
+          <input type="date" id="weekStart">
+        </label>
+        <label class="small">Horaires
+          <select id="rangeSel">
+            <option value="08:30-19:00">08:30 → 19:00</option>
+            <option value="08:30-19:30">08:30 → 19:30</option>
+            <option value="09:00-19:00">09:00 → 19:00</option>
+            <option value="10:00-19:00">10:00 → 19:00</option>
+          </select>
+        </label>
+        <label class="small">Jours
+          <select id="daysSel">
+            <option value="Lun,Mar,Mer,Jeu,Ven,Sam">Lun → Sam</option>
+            <option value="Lun,Mar,Mer,Jeu,Ven">Lun → Ven</option>
+          </select>
+        </label>
+
+        <label class="small">Mode
+          <select id="paintMode">
+            <option value="toggle">Toggle</option>
+            <option value="paintOn">Peindre ON</option>
+            <option value="paintOff">Peindre OFF</option>
+          </select>
+        </label>
+
+        <button class="btn" id="clearWeekBtn">Vider semaine</button>
+        <button class="btn ok" id="printWeekBtn">Imprimer A4</button>
       </div>
 
       <div class="plWrap">
-        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 10px 0">
+        <div class="plTop">
           <div>
-            <div class="plTitle" id="plPrintTitle">PLANNING</div>
-            <div class="plSub" id="plPrintSub"></div>
+            <div class="plTitle" id="printTitle">PLANNING</div>
+            <div class="plSub" id="printSub"></div>
           </div>
-          <div class="plTotals noPrint" id="plTotals"></div>
+          <div class="legend" id="legend"></div>
         </div>
-        <div id="planTableHost"></div>
+
+        <div id="planHost"></div>
+
+        <div class="plFooter noPrint">
+          <div class="plTotals" id="weekTotals"></div>
+          <div class="hint">Astuce : les retards / absences se gèrent dans l’onglet “Retards / Absences” et apparaissent sur le planning + dans l’édition fin de mois.</div>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <section id="eventsSection" class="section">
+    <div class="grid2">
+      <div class="card">
+        <h2>Ajouter un événement</h2>
+
+        <div class="row">
+          <label class="small">Type
+            <select id="evType">
+              <option value="retard">Retard</option>
+              <option value="maladie">Maladie</option>
+              <option value="conge">Congé</option>
+              <option value="formation">Formation</option>
+              <option value="autre">Autre absence</option>
+            </select>
+          </label>
+          <label class="small">Vendeur
+            <select id="evStaff"></select>
+          </label>
+        </div>
+
+        <div class="row">
+          <label class="small">Date
+            <input type="date" id="evDate">
+          </label>
+          <label class="tiny">Début
+            <input type="time" id="evStart" value="09:00">
+          </label>
+          <label class="tiny">Fin
+            <input type="time" id="evEnd" value="10:00">
+          </label>
+        </div>
+
+        <div class="row">
+          <label class="full">Motif / note
+            <input id="evNote" placeholder="Ex : arrêt maladie / retard bus / RDV médical…">
+          </label>
+        </div>
+
+        <div class="row">
+          <button class="btn primary" id="addEventBtn">Ajouter</button>
+          <button class="btn" id="clearEventBtn">Vider</button>
+        </div>
+
+        <div class="hint">Les événements apparaissent en couleur sur le planning et dans l’édition fin de mois (totaux, heures perdues, retards).</div>
+      </div>
+
+      <div class="card">
+        <h2>Liste / filtres</h2>
+
+        <div class="row">
+          <label class="small">Mois
+            <input type="month" id="evMonth">
+          </label>
+          <label class="small">Vendeur
+            <select id="evFilterStaff"></select>
+          </label>
+          <label class="small">Type
+            <select id="evFilterType">
+              <option value="all">Tous</option>
+              <option value="retard">Retard</option>
+              <option value="maladie">Maladie</option>
+              <option value="conge">Congé</option>
+              <option value="formation">Formation</option>
+              <option value="autre">Autre</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="list" id="evList"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="reportSection" class="section">
+    <div class="card">
+      <h2>Édition fin de mois</h2>
+
+      <div class="row noPrint">
+        <label class="small">Mois
+          <input type="month" id="repMonth">
+        </label>
+        <button class="btn primary" id="buildReportBtn">Générer</button>
+        <button class="btn" id="exportCsvBtn">Exporter CSV</button>
+        <button class="btn ok" id="printReportBtn">Imprimer</button>
+      </div>
+
+      <div class="hr"></div>
+      <div id="reportHost"></div>
     </div>
   </section>
 
   <section id="settingsSection" class="section">
-    <div class="grid">
+    <div class="grid2">
       <div class="card">
         <h2>Vendeurs</h2>
         <div class="row">
-          <label class="full">Ajouter<input id="staffInput" placeholder="Ex : Léa"></label>
+          <label class="full">Ajouter
+            <input id="staffInput" placeholder="Ex : Léa">
+          </label>
           <button class="btn primary" id="addStaffBtn">Ajouter</button>
         </div>
         <div class="list" id="staffList"></div>
       </div>
 
       <div class="card">
-        <h2>Motifs</h2>
+        <h2>Options</h2>
         <div class="row">
-          <label class="full">Ajouter<input id="motifInput" placeholder="Ex : Stock / SAV / Fournisseur"></label>
-          <button class="btn primary" id="addMotifBtn">Ajouter</button>
+          <label class="full">Nom boutique (impression)
+            <input id="shopName" placeholder="Ex : STOOM Michelin">
+          </label>
         </div>
-        <div class="list" id="motifList"></div>
+        <div class="row">
+          <button class="btn primary" id="saveOptionsBtn">Enregistrer</button>
+        </div>
+        <div class="hint">Le nom boutique s’affiche sur l’impression planning + édition fin de mois.</div>
       </div>
     </div>
   </section>
@@ -632,8 +586,7 @@ table.pl{
 <script>
 const $ = (s)=>document.querySelector(s)
 const $$ = (s)=>Array.from(document.querySelectorAll(s))
-
-const KEY="stoom_manager_pro_v1"
+const KEY="stoom_manager_ultimate_v2"
 
 function uid(){return Math.random().toString(16).slice(2)+"-"+Date.now().toString(16)}
 function nowISO(){return new Date().toISOString()}
@@ -668,6 +621,11 @@ function minutesToTime(m){
   const mm=String(m%60).padStart(2,"0")
   return `${h}:${mm}`
 }
+function frDateLabel(iso){
+  const p=(iso||"").split("-")
+  if(p.length!==3) return iso||""
+  return `${p[2]}/${p[1]}/${p[0]}`
+}
 function setSaveStatus(txt){
   const el=$("#saveStatus")
   if(!el) return
@@ -676,25 +634,12 @@ function setSaveStatus(txt){
   clearTimeout(setSaveStatus.t)
   setSaveStatus.t=setTimeout(()=>{el.style.opacity=".86"},900)
 }
-function isPast(dueDate,dueTime){
-  if(!dueDate) return false
-  const dt=new Date(`${dueDate}T${dueTime||"23:59"}:00`)
-  return dt.getTime()<Date.now()
-}
-function isToday(dueDate){
-  if(!dueDate) return false
-  return dueDate===ymd(new Date())
-}
-function inThisWeek(dueDate){
-  if(!dueDate) return false
-  const w0=startOfWeekMonday(new Date())
-  const w6=addDays(w0,6)
-  const d=new Date(dueDate+"T00:00:00")
-  return d>=w0 && d<=w6
-}
+function clamp(n,a,b){return Math.max(a,Math.min(b,n))}
 
 function normalize(s){
   s=s||{}
+  s.options=s.options||{}
+  if(!s.options.shopName) s.options.shopName="STOOM Manager"
   s.staff=Array.isArray(s.staff)&&s.staff.length?s.staff:["Léa","Arnaud","Evan"]
   s.staffColors=s.staffColors||{}
   s.staff.forEach((n,i)=>{
@@ -703,16 +648,12 @@ function normalize(s){
       s.staffColors[n]=palette[i%palette.length]
     }
   })
-  s.motifs=Array.isArray(s.motifs)&&s.motifs.length?s.motifs:["Général","Stock","Fournisseur","SAV","Sevrage","RH"]
-  s.tasks=Array.isArray(s.tasks)?s.tasks:[]
-  s.purchases=Array.isArray(s.purchases)?s.purchases:[]
-  s.clientFollowups=Array.isArray(s.clientFollowups)?s.clientFollowups:[]
-  s.plannings=Array.isArray(s.plannings)?s.plannings:[]
-  s.planningDraft=s.planningDraft||{weekStart:ymd(startOfWeekMonday()),range:"08:30-19:00",days:"Lun,Mar,Mer,Jeu,Ven,Sam",grid:{}}
-  if(!s.planningDraft.weekStart) s.planningDraft.weekStart=ymd(startOfWeekMonday())
-  if(!s.planningDraft.range) s.planningDraft.range="08:30-19:00"
-  if(!s.planningDraft.days) s.planningDraft.days="Lun,Mar,Mer,Jeu,Ven,Sam"
-  s.planningDraft.grid=s.planningDraft.grid||{}
+  s.planning=s.planning||{weekStart:ymd(startOfWeekMonday()),range:"08:30-19:00",days:"Lun,Mar,Mer,Jeu,Ven,Sam",grid:{}}
+  if(!s.planning.weekStart) s.planning.weekStart=ymd(startOfWeekMonday())
+  if(!s.planning.range) s.planning.range="08:30-19:00"
+  if(!s.planning.days) s.planning.days="Lun,Mar,Mer,Jeu,Ven,Sam"
+  s.planning.grid=s.planning.grid||{}
+  s.events=Array.isArray(s.events)?s.events:[]
   return s
 }
 
@@ -730,18 +671,6 @@ function save(){
   setSaveStatus("Sauvegardé")
 }
 
-function hydrateSelects(){
-  const motifSel=$("#taskMotif")
-  const clientMotif=$("#clientMotif")
-  if(motifSel) motifSel.innerHTML=state.motifs.map(m=>`<option value="${esc(m)}">${esc(m)}</option>`).join("")
-  if(clientMotif) clientMotif.innerHTML=state.motifs.map(m=>`<option value="${esc(m)}">${esc(m)}</option>`).join("")
-  const staffOptions=['<option value="">—</option>'].concat(state.staff.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`))
-  const tSel=$("#taskSeller")
-  const cSel=$("#clientSeller")
-  if(tSel) tSel.innerHTML=staffOptions.join("")
-  if(cSel) cSel.innerHTML=staffOptions.join("")
-}
-
 function bindTabs(){
   $$(".tab").forEach(btn=>{
     btn.addEventListener("click",()=>{
@@ -754,506 +683,611 @@ function bindTabs(){
   })
 }
 
-function clearTaskForm(){
-  $("#taskTitle").value=""
-  $("#taskNotes").value=""
-  $("#taskType").value="todo"
-  $("#taskDueDate").value=""
-  $("#taskDueTime").value=""
-  $("#taskIsSeller").checked=false
-  $("#taskSellerWrap").style.display="none"
-  $("#taskSeller").value=""
-  $("#taskMotif").value=state.motifs[0]||"Général"
-}
-
-function addTask(){
-  const title=($("#taskTitle").value||"").trim()
-  if(!title) return alert("Titre requis.")
-  const motif=$("#taskMotif").value||"Général"
-  const notes=($("#taskNotes").value||"").trim()
-  const type=$("#taskType").value
-  const dueDate=($("#taskDueDate").value||"").trim()
-  const dueTime=($("#taskDueTime").value||"").trim()
-  const isSeller=$("#taskIsSeller").checked
-  const vendor=isSeller?($("#taskSeller").value||""):""
-  state.tasks.unshift({
-    id:uid(),title,motif,notes,type,dueDate,dueTime,
-    status:"open",createdAt:nowISO(),doneAt:"",doneComment:"",
-    isSellerTask:isSeller,vendor
-  })
-  save()
-  clearTaskForm()
-  renderTasks()
-  renderDashboard()
-}
-
-function taskBucket(t){
-  if(t.status==="done") return "done"
-  if(t.dueDate && isPast(t.dueDate,t.dueTime)) return "late"
-  return t.type
-}
-function taskMatches(t){
-  const q=($("#taskSearch").value||"").toLowerCase().trim()
-  const from=($("#taskDateFrom").value||"").trim()
-  const to=($("#taskDateTo").value||"").trim()
-  if(from && (!t.dueDate || t.dueDate<from)) return false
-  if(to && (!t.dueDate || t.dueDate>to)) return false
-  if(!q) return true
-  const hay=[t.title,t.notes,t.vendor,t.motif,t.type,t.status,t.doneComment].join(" ").toLowerCase()
-  return hay.includes(q)
-}
-function renderTasks(){
-  const host=$("#tasksList")
-  if(!host) return
-  const view=$("#taskView").value
-  const sort=$("#taskSort").value
-  let rows=state.tasks.slice().filter(taskMatches)
-  rows=rows.filter(t=>{
-    const b=taskBucket(t)
-    if(view==="all") return true
-    if(view==="late") return b==="late"
-    if(view==="done") return b==="done"
-    return b===view
-  })
-  rows.sort((a,b)=>{
-    if(sort==="created") return (b.createdAt||"").localeCompare(a.createdAt||"")
-    if(sort==="seller") return (a.vendor||"").localeCompare(b.vendor||"") || (a.dueDate||"").localeCompare(b.dueDate||"")
-    const ad=a.dueDate||"9999-12-31"
-    const bd=b.dueDate||"9999-12-31"
-    if(ad!==bd) return ad.localeCompare(bd)
-    return (a.dueTime||"").localeCompare(b.dueTime||"")
-  })
-  if(!rows.length){
-    host.innerHTML=`<div class="hint">Aucune tâche.</div>`
-    return
-  }
-  host.innerHTML=rows.map(t=>{
-    const b=taskBucket(t)
-    const due=t.dueDate?`${t.dueDate}${t.dueTime?(" "+t.dueTime):""}`:"—"
-    const badges=[]
-    if(b==="late") badges.push(`<span class="badge bad">En retard</span>`)
-    if(b==="reminder") badges.push(`<span class="badge warn">Rappel</span>`)
-    if(b==="todo") badges.push(`<span class="badge acc">À faire</span>`)
-    if(t.status==="done") badges.push(`<span class="badge ok">Fait</span>`)
-    if(t.isSellerTask) badges.push(`<span class="badge">Vendeur: ${esc(t.vendor||"—")}</span>`)
-    if(t.motif) badges.push(`<span class="badge">${esc(t.motif)}</span>`)
-    if(t.dueDate && isToday(t.dueDate) && t.status!=="done") badges.push(`<span class="badge warn">Aujourd’hui</span>`)
-    return `
-      <div class="item">
-        <div class="itemLeft">
-          <div class="itemTitle">${esc(t.title)}</div>
-          <div class="meta">${badges.join("")}<span class="badge">Échéance: ${esc(due)}</span></div>
-          ${t.notes?`<div class="hint" style="margin-top:8px">${esc(t.notes)}</div>`:""}
-          ${t.status==="done"?`<div class="hint" style="margin-top:8px"><b>Commentaire :</b> ${esc(t.doneComment||"")}</div>`:""}
-        </div>
-        <div class="actions noPrint">
-          <select class="selInline" data-taskstatus="${t.id}">
-            ${t.status==="done"
-              ? `<option value="done" selected>Fait</option><option value="open">Réouvrir</option>`
-              : `<option value="open" selected>Ouvert</option><option value="done">Passer en fait…</option>`
-            }
-          </select>
-          <div class="row" style="justify-content:flex-end">
-            <button class="btn" data-edittask="${t.id}">Éditer</button>
-            <button class="btn danger" data-deltask="${t.id}">Supprimer</button>
-          </div>
-        </div>
-      </div>
-    `
-  }).join("")
-
-  host.querySelectorAll("[data-deltask]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const id=btn.getAttribute("data-deltask")
-      if(!confirm("Supprimer cette tâche ?")) return
-      state.tasks=state.tasks.filter(x=>x.id!==id)
-      save()
-      renderTasks()
-      renderDashboard()
+function ensureGrid(){
+  state.planning.grid=state.planning.grid||{}
+  const days=planDays()
+  state.staff.forEach(st=>{
+    if(!state.planning.grid[st]) state.planning.grid[st]={}
+    days.forEach(d=>{
+      if(!state.planning.grid[st][d]) state.planning.grid[st][d]={}
     })
   })
-  host.querySelectorAll("[data-taskstatus]").forEach(sel=>{
-    sel.addEventListener("change",()=>{
-      const id=sel.getAttribute("data-taskstatus")
-      const t=state.tasks.find(x=>x.id===id)
-      if(!t) return
-      if(sel.value==="done"){
-        const c=prompt("Commentaire obligatoire : qu’est-ce qui a été fait ?")
-        if(!c || !c.trim()){
-          alert("Commentaire obligatoire.")
-          sel.value="open"
-          return
-        }
-        t.status="done"
-        t.doneAt=nowISO()
-        t.doneComment=c.trim()
-      }else{
-        t.status="open"
-        t.doneAt=""
-        t.doneComment=""
+}
+
+function planDays(){
+  return (state.planning.days||"Lun,Mar,Mer,Jeu,Ven,Sam").split(",").map(x=>x.trim()).filter(Boolean)
+}
+function parseRange(r){
+  const p=(r||"08:30-19:00").split("-")
+  return {start:toMinutes(p[0]),end:toMinutes(p[1])}
+}
+function buildSlots(){
+  const {start,end}=parseRange(state.planning.range)
+  const slots=[]
+  for(let m=start;m<end;m+=30) slots.push(m)
+  return slots
+}
+function dayHeaderLabel(dayIndex){
+  const monday=new Date(state.planning.weekStart+"T00:00:00")
+  const d=addDays(monday,dayIndex)
+  const daysShort=["LUN","MAR","MER","JEU","VEN","SAM","DIM"]
+  const wd=daysShort[(d.getDay()+6)%7]
+  return `${wd} — ${frDateLabel(ymd(d))}`
+}
+function weekSubLabel(){
+  const monday=new Date(state.planning.weekStart+"T00:00:00")
+  const days=planDays()
+  const last=addDays(monday,days.length-1)
+  return `SEMAINE DU ${frDateLabel(ymd(monday))} AU ${frDateLabel(ymd(last))}`
+}
+
+function toggleCell(staff,day,idx,force=null){
+  ensureGrid()
+  const cur=!!state.planning.grid?.[staff]?.[day]?.[idx]
+  const nxt=(force===null)?!cur:!!force
+  if(nxt) state.planning.grid[staff][day][idx]=1
+  else delete state.planning.grid[staff][day][idx]
+}
+
+function dayWorkMinutes(staff,day){
+  ensureGrid()
+  const obj=state.planning.grid?.[staff]?.[day]||{}
+  return Object.keys(obj).length*30
+}
+function weekWorkMinutes(staff){
+  ensureGrid()
+  let tot=0
+  planDays().forEach(d=>{
+    const obj=state.planning.grid?.[staff]?.[d]||{}
+    tot+=Object.keys(obj).length*30
+  })
+  return tot
+}
+
+function eventLabel(type){
+  if(type==="retard") return "Retard"
+  if(type==="maladie") return "Maladie"
+  if(type==="conge") return "Congé"
+  if(type==="formation") return "Formation"
+  return "Autre"
+}
+function eventClass(type){
+  if(type==="retard") return "retard"
+  if(type==="maladie") return "abs maladie"
+  if(type==="conge") return "abs conge"
+  if(type==="formation") return "abs formation"
+  return "abs autre"
+}
+function legendData(){
+  return [
+    {lab:"Présence", sw:"#8bbff2"},
+    {lab:"Présence (2)", sw:"#bfeedd"},
+    {lab:"Retard", sw:"#ffe08a"},
+    {lab:"Maladie", sw:"#f7c0ca"},
+    {lab:"Congé", sw:"#e9ebf0"},
+    {lab:"Formation", sw:"#cfe6ff"},
+    {lab:"Autre", sw:"#ffe7ad"}
+  ]
+}
+
+function eventsForWeek(){
+  const days=planDays()
+  const monday=new Date(state.planning.weekStart+"T00:00:00")
+  const start=ymd(monday)
+  const end=ymd(addDays(monday,days.length-1))
+  return state.events.filter(e=>e.date>=start && e.date<=end)
+}
+
+function slotIndexFromTime(t, slots){
+  const m=toMinutes(t)
+  if(m===null) return null
+  const {start}=parseRange(state.planning.range)
+  const idx=Math.floor((m-start)/30)
+  return clamp(idx,0,slots.length)
+}
+
+function buildOverlayMap(){
+  const days=planDays()
+  const slots=buildSlots()
+  const weekE=eventsForWeek()
+  const map={}
+  weekE.forEach(e=>{
+    if(!e.staff || !e.date) return
+    const staff=e.staff
+    const day=dayFromDate(e.date, days)
+    if(!day) return
+    const i0=slotIndexFromTime(e.start||minutesToTime(slots[0]), slots)
+    const i1=slotIndexFromTime(e.end||minutesToTime(slots[slots.length-1]+30), slots)
+    if(i0===null || i1===null) return
+    const a=Math.min(i0,i1)
+    const b=Math.max(i0,i1)
+    for(let i=a;i<b;i++){
+      map[`${staff}|${day}|${i}`]=e.type
+    }
+  })
+  return map
+}
+
+function dayFromDate(iso, days){
+  const d=new Date(iso+"T00:00:00")
+  const names=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"]
+  const n=names[(d.getDay()+6)%7]
+  return days.includes(n)?n:null
+}
+
+function renderPlanning(){
+  ensureGrid()
+  $("#weekStart").value=state.planning.weekStart
+  $("#rangeSel").value=state.planning.range
+  $("#daysSel").value=state.planning.days
+
+  $("#printTitle").textContent=(state.options.shopName||"STOOM Manager")
+  $("#printSub").textContent=weekSubLabel()
+
+  const legend=$("#legend")
+  legend.innerHTML=legendData().map(x=>`
+    <div class="chip"><span class="swatch" style="background:${esc(x.sw)}"></span>${esc(x.lab)}</div>
+  `).join("")
+
+  const days=planDays()
+  const slots=buildSlots()
+  const overlay=buildOverlayMap()
+
+  const timeHeaders=slots.map(m=>{
+    const a=minutesToTime(m).replace(":","h")
+    const b=minutesToTime(m+30).replace(":","h")
+    return `<th class="thTime"><div>${esc(a)}-${esc(b)}</div></th>`
+  }).join("")
+
+  let html=`<table class="pl">
+    <thead>
+      <tr>
+        <th class="thDay">Jour</th>
+        <th class="thVend">Vendeur</th>
+        ${timeHeaders}
+        <th class="thSum">H/j</th>
+      </tr>
+    </thead>
+    <tbody>`
+
+  days.forEach((day,di)=>{
+    html+=`<tr class="dayRow"><th colspan="${2+slots.length+1}">${esc(dayHeaderLabel(di))}</th></tr>`
+    state.staff.forEach(st=>{
+      const col=state.staffColors[st]||"#78a6ff"
+      html+=`<tr>`
+      html+=`<td class="dayCell">${esc(day)}</td>`
+      html+=`<td class="vendCell"><span class="colorTag" style="background:${esc(col)}"></span>${esc(st)}</td>`
+      for(let i=0;i<slots.length;i++){
+        const k=`${st}|${day}|${i}`
+        const has=!!state.planning.grid?.[st]?.[day]?.[i]
+        const ov=overlay[k]||""
+        const clsBase=has ? (st===state.staff[0] ? "slot work2" : "slot work") : "slot"
+        const cls = ov ? `slot ${eventClass(ov)}` : clsBase
+        html+=`<td><div class="${cls}" data-p="${esc(st)}|${esc(day)}|${i}" tabindex="0" role="button" aria-label="${esc(st)} ${esc(day)} ${esc(minutesToTime(slots[i]))}"></div></td>`
       }
-      save()
-      renderTasks()
-      renderDashboard()
+      const h=(dayWorkMinutes(st,day)/60)
+      html+=`<td class="sumCell">${(Math.round(h*10)/10).toString().replace(".",",")}</td>`
+      html+=`</tr>`
     })
   })
-  host.querySelectorAll("[data-edittask]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const id=btn.getAttribute("data-edittask")
-      const t=state.tasks.find(x=>x.id===id)
-      if(!t) return
-      const nt=prompt("Titre :",t.title)
-      if(nt===null) return
-      const nn=prompt("Détails :",t.notes||"")
-      if(nn===null) return
-      t.title=(nt.trim()||t.title)
-      t.notes=(nn||"").trim()
-      save()
-      renderTasks()
-      renderDashboard()
-    })
-  })
-}
 
-function taskSetToday(){
-  $("#taskDateFrom").value=ymd(new Date())
-  $("#taskDateTo").value=ymd(new Date())
-  renderTasks()
-}
-function taskSetWeek(){
-  const w0=startOfWeekMonday(new Date())
-  const w6=addDays(w0,6)
-  $("#taskDateFrom").value=ymd(w0)
-  $("#taskDateTo").value=ymd(w6)
-  renderTasks()
-}
-function taskClearFilters(){
-  $("#taskSearch").value=""
-  $("#taskDateFrom").value=""
-  $("#taskDateTo").value=""
-  $("#taskView").value="all"
-  $("#taskSort").value="due"
-  renderTasks()
-}
+  html+=`</tbody></table>`
+  $("#planHost").innerHTML=html
 
-function clearBuyForm(){
-  $("#buyTitle").value=""
-  $("#buyNotes").value=""
-  $("#buyPriority").value="normal"
-}
-function addPurchase(){
-  const title=($("#buyTitle").value||"").trim()
-  if(!title) return alert("Produit requis.")
-  const notes=($("#buyNotes").value||"").trim()
-  const priority=$("#buyPriority").value
-  state.purchases.unshift({id:uid(),title,notes,priority,status:"open",createdAt:nowISO(),doneAt:""})
-  save()
-  clearBuyForm()
-  renderPurchases()
-  renderDashboard()
-}
-function renderPurchases(){
-  const host=$("#buyList")
-  if(!host) return
-  const q=($("#buySearch").value||"").toLowerCase().trim()
-  const filter=$("#buyFilter").value
-  let rows=state.purchases.slice().filter(p=>{
-    if(filter==="open" && p.status!=="open") return false
-    if(filter==="done" && p.status!=="done") return false
-    if(!q) return true
-    const hay=[p.title,p.notes,p.priority,p.status].join(" ").toLowerCase()
-    return hay.includes(q)
-  })
-  if(!rows.length){
-    host.innerHTML=`<div class="hint">Aucun achat.</div>`
-    return
-  }
-  host.innerHTML=rows.map(p=>{
-    const badges=[]
-    badges.push(p.priority==="urgent"?`<span class="badge bad">Urgent</span>`:`<span class="badge">Normal</span>`)
-    if(p.status==="done") badges.push(`<span class="badge ok">Acheté</span>`)
-    return `
-      <div class="item">
-        <div class="itemLeft">
-          <div class="itemTitle">${esc(p.title)}</div>
-          <div class="meta">${badges.join("")}</div>
-          ${p.notes?`<div class="hint" style="margin-top:8px">${esc(p.notes)}</div>`:""}
-        </div>
-        <div class="actions noPrint">
-          <select class="selInline" data-buystatus="${p.id}">
-            ${p.status==="done"
-              ? `<option value="done" selected>Acheté</option><option value="open">Remettre</option>`
-              : `<option value="open" selected>En attente</option><option value="done">Marquer acheté</option>`
-            }
-          </select>
-          <button class="btn danger" data-delbuy="${p.id}">Supprimer</button>
-        </div>
-      </div>
-    `
+  const chips=state.staff.map(s=>{
+    const h=weekWorkMinutes(s)/60
+    return `<span class="chip">${esc(s)} : <b>${(Math.round(h*10)/10).toString().replace(".",",")}h</b></span>`
   }).join("")
-  host.querySelectorAll("[data-delbuy]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const id=btn.getAttribute("data-delbuy")
-      if(!confirm("Supprimer cet achat ?")) return
-      state.purchases=state.purchases.filter(x=>x.id!==id)
-      save()
-      renderPurchases()
-      renderDashboard()
+  $("#weekTotals").innerHTML=chips
+
+  let down=false
+  function modeForce(){
+    const pm=$("#paintMode").value
+    if(pm==="paintOn") return true
+    if(pm==="paintOff") return false
+    return null
+  }
+  function applyCell(el){
+    const v=el.getAttribute("data-p")
+    if(!v) return
+    const parts=v.split("|")
+    const staff=parts[0], day=parts[1], idx=Number(parts[2])
+    const overlayHere=overlay[`${staff}|${day}|${idx}`]
+    if(overlayHere && overlayHere!=="retard"){
+      alert("Cette case est couverte par une absence (maladie/congé/formation/autre). Modifie l’événement dans l’onglet “Retards / Absences”.")
+      return
+    }
+    toggleCell(staff,day,idx,modeForce())
+    save()
+    renderPlanning()
+  }
+
+  $("#planHost").querySelectorAll("[data-p]").forEach(el=>{
+    el.addEventListener("click",()=>applyCell(el))
+    el.addEventListener("mousedown",()=>{down=true;applyCell(el)})
+    el.addEventListener("mouseenter",()=>{if(down) applyCell(el)})
+    el.addEventListener("keydown",(e)=>{
+      if(e.key==="Enter"||e.key===" "){e.preventDefault();applyCell(el)}
     })
   })
-  host.querySelectorAll("[data-buystatus]").forEach(sel=>{
-    sel.addEventListener("change",()=>{
-      const id=sel.getAttribute("data-buystatus")
-      const p=state.purchases.find(x=>x.id===id)
-      if(!p) return
-      if(sel.value==="done"){p.status="done";p.doneAt=nowISO()}else{p.status="open";p.doneAt=""}
-      save()
-      renderPurchases()
-      renderDashboard()
-    })
-  })
+  window.addEventListener("mouseup",()=>{down=false},{once:true})
 }
 
-function clearClientForm(){
-  $("#clientName").value=""
-  $("#clientSummary").value=""
-  $("#clientMotif").value=state.motifs[0]||"Général"
-  $("#clientDueDate").value=""
-  $("#clientDueTime").value=""
-  $("#clientSeller").value=""
-}
-function addClientFollowup(){
-  const name=($("#clientName").value||"").trim()
-  const summary=($("#clientSummary").value||"").trim()
-  if(!name || !summary) return alert("Client + résumé requis.")
-  const motif=$("#clientMotif").value||"Général"
-  const dueDate=($("#clientDueDate").value||"").trim()
-  const dueTime=($("#clientDueTime").value||"").trim()
-  const vendor=$("#clientSeller").value||""
-  state.clientFollowups.unshift({
-    id:uid(),name,summary,motif,dueDate,dueTime,vendor,
-    status:"open",createdAt:nowISO(),doneAt:"",doneComment:""
-  })
+function clearWeek(){
+  if(!confirm("Vider toutes les cases de la semaine ?")) return
+  state.planning.grid={}
+  ensureGrid()
   save()
-  clearClientForm()
-  renderClients()
-  renderDashboard()
+  renderPlanning()
 }
-function clientBucket(f){
-  if(f.status==="done") return "done"
-  if(f.dueDate && isPast(f.dueDate,f.dueTime)) return "late"
-  return "open"
+
+function fillStaffSelects(){
+  const staffOpts=state.staff.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("")
+  $("#evStaff").innerHTML=staffOpts
+  $("#evFilterStaff").innerHTML=`<option value="all">Tous</option>${staffOpts}`
 }
-function clientMatches(f){
-  const q=($("#clientSearch").value||"").toLowerCase().trim()
-  const from=($("#clientDateFrom").value||"").trim()
-  const to=($("#clientDateTo").value||"").trim()
-  if(from && (!f.dueDate || f.dueDate<from)) return false
-  if(to && (!f.dueDate || f.dueDate>to)) return false
-  if(!q) return true
-  const hay=[f.name,f.summary,f.vendor,f.motif,f.doneComment].join(" ").toLowerCase()
-  return hay.includes(q)
+
+function clearEventForm(){
+  $("#evType").value="retard"
+  $("#evDate").value=ymd(new Date())
+  $("#evStart").value="09:00"
+  $("#evEnd").value="10:00"
+  $("#evNote").value=""
+  $("#evStaff").value=state.staff[0]||""
 }
-function renderClients(){
-  const host=$("#clientList")
-  if(!host) return
-  const view=$("#clientView").value
-  let rows=state.clientFollowups.slice().filter(clientMatches)
-  rows=rows.filter(f=>{
-    const b=clientBucket(f)
-    if(view==="all") return true
-    return b===view
-  })
-  rows.sort((a,b)=>{
-    const ad=a.dueDate||"9999-12-31"
-    const bd=b.dueDate||"9999-12-31"
-    if(ad!==bd) return ad.localeCompare(bd)
-    return (a.dueTime||"").localeCompare(b.dueTime||"")
-  })
+
+function addEvent(){
+  const type=$("#evType").value
+  const staff=$("#evStaff").value
+  const date=$("#evDate").value
+  const start=$("#evStart").value
+  const end=$("#evEnd").value
+  const note=($("#evNote").value||"").trim()
+  if(!staff) return alert("Vendeur requis.")
+  if(!date) return alert("Date requise.")
+  if(!start || !end) return alert("Heures requises.")
+  if(toMinutes(end)===toMinutes(start)) return alert("La durée ne peut pas être nulle.")
+  state.events.unshift({id:uid(),type,staff,date,start,end,note,createdAt:nowISO()})
+  save()
+  renderEvents()
+  renderPlanning()
+  renderReport(false)
+}
+
+function eventMinutes(e){
+  const a=toMinutes(e.start), b=toMinutes(e.end)
+  if(a===null || b===null) return 0
+  return Math.max(0, Math.abs(b-a))
+}
+
+function renderEvents(){
+  const host=$("#evList")
+  const month=$("#evMonth").value
+  const st=$("#evFilterStaff").value
+  const type=$("#evFilterType").value
+
+  let rows=state.events.slice()
+
+  if(month){
+    rows=rows.filter(e=>String(e.date||"").startsWith(month))
+  }
+  if(st && st!=="all"){
+    rows=rows.filter(e=>e.staff===st)
+  }
+  if(type && type!=="all"){
+    rows=rows.filter(e=>e.type===type)
+  }
+
   if(!rows.length){
-    host.innerHTML=`<div class="hint">Aucun suivi.</div>`
+    host.innerHTML=`<div class="hint">Aucun événement.</div>`
     return
   }
-  host.innerHTML=rows.map(f=>{
-    const b=clientBucket(f)
-    const due=f.dueDate?`${f.dueDate}${f.dueTime?(" "+f.dueTime):""}`:"—"
-    const badges=[]
-    if(b==="late") badges.push(`<span class="badge bad">En retard</span>`)
-    if(f.status==="done") badges.push(`<span class="badge ok">Clôturé</span>`)
-    if(f.vendor) badges.push(`<span class="badge">Vendeur: ${esc(f.vendor)}</span>`)
-    if(f.motif) badges.push(`<span class="badge">${esc(f.motif)}</span>`)
-    if(f.dueDate && isToday(f.dueDate) && f.status!=="done") badges.push(`<span class="badge warn">Aujourd’hui</span>`)
+
+  host.innerHTML=rows.map(e=>{
+    const mins=eventMinutes(e)
+    const h=(mins/60)
+    const b = e.type==="retard" ? "warn" : (e.type==="maladie" ? "bad" : "acc")
     return `
       <div class="item">
         <div class="itemLeft">
-          <div class="itemTitle">${esc(f.name)}</div>
-          <div class="meta">${badges.join("")}<span class="badge">Rappel: ${esc(due)}</span></div>
-          <div class="hint" style="margin-top:8px">${esc(f.summary)}</div>
-          ${f.status==="done"?`<div class="hint" style="margin-top:8px"><b>Commentaire :</b> ${esc(f.doneComment||"")}</div>`:""}
-        </div>
-        <div class="actions noPrint">
-          <select class="selInline" data-clientstatus="${f.id}">
-            ${f.status==="done"
-              ? `<option value="done" selected>Clôturé</option><option value="open">Réouvrir</option>`
-              : `<option value="open" selected>Ouvert</option><option value="done">Clôturer…</option>`
-            }
-          </select>
-          <div class="row" style="justify-content:flex-end">
-            <button class="btn" data-editclient="${f.id}">Éditer</button>
-            <button class="btn danger" data-delclient="${f.id}">Supprimer</button>
+          <div class="itemTitle">${esc(e.staff)} — ${esc(eventLabel(e.type))}</div>
+          <div class="meta">
+            <span class="badge">${esc(frDateLabel(e.date))}</span>
+            <span class="badge ${b}">${esc(e.start)} → ${esc(e.end)}</span>
+            <span class="badge">${esc((Math.round(h*10)/10).toString().replace(".",","))}h</span>
           </div>
+          ${e.note?`<div class="hint" style="margin-top:8px">${esc(e.note)}</div>`:""}
+        </div>
+        <div class="noPrint">
+          <button class="btn" data-edit="${esc(e.id)}">Éditer</button>
+          <button class="btn danger" data-del="${esc(e.id)}">Supprimer</button>
         </div>
       </div>
     `
   }).join("")
 
-  host.querySelectorAll("[data-delclient]").forEach(btn=>{
+  host.querySelectorAll("[data-del]").forEach(btn=>{
     btn.addEventListener("click",()=>{
-      const id=btn.getAttribute("data-delclient")
-      if(!confirm("Supprimer ce suivi ?")) return
-      state.clientFollowups=state.clientFollowups.filter(x=>x.id!==id)
+      const id=btn.getAttribute("data-del")
+      if(!confirm("Supprimer cet événement ?")) return
+      state.events=state.events.filter(x=>x.id!==id)
       save()
-      renderClients()
-      renderDashboard()
+      renderEvents()
+      renderPlanning()
+      renderReport(false)
     })
   })
-  host.querySelectorAll("[data-clientstatus]").forEach(sel=>{
-    sel.addEventListener("change",()=>{
-      const id=sel.getAttribute("data-clientstatus")
-      const f=state.clientFollowups.find(x=>x.id===id)
-      if(!f) return
-      if(sel.value==="done"){
-        const c=prompt("Commentaire obligatoire : résultat du suivi ?")
-        if(!c || !c.trim()){
-          alert("Commentaire obligatoire.")
-          sel.value="open"
-          return
-        }
-        f.status="done"
-        f.doneAt=nowISO()
-        f.doneComment=c.trim()
-      }else{
-        f.status="open"
-        f.doneAt=""
-        f.doneComment=""
-      }
-      save()
-      renderClients()
-      renderDashboard()
-    })
-  })
-  host.querySelectorAll("[data-editclient]").forEach(btn=>{
+  host.querySelectorAll("[data-edit]").forEach(btn=>{
     btn.addEventListener("click",()=>{
-      const id=btn.getAttribute("data-editclient")
-      const f=state.clientFollowups.find(x=>x.id===id)
-      if(!f) return
-      const ns=prompt("Résumé :",f.summary)
-      if(ns===null) return
-      f.summary=(ns.trim()||f.summary)
+      const id=btn.getAttribute("data-edit")
+      const e=state.events.find(x=>x.id===id)
+      if(!e) return
+      const ntype=prompt("Type (retard/maladie/conge/formation/autre) :", e.type)
+      if(ntype===null) return
+      const nstart=prompt("Début (HH:MM) :", e.start)
+      if(nstart===null) return
+      const nend=prompt("Fin (HH:MM) :", e.end)
+      if(nend===null) return
+      const nnote=prompt("Note :", e.note||"")
+      if(nnote===null) return
+      const t=String(ntype||"").trim()
+      if(!["retard","maladie","conge","formation","autre"].includes(t)) return alert("Type invalide.")
+      e.type=t
+      e.start=String(nstart||"").trim()
+      e.end=String(nend||"").trim()
+      e.note=String(nnote||"").trim()
       save()
-      renderClients()
-      renderDashboard()
+      renderEvents()
+      renderPlanning()
+      renderReport(false)
     })
   })
 }
 
-function clientSetToday(){
-  $("#clientDateFrom").value=ymd(new Date())
-  $("#clientDateTo").value=ymd(new Date())
-  renderClients()
-}
-function clientSetWeek(){
-  const w0=startOfWeekMonday(new Date())
-  const w6=addDays(w0,6)
-  $("#clientDateFrom").value=ymd(w0)
-  $("#clientDateTo").value=ymd(w6)
-  renderClients()
-}
-function clientClearFilters(){
-  $("#clientSearch").value=""
-  $("#clientDateFrom").value=""
-  $("#clientDateTo").value=""
-  $("#clientView").value="open"
-  renderClients()
+function monthDefault(){
+  const d=new Date()
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`
 }
 
-function renderDashboard(){
-  const k=$("#kpis")
-  if(!k) return
-  const tasksOpen=state.tasks.filter(t=>t.status!=="done")
-  const late=tasksOpen.filter(t=>t.dueDate && isPast(t.dueDate,t.dueTime))
-  const today=tasksOpen.filter(t=>t.dueDate && isToday(t.dueDate))
-  const clientOpen=state.clientFollowups.filter(f=>f.status!=="done")
-  k.innerHTML=`
-    <div class="kpi"><div class="num">${tasksOpen.length}</div><div class="lab">Tâches ouvertes</div></div>
-    <div class="kpi"><div class="num">${late.length}</div><div class="lab">Tâches en retard</div></div>
-    <div class="kpi"><div class="num">${today.length}</div><div class="lab">Échéance aujourd’hui</div></div>
-    <div class="kpi"><div class="num">${clientOpen.length}</div><div class="lab">Suivis clients ouverts</div></div>
+function calcMonthReport(month){
+  const rows={}
+  state.staff.forEach(s=>{
+    rows[s]={
+      staff:s,
+      plannedMin:0,
+      tardyMin:0,
+      maladieMin:0,
+      congeMin:0,
+      formationMin:0,
+      autreMin:0,
+      tardyCount:0,
+      absCount:0
+    }
+  })
+
+  const monthEvents=state.events.filter(e=>String(e.date||"").startsWith(month))
+  monthEvents.forEach(e=>{
+    if(!rows[e.staff]) return
+    const mins=eventMinutes(e)
+    if(e.type==="retard"){rows[e.staff].tardyMin+=mins;rows[e.staff].tardyCount+=1}
+    else{
+      rows[e.staff].absCount+=1
+      if(e.type==="maladie") rows[e.staff].maladieMin+=mins
+      else if(e.type==="conge") rows[e.staff].congeMin+=mins
+      else if(e.type==="formation") rows[e.staff].formationMin+=mins
+      else rows[e.staff].autreMin+=mins
+    }
+  })
+
+  const plannedFromGrid = computePlannedMinutesFromGrid(month)
+  Object.keys(plannedFromGrid).forEach(s=>{
+    if(rows[s]) rows[s].plannedMin=plannedFromGrid[s]
+  })
+
+  return Object.values(rows)
+}
+
+function computePlannedMinutesFromGrid(month){
+  const out={}
+  state.staff.forEach(s=>out[s]=0)
+
+  const allDays=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"]
+  const slotsForRange=(range)=>{
+    const p=(range||"08:30-19:00").split("-")
+    const start=toMinutes(p[0]); const end=toMinutes(p[1])
+    const count=Math.max(0, Math.floor((end-start)/30))
+    return count
+  }
+
+  const countSlots=slotsForRange(state.planning.range)
+
+  Object.keys(state.planning.grid||{}).forEach(st=>{
+    const staffDays=state.planning.grid[st]||{}
+    Object.keys(staffDays).forEach(dayName=>{
+      const dayGrid=staffDays[dayName]||{}
+      const keys=Object.keys(dayGrid)
+      if(!keys.length) return
+      const matchingDates = datesInMonthForDayName(month, dayName, allDays)
+      matchingDates.forEach(date=>{
+        keys.forEach(k=>{
+          const idx=Number(k)
+          if(Number.isFinite(idx) && idx>=0 && idx<countSlots){
+            out[st]=(out[st]||0)+30
+          }
+        })
+      })
+    })
+  })
+
+  return out
+}
+
+function datesInMonthForDayName(month, dayName, allDays){
+  const y=Number(month.split("-")[0])
+  const m=Number(month.split("-")[1])
+  if(!y || !m) return []
+  const first=new Date(`${month}-01T00:00:00`)
+  const last=new Date(y, m, 0)
+  const targetIdx=allDays.indexOf(dayName)
+  if(targetIdx<0) return []
+  const out=[]
+  for(let d=new Date(first); d<=last; d.setDate(d.getDate()+1)){
+    const idx=(d.getDay()+6)%7
+    if(idx===targetIdx) out.push(ymd(d))
+  }
+  return out
+}
+
+function fmtH(mins){
+  const h=mins/60
+  return (Math.round(h*10)/10).toString().replace(".",",")
+}
+
+function renderReport(showAlert){
+  const month=$("#repMonth").value
+  if(!month){
+    $("#reportHost").innerHTML=`<div class="hint">Choisis un mois, puis “Générer”.</div>`
+    return
+  }
+  const data=calcMonthReport(month)
+
+  const total={
+    plannedMin:0,tardyMin:0,maladieMin:0,congeMin:0,formationMin:0,autreMin:0,tardyCount:0,absCount:0
+  }
+  data.forEach(r=>{
+    total.plannedMin+=r.plannedMin
+    total.tardyMin+=r.tardyMin
+    total.maladieMin+=r.maladieMin
+    total.congeMin+=r.congeMin
+    total.formationMin+=r.formationMin
+    total.autreMin+=r.autreMin
+    total.tardyCount+=r.tardyCount
+    total.absCount+=r.absCount
+  })
+
+  const shop=state.options.shopName||"STOOM Manager"
+
+  let html=`
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <div>
+        <div class="plTitle">${esc(shop)} — ÉDITION FIN DE MOIS</div>
+        <div class="plSub">Mois : ${esc(month)}</div>
+      </div>
+      <div class="legend">
+        <div class="chip"><span class="swatch" style="background:#8bbff2"></span>Planifié</div>
+        <div class="chip"><span class="swatch" style="background:#ffe08a"></span>Retard</div>
+        <div class="chip"><span class="swatch" style="background:#f7c0ca"></span>Maladie</div>
+        <div class="chip"><span class="swatch" style="background:#e9ebf0"></span>Congé</div>
+        <div class="chip"><span class="swatch" style="background:#cfe6ff"></span>Formation</div>
+        <div class="chip"><span class="swatch" style="background:#ffe7ad"></span>Autre</div>
+      </div>
+    </div>
+    <div class="hr"></div>
   `
 
-  const todayList=$("#todayList")
-  if(todayList){
-    const rows=[]
-    state.tasks.forEach(t=>{
-      if(t.status==="done") return
-      if(!t.dueDate) return
-      if(!(isToday(t.dueDate) || isPast(t.dueDate,t.dueTime))) return
-      rows.push({kind:"Tâche",title:t.title,due:`${t.dueDate}${t.dueTime?(" "+t.dueTime):""}`,bucket:taskBucket(t)})
-    })
-    state.clientFollowups.forEach(f=>{
-      if(f.status==="done") return
-      if(!f.dueDate) return
-      if(!(isToday(f.dueDate) || isPast(f.dueDate,f.dueTime))) return
-      rows.push({kind:"Client",title:`${f.name} — ${f.summary}`,due:`${f.dueDate}${f.dueTime?(" "+f.dueTime):""}`,bucket:clientBucket(f)})
-    })
-    rows.sort((a,b)=>a.due.localeCompare(b.due))
-    if(!rows.length){
-      todayList.innerHTML=`<div class="hint">Rien de critique.</div>`
-    }else{
-      todayList.innerHTML=rows.slice(0,8).map(r=>{
-        const c=r.bucket==="late"?"bad":(r.bucket==="reminder"?"warn":"acc")
-        const lab=r.bucket==="late"?"En retard":(r.bucket==="open"?"Ouvert":r.bucket)
-        return `
-          <div class="item">
-            <div class="itemLeft">
-              <div class="itemTitle">${esc(r.title)}</div>
-              <div class="meta">
-                <span class="badge">${esc(r.kind)}</span>
-                <span class="badge ${c}">${esc(lab)}</span>
-                <span class="badge">Échéance: ${esc(r.due)}</span>
-              </div>
+  html+=`
+    <table class="reportTable">
+      <thead>
+        <tr>
+          <th>Vendeur</th>
+          <th>Heures planifiées</th>
+          <th>Retards</th>
+          <th>Heures retard</th>
+          <th>Maladie (h)</th>
+          <th>Congé (h)</th>
+          <th>Formation (h)</th>
+          <th>Autre (h)</th>
+          <th>Absences (nb)</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data.map(r=>`
+          <tr>
+            <td><span class="colorTag" style="background:${esc(state.staffColors[r.staff]||"#78a6ff")}"></span>${esc(r.staff)}</td>
+            <td>${esc(fmtH(r.plannedMin))}</td>
+            <td>${esc(String(r.tardyCount))}</td>
+            <td>${esc(fmtH(r.tardyMin))}</td>
+            <td>${esc(fmtH(r.maladieMin))}</td>
+            <td>${esc(fmtH(r.congeMin))}</td>
+            <td>${esc(fmtH(r.formationMin))}</td>
+            <td>${esc(fmtH(r.autreMin))}</td>
+            <td>${esc(String(r.absCount))}</td>
+          </tr>
+        `).join("")}
+        <tr>
+          <td style="font-weight:1100">TOTAL</td>
+          <td>${esc(fmtH(total.plannedMin))}</td>
+          <td>${esc(String(total.tardyCount))}</td>
+          <td>${esc(fmtH(total.tardyMin))}</td>
+          <td>${esc(fmtH(total.maladieMin))}</td>
+          <td>${esc(fmtH(total.congeMin))}</td>
+          <td>${esc(fmtH(total.formationMin))}</td>
+          <td>${esc(fmtH(total.autreMin))}</td>
+          <td>${esc(String(total.absCount))}</td>
+        </tr>
+      </tbody>
+    </table>
+  `
+
+  const ev=state.events.filter(e=>String(e.date||"").startsWith(month)).slice().sort((a,b)=>(a.date||"").localeCompare(b.date||""))
+  html+=`<div class="hr"></div><h3>Détail des événements</h3>`
+  if(!ev.length){
+    html+=`<div class="hint">Aucun événement sur ce mois.</div>`
+  }else{
+    html+=`<div class="list">`+ev.map(e=>{
+      const mins=eventMinutes(e)
+      return `
+        <div class="item">
+          <div class="itemLeft">
+            <div class="itemTitle">${esc(e.staff)} — ${esc(eventLabel(e.type))}</div>
+            <div class="meta">
+              <span class="badge">${esc(frDateLabel(e.date))}</span>
+              <span class="badge ${e.type==="retard"?"warn":"acc"}">${esc(e.start)} → ${esc(e.end)}</span>
+              <span class="badge">${esc(fmtH(mins))}h</span>
             </div>
+            ${e.note?`<div class="hint" style="margin-top:8px">${esc(e.note)}</div>`:""}
           </div>
-        `
-      }).join("")
-    }
+        </div>
+      `
+    }).join("")+`</div>`
   }
 
-  const pq=$("#purchaseQuickList")
-  if(pq){
-    const rows=state.purchases.filter(p=>p.status!=="done")
-    if(!rows.length){
-      pq.innerHTML=`<div class="hint">Aucun achat en attente.</div>`
-    }else{
-      pq.innerHTML=rows.slice(0,6).map(p=>{
-        const b=p.priority==="urgent"?`<span class="badge bad">Urgent</span>`:`<span class="badge">Normal</span>`
-        return `
-          <div class="item">
-            <div class="itemLeft">
-              <div class="itemTitle">${esc(p.title)}</div>
-              <div class="meta">${b}</div>
-              ${p.notes?`<div class="hint" style="margin-top:6px">${esc(p.notes)}</div>`:""}
-            </div>
-          </div>
-        `
-      }).join("")
-    }
-  }
+  $("#reportHost").innerHTML=html
+  if(showAlert) alert("Édition générée.")
+}
+
+function exportReportCsv(){
+  const month=$("#repMonth").value
+  if(!month) return alert("Choisis un mois.")
+  const data=calcMonthReport(month)
+  const head=["Vendeur","Heures_planifiées","Nb_retards","Heures_retard","Maladie_h","Congé_h","Formation_h","Autre_h","Nb_absences"]
+  const lines=[head.join(";")]
+  data.forEach(r=>{
+    lines.push([
+      r.staff,
+      fmtH(r.plannedMin),
+      r.tardyCount,
+      fmtH(r.tardyMin),
+      fmtH(r.maladieMin),
+      fmtH(r.congeMin),
+      fmtH(r.formationMin),
+      fmtH(r.autreMin),
+      r.absCount
+    ].join(";"))
+  })
+  const blob=new Blob([lines.join("\n")],{type:"text/csv;charset=utf-8"})
+  const url=URL.createObjectURL(blob)
+  const a=document.createElement("a")
+  a.href=url
+  a.download=`edition-fin-de-mois-${month}.csv`
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
 }
 
 function renderStaff(){
   const host=$("#staffList")
-  if(!host) return
   host.innerHTML=state.staff.map(n=>{
     const col=state.staffColors[n]||"#78a6ff"
     return `
@@ -1262,7 +1296,7 @@ function renderStaff(){
           <div class="itemTitle"><span class="colorTag" style="background:${esc(col)}"></span>${esc(n)}</div>
           <div class="meta"><span class="badge">Vendeur</span></div>
         </div>
-        <div class="actions noPrint">
+        <div class="noPrint">
           <button class="btn danger" data-delstaff="${esc(n)}">Supprimer</button>
         </div>
       </div>
@@ -1274,241 +1308,17 @@ function renderStaff(){
       if(!confirm(`Supprimer ${n} ?`)) return
       state.staff=state.staff.filter(x=>x!==n)
       delete state.staffColors[n]
-      state.tasks.forEach(t=>{if(t.vendor===n) t.vendor=""})
-      state.clientFollowups.forEach(f=>{if(f.vendor===n) f.vendor=""})
-      if(state.planningDraft?.grid?.[n]) delete state.planningDraft.grid[n]
+      state.events=state.events.filter(e=>e.staff!==n)
+      if(state.planning.grid?.[n]) delete state.planning.grid[n]
       save()
-      hydrateSelects()
+      fillStaffSelects()
       renderStaff()
+      renderEvents()
       renderPlanning()
-      renderTasks()
-      renderClients()
+      renderReport(false)
     })
   })
 }
-
-function renderMotifs(){
-  const host=$("#motifList")
-  if(!host) return
-  host.innerHTML=state.motifs.map(m=>`
-    <div class="item">
-      <div class="itemLeft">
-        <div class="itemTitle">${esc(m)}</div>
-        <div class="meta"><span class="badge">Motif</span></div>
-      </div>
-      <div class="actions noPrint">
-        <button class="btn danger" data-delmotif="${esc(m)}">Supprimer</button>
-      </div>
-    </div>
-  `).join("")
-  host.querySelectorAll("[data-delmotif]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const m=btn.getAttribute("data-delmotif")
-      if(!confirm(`Supprimer le motif "${m}" ?`)) return
-      state.motifs=state.motifs.filter(x=>x!==m)
-      state.tasks.forEach(t=>{if(t.motif===m) t.motif=state.motifs[0]||"Général"})
-      state.clientFollowups.forEach(f=>{if(f.motif===m) f.motif=state.motifs[0]||"Général"})
-      save()
-      hydrateSelects()
-      renderMotifs()
-      renderTasks()
-      renderClients()
-    })
-  })
-}
-
-function ensurePlanGrid(){
-  state.planningDraft.grid=state.planningDraft.grid||{}
-  state.staff.forEach(n=>{
-    if(!state.planningDraft.grid[n]) state.planningDraft.grid[n]={}
-  })
-}
-function parseRange(r){
-  const p=(r||"08:30-19:00").split("-")
-  return {start:toMinutes(p[0]),end:toMinutes(p[1])}
-}
-function planDays(){
-  return (state.planningDraft.days||"Lun,Mar,Mer,Jeu,Ven,Sam").split(",").map(x=>x.trim()).filter(Boolean)
-}
-function buildSlots(){
-  const {start,end}=parseRange(state.planningDraft.range)
-  const slots=[]
-  for(let m=start;m<end;m+=30) slots.push(m)
-  return slots
-}
-function dayDateLabel(dayIndex){
-  const monday=new Date(state.planningDraft.weekStart+"T00:00:00")
-  const d=addDays(monday,dayIndex)
-  return ymd(d).split("-").reverse().join("/")
-}
-function slotKey(day,idx){return `${day}|${idx}`}
-function togglePlanCell(staff,day,idx,force=null){
-  ensurePlanGrid()
-  const g=state.planningDraft.grid
-  g[staff]=g[staff]||{}
-  g[staff][day]=g[staff][day]||{}
-  const cur=!!g[staff][day][idx]
-  const nxt=(force===null)?!cur:!!force
-  if(nxt) g[staff][day][idx]=1
-  else delete g[staff][day][idx]
-}
-function staffDayMinutes(staff,day){
-  ensurePlanGrid()
-  const obj=state.planningDraft.grid?.[staff]?.[day]||{}
-  return Object.keys(obj).length*30
-}
-function staffWeekMinutes(staff){
-  ensurePlanGrid()
-  let tot=0
-  const days=planDays()
-  days.forEach(d=>{
-    const obj=state.planningDraft.grid?.[staff]?.[d]||{}
-    tot+=Object.keys(obj).length*30
-  })
-  return tot
-}
-
-function renderPlanning(){
-  const host=$("#planTableHost")
-  if(!host) return
-  ensurePlanGrid()
-  $("#planWeekStart").value=state.planningDraft.weekStart
-  $("#planRange").value=state.planningDraft.range
-  $("#planDays").value=state.planningDraft.days
-
-  const days=planDays()
-  const slots=buildSlots()
-  const monday=startOfWeekMonday(new Date(state.planningDraft.weekStart+"T00:00:00"))
-  const sunday=addDays(monday,days.length-1)
-  const title=`SEMAINE DU ${dayDateLabel(0)} AU ${dayDateLabel(days.length-1)}`
-  $("#plPrintTitle").textContent="PLANNING"
-  $("#plPrintSub").textContent=title
-
-  const timeHeaders=slots.map((m,i)=>{
-    const a=minutesToTime(m).replace(":","h")
-    const b=minutesToTime(m+30).replace(":","h")
-    return `<th class="thTime"><div>${esc(a)}-${esc(b)}</div></th>`
-  }).join("")
-
-  let html=`<table class="pl">
-    <thead>
-      <tr>
-        <th class="thDay">Jour</th>
-        <th class="thName">Vendeur</th>
-        ${timeHeaders}
-        <th class="thSum">H/j</th>
-      </tr>
-    </thead>
-    <tbody>`
-
-  days.forEach((day,dayIndex)=>{
-    html+=`<tr class="dayRow"><th colspan="${2+slots.length+1}">${esc(day.toUpperCase())} — ${esc(dayDateLabel(dayIndex))}</th></tr>`
-    state.staff.forEach((staff,si)=>{
-      const col=state.staffColors[staff]||"#78a6ff"
-      html+=`<tr>`
-      html+=`<td class="dayCell">${esc(day)}</td>`
-      html+=`<td class="name"><span class="colorTag" style="background:${esc(col)}"></span>${esc(staff)}</td>`
-      for(let i=0;i<slots.length;i++){
-        const on=!!(state.planningDraft.grid?.[staff]?.[day]?.[i])
-        const cls=on?"slot on":"slot"
-        html+=`<td><div class="${cls}" data-p="${esc(staff)}|${esc(day)}|${i}" tabindex="0" role="button" aria-label="${esc(staff)} ${esc(day)} ${esc(minutesToTime(slots[i]))}"></div></td>`
-      }
-      const h=(staffDayMinutes(staff,day)/60)
-      html+=`<td class="sum">${(Math.round(h*10)/10).toString().replace(".",",")}</td>`
-      html+=`</tr>`
-    })
-  })
-
-  const chips=state.staff.map(s=>{
-    const h=staffWeekMinutes(s)/60
-    return `<span class="chip">${esc(s)} : <b>${(Math.round(h*10)/10).toString().replace(".",",")}h</b></span>`
-  }).join("")
-  const pt=$("#plTotals")
-  if(pt) pt.innerHTML=chips
-
-  html+=`</tbody>
-    <tfoot>
-      <tr>
-        <td colspan="${2+slots.length+1}">
-          <div class="footBox">
-            <div>${esc(title)}</div>
-            <div class="plTotals">${chips}</div>
-          </div>
-        </td>
-      </tr>
-    </tfoot>
-  </table>`
-
-  host.innerHTML=html
-
-  let down=false
-  let paintMode=$("#planPaintMode")?$("#planPaintMode").value:"toggle"
-  function modeForce(){
-    paintMode=$("#planPaintMode")?$("#planPaintMode").value:"toggle"
-    if(paintMode==="paintOn") return true
-    if(paintMode==="paintOff") return false
-    return null
-  }
-  function applyCell(el){
-    const v=el.getAttribute("data-p")
-    if(!v) return
-    const parts=v.split("|")
-    const staff=parts[0], day=parts[1], idx=Number(parts[2])
-    togglePlanCell(staff,day,idx,modeForce())
-    save()
-    renderPlanning()
-  }
-
-  host.querySelectorAll("[data-p]").forEach(el=>{
-    el.addEventListener("click",()=>applyCell(el))
-    el.addEventListener("mousedown",(e)=>{down=true;applyCell(el)})
-    el.addEventListener("mouseenter",()=>{if(down) applyCell(el)})
-    el.addEventListener("keydown",(e)=>{
-      if(e.key==="Enter"||e.key===" "){e.preventDefault();applyCell(el)}
-    })
-  })
-  document.addEventListener("mouseup",()=>{down=false},{once:true})
-}
-
-function clearPlanning(){
-  if(!confirm("Vider le planning (semaine en cours) ?")) return
-  state.planningDraft.grid={}
-  ensurePlanGrid()
-  save()
-  renderPlanning()
-}
-function savePlanningSnapshot(){
-  const name=($("#planName").value||"").trim()
-  if(!name) return alert("Nom requis.")
-  state.plannings.unshift({
-    id:uid(),
-    name,
-    savedAt:nowISO(),
-    draft:JSON.parse(JSON.stringify(state.planningDraft)),
-    staff:state.staff.slice(),
-    colors:JSON.parse(JSON.stringify(state.staffColors))
-  })
-  save()
-  $("#planName").value=""
-  alert("Planning sauvegardé.")
-}
-function loadPlanningSnapshot(){
-  if(!state.plannings.length) return alert("Aucun planning sauvegardé.")
-  const list=state.plannings.slice(0,12).map((p,i)=>`${i+1}. ${p.name} (${p.draft.weekStart})`).join("\n")
-  const pick=prompt("Charger quel planning ?\n\n"+list+"\n\nNuméro (1..)")
-  if(!pick) return
-  const idx=Number(pick)-1
-  const snap=state.plannings[idx]
-  if(!snap) return alert("Numéro invalide.")
-  state.planningDraft=JSON.parse(JSON.stringify(snap.draft))
-  if(snap.colors) state.staffColors=JSON.parse(JSON.stringify(snap.colors))
-  save()
-  renderPlanning()
-  renderStaff()
-  hydrateSelects()
-  alert("Planning chargé.")
-}
-function printPlanning(){window.print()}
 
 function exportData(){
   const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"})
@@ -1532,7 +1342,6 @@ function importData(){
     try{
       state=normalize(JSON.parse(txt))
       save()
-      hydrateSelects()
       refresh()
       alert("Import réussi.")
     }catch(e){
@@ -1546,72 +1355,63 @@ function resetAll(){
   localStorage.removeItem(KEY)
   state=normalize({})
   save()
-  hydrateSelects()
   refresh()
 }
 
 function refresh(){
-  hydrateSelects()
-  renderDashboard()
-  renderTasks()
-  renderPurchases()
-  renderClients()
-  renderStaff()
-  renderMotifs()
+  $("#shopName").value=state.options.shopName||"STOOM Manager"
+  $("#weekStart").value=state.planning.weekStart
+  $("#rangeSel").value=state.planning.range
+  $("#daysSel").value=state.planning.days
+
+  fillStaffSelects()
+
+  if(!$("#evMonth").value) $("#evMonth").value=monthDefault()
+  if(!$("#repMonth").value) $("#repMonth").value=monthDefault()
+  if(!$("#evDate").value) $("#evDate").value=ymd(new Date())
+
   renderPlanning()
+  renderEvents()
+  renderStaff()
+  if(!$("#reportHost").innerHTML.trim()) renderReport(false)
+  setSaveStatus("Prêt")
 }
 
 function bind(){
   bindTabs()
 
-  $("#taskIsSeller").addEventListener("change",()=>{
-    $("#taskSellerWrap").style.display=$("#taskIsSeller").checked?"block":"none"
+  $("#weekStart").addEventListener("input",()=>{
+    state.planning.weekStart=$("#weekStart").value||ymd(startOfWeekMonday())
+    save(); renderPlanning()
   })
-  $("#addTaskBtn").addEventListener("click",addTask)
-  $("#clearTaskFormBtn").addEventListener("click",clearTaskForm)
-  $("#taskSearch").addEventListener("input",renderTasks)
-  $("#taskDateFrom").addEventListener("input",renderTasks)
-  $("#taskDateTo").addEventListener("input",renderTasks)
-  $("#taskView").addEventListener("change",renderTasks)
-  $("#taskSort").addEventListener("change",renderTasks)
-  $("#taskTodayBtn").addEventListener("click",taskSetToday)
-  $("#taskWeekBtn").addEventListener("click",taskSetWeek)
-  $("#taskClearFiltersBtn").addEventListener("click",taskClearFilters)
+  $("#rangeSel").addEventListener("change",()=>{
+    state.planning.range=$("#rangeSel").value
+    save(); renderPlanning()
+  })
+  $("#daysSel").addEventListener("change",()=>{
+    state.planning.days=$("#daysSel").value
+    save(); renderPlanning()
+  })
+  $("#clearWeekBtn").addEventListener("click",clearWeek)
+  $("#printWeekBtn").addEventListener("click",()=>window.print())
 
-  $("#addBuyBtn").addEventListener("click",addPurchase)
-  $("#clearBuyBtn").addEventListener("click",clearBuyForm)
-  $("#buySearch").addEventListener("input",renderPurchases)
-  $("#buyFilter").addEventListener("change",renderPurchases)
+  $("#addEventBtn").addEventListener("click",addEvent)
+  $("#clearEventBtn").addEventListener("click",clearEventForm)
+  $("#evMonth").addEventListener("input",renderEvents)
+  $("#evFilterStaff").addEventListener("change",renderEvents)
+  $("#evFilterType").addEventListener("change",renderEvents)
 
-  $("#addClientBtn").addEventListener("click",addClientFollowup)
-  $("#clearClientBtn").addEventListener("click",clearClientForm)
-  $("#clientSearch").addEventListener("input",renderClients)
-  $("#clientDateFrom").addEventListener("input",renderClients)
-  $("#clientDateTo").addEventListener("input",renderClients)
-  $("#clientView").addEventListener("change",renderClients)
-  $("#clientTodayBtn").addEventListener("click",clientSetToday)
-  $("#clientWeekBtn").addEventListener("click",clientSetWeek)
-  $("#clientClearFiltersBtn").addEventListener("click",clientClearFilters)
-
-  $("#planWeekStart").addEventListener("input",()=>{
-    state.planningDraft.weekStart=$("#planWeekStart").value||ymd(startOfWeekMonday())
-    save()
-    renderPlanning()
+  $("#buildReportBtn").addEventListener("click",()=>renderReport(true))
+  $("#exportCsvBtn").addEventListener("click",exportReportCsv)
+  $("#printReportBtn").addEventListener("click",()=>{
+    const sec=$("#reportSection")
+    const cur=$$(".section").find(s=>s.classList.contains("active"))
+    $$(".section").forEach(s=>s.classList.remove("active"))
+    sec.classList.add("active")
+    window.print()
+    if(cur){sec.classList.remove("active");cur.classList.add("active")}
   })
-  $("#planRange").addEventListener("change",()=>{
-    state.planningDraft.range=$("#planRange").value
-    save()
-    renderPlanning()
-  })
-  $("#planDays").addEventListener("change",()=>{
-    state.planningDraft.days=$("#planDays").value
-    save()
-    renderPlanning()
-  })
-  $("#planClearBtn").addEventListener("click",clearPlanning)
-  $("#planSaveBtn").addEventListener("click",savePlanningSnapshot)
-  $("#planLoadBtn").addEventListener("click",loadPlanningSnapshot)
-  $("#planPrintBtn").addEventListener("click",printPlanning)
+  $("#repMonth").addEventListener("input",()=>renderReport(false))
 
   $("#addStaffBtn").addEventListener("click",()=>{
     const n=($("#staffInput").value||"").trim()
@@ -1622,20 +1422,15 @@ function bind(){
     state.staffColors[n]=palette[state.staff.length%palette.length]
     $("#staffInput").value=""
     save()
-    hydrateSelects()
-    renderStaff()
-    renderPlanning()
+    refresh()
   })
 
-  $("#addMotifBtn").addEventListener("click",()=>{
-    const m=($("#motifInput").value||"").trim()
-    if(!m) return
-    if(state.motifs.includes(m)) return alert("Déjà présent.")
-    state.motifs.push(m)
-    $("#motifInput").value=""
+  $("#saveOptionsBtn").addEventListener("click",()=>{
+    state.options.shopName=($("#shopName").value||"STOOM Manager").trim()||"STOOM Manager"
     save()
-    hydrateSelects()
-    renderMotifs()
+    renderPlanning()
+    renderReport(false)
+    alert("Options enregistrées.")
   })
 
   $("#exportBtn").addEventListener("click",exportData)
@@ -1644,15 +1439,11 @@ function bind(){
 }
 
 (function init(){
-  hydrateSelects()
-  $("#taskMotif").value=state.motifs[0]||"Général"
-  $("#clientMotif").value=state.motifs[0]||"Général"
-  $("#taskSellerWrap").style.display="none"
-  ensurePlanGrid()
+  ensureGrid()
   save()
   bind()
+  clearEventForm()
   refresh()
-  setSaveStatus("Prêt")
 })()
 </script>
 </body>
