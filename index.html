@@ -3,128 +3,851 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>STOOM Manager</title>
+<title>STOOM Manager — HUB</title>
+
 <style>
 :root{
-  --bg:#0a1222; --panel:#0f1b34; --line:rgba(255,255,255,.10);
-  --text:#e9efff; --muted:#a9b6da; --accent:#3ea2ff;
-  --ok:#38e08f; --warn:#ffd35a; --bad:#ff5a73;
-  --shadow:0 14px 40px rgba(0,0,0,.38); --r1:18px; --r2:12px;
+  --bg0:#070b16;
+  --bg1:#0a1024;
+  --panel:rgba(255,255,255,.06);
+  --panel2:rgba(255,255,255,.04);
+  --line:rgba(255,255,255,.12);
+  --line2:rgba(255,255,255,.08);
+  --text:#eef2ff;
+  --muted:#b2bce3;
+  --muted2:#8a95c7;
+
+  --a1:#3ea2ff;
+  --a2:#38e08f;
+  --a3:#ffd35a;
+  --a4:#ff5a73;
+  --a5:#cbb6ff;
+
+  --shadow:0 16px 55px rgba(0,0,0,.42);
+  --shadow2:0 10px 30px rgba(0,0,0,.35);
+  --r1:20px;
+  --r2:14px;
   --font:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+
+  --chipBg:rgba(255,255,255,.05);
+  --chipLine:rgba(255,255,255,.10);
 }
+
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0; font-family:var(--font); color:var(--text);
+  margin:0;
+  font-family:var(--font);
+  color:var(--text);
   background:
-    radial-gradient(1000px 520px at 12% -8%, rgba(62,162,255,.20), transparent 58%),
-    radial-gradient(1000px 520px at 88% 10%, rgba(56,224,143,.10), transparent 58%),
-    var(--bg);
+    radial-gradient(1100px 520px at 12% -12%, rgba(62,162,255,.26), transparent 55%),
+    radial-gradient(900px 520px at 88% 8%, rgba(56,224,143,.18), transparent 58%),
+    radial-gradient(900px 520px at 55% 110%, rgba(203,182,255,.14), transparent 60%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
 }
-.wrap{max-width:1200px;margin:0 auto;padding:18px 16px 42px}
-header{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}
-.brand h1{margin:0;font-size:20px;letter-spacing:.2px}
-.brand p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.35;max-width:980px}
+
+.wrap{max-width:1380px;margin:0 auto;padding:18px 16px 44px}
+header{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;
+  margin-bottom:14px
+}
+.brand{
+  display:flex;gap:12px;align-items:flex-start
+}
+.logo{
+  width:42px;height:42px;border-radius:14px;
+  background:
+    radial-gradient(18px 18px at 30% 20%, rgba(255,255,255,.35), transparent 55%),
+    linear-gradient(135deg, rgba(62,162,255,.35), rgba(56,224,143,.22));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--shadow2);
+  position:relative;
+  overflow:hidden;
+}
+.logo:after{
+  content:"";
+  position:absolute;inset:-60%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+  transform:rotate(28deg);
+  animation:shine 5.8s linear infinite;
+}
+@keyframes shine{
+  0%{transform:translateX(-35%) rotate(28deg)}
+  100%{transform:translateX(35%) rotate(28deg)}
+}
+.brand h1{margin:0;font-size:18px;letter-spacing:.2px}
+.brand p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.4;max-width:920px}
+
+.topbar{
+  display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end
+}
 .pill{
   border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  padding:9px 10px;border-radius:999px;
-  font-size:12px;color:var(--muted);
-  box-shadow:var(--shadow);
-  display:flex;gap:8px;align-items:center;
+  background:rgba(255,255,255,.05);
+  padding:9px 12px;
+  border-radius:999px;
+  font-size:12px;
+  color:var(--muted);
+  box-shadow:var(--shadow2);
+  display:flex;gap:8px;align-items:center
 }
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-@media (max-width: 900px){.grid{grid-template-columns:1fr}}
-.card{
-  background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
-  border:1px solid var(--line);
-  border-radius:var(--r1);
-  box-shadow:var(--shadow);
-  padding:14px;
-}
-.card h2{margin:0 0 6px;font-size:16px}
-.card p{margin:0;color:var(--muted);font-size:12px;line-height:1.35}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.pill b{color:var(--text)}
+
 .btn{
   border:1px solid var(--line);
   background:rgba(255,255,255,.06);
   color:var(--text);
-  padding:10px 12px;border-radius:12px;
-  cursor:pointer;font-weight:900;font-size:13px;
-  outline:none; transition:transform .05s ease, background .2s ease, border-color .2s ease;
-  user-select:none; text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+  padding:10px 12px;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:950;
+  font-size:13px;
+  outline:none;
+  transition:transform .06s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+  user-select:none;
 }
-.btn:hover{background:rgba(255,255,255,.09)}
+.btn:hover{background:rgba(255,255,255,.10);box-shadow:0 0 0 3px rgba(255,255,255,.04) inset}
 .btn:active{transform:translateY(1px)}
 .btn:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25)}
-.btn.primary{background:rgba(62,162,255,.22);border-color:rgba(62,162,255,.55)}
-.btn.ok{background:rgba(56,224,143,.14);border-color:rgba(56,224,143,.38)}
-.btn.danger{background:rgba(255,90,115,.18);border-color:rgba(255,90,115,.40)}
-.hr{height:1px;background:rgba(255,255,255,.10);margin:14px 0}
-.small{font-size:12px;color:var(--muted)}
-code.k{padding:2px 6px;border:1px solid rgba(255,255,255,.10);border-radius:8px;background:rgba(0,0,0,.18);color:var(--text)}
+.btn.primary{
+  border-color:rgba(62,162,255,.55);
+  background:linear-gradient(180deg, rgba(62,162,255,.22), rgba(62,162,255,.10));
+}
+.btn.ok{
+  border-color:rgba(56,224,143,.45);
+  background:linear-gradient(180deg, rgba(56,224,143,.18), rgba(56,224,143,.08));
+}
+.btn.warn{
+  border-color:rgba(255,211,90,.48);
+  background:linear-gradient(180deg, rgba(255,211,90,.16), rgba(255,211,90,.07));
+}
+.btn.danger{
+  border-color:rgba(255,90,115,.48);
+  background:linear-gradient(180deg, rgba(255,90,115,.18), rgba(255,90,115,.08));
+}
+.btn.ghost{background:transparent}
+
+.grid{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:14px;
+}
+@media (max-width: 1080px){.grid{grid-template-columns:1fr}}
+
+.card{
+  background:
+    radial-gradient(700px 240px at 10% 0%, rgba(62,162,255,.10), transparent 55%),
+    radial-gradient(700px 240px at 90% 10%, rgba(56,224,143,.08), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035));
+  border:1px solid var(--line);
+  border-radius:var(--r1);
+  box-shadow:var(--shadow);
+  padding:14px;
+  overflow:hidden;
+  position:relative;
+}
+.card:before{
+  content:"";
+  position:absolute;inset:-2px;
+  background:linear-gradient(135deg, rgba(255,255,255,.08), transparent 35%, rgba(255,255,255,.06));
+  pointer-events:none;
+}
+.card h2{margin:0 0 10px;font-size:15px;letter-spacing:.15px}
+.sub{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.35;
+  margin-top:-4px;
+  margin-bottom:10px;
+}
+
+.hero{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+}
+@media (max-width: 1080px){.hero{grid-template-columns:1fr}}
+.kpi{
+  border:1px solid var(--line2);
+  background:rgba(0,0,0,.16);
+  border-radius:18px;
+  padding:12px;
+  box-shadow:var(--shadow2);
+  position:relative;
+  overflow:hidden;
+}
+.kpiTop{
+  display:flex;align-items:center;justify-content:space-between;gap:10px
+}
+.kpiTitle{color:var(--muted);font-size:12px;font-weight:950;letter-spacing:.2px}
+.kpiIcon{
+  width:34px;height:34px;border-radius:14px;
+  display:grid;place-items:center;
+  border:1px solid var(--line2);
+  background:rgba(255,255,255,.05);
+}
+.kpiVal{
+  margin-top:8px;
+  font-size:24px;
+  font-weight:1100;
+  letter-spacing:.2px;
+}
+.kpiHint{margin-top:4px;color:var(--muted2);font-size:12px;line-height:1.3}
+.kpiBar{
+  margin-top:10px;
+  height:8px;border-radius:999px;
+  background:rgba(255,255,255,.06);
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.08);
+}
+.kpiBar > div{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg, rgba(62,162,255,.55), rgba(56,224,143,.55));
+}
+
+.split{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+@media (max-width: 1080px){.split{grid-template-columns:1fr}}
+
+.panel{
+  border:1px solid var(--line2);
+  background:rgba(0,0,0,.14);
+  border-radius:18px;
+  padding:12px;
+  box-shadow:var(--shadow2);
+}
+.panelHead{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap
+}
+.panelTitle{
+  font-weight:1100;
+  font-size:13px;
+  letter-spacing:.12px;
+  display:flex;gap:8px;align-items:center;
+}
+.panelTitle .dot{
+  width:10px;height:10px;border-radius:4px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.14);
+}
+.panelTitle .dot.blue{background:rgba(62,162,255,.45);border-color:rgba(62,162,255,.35)}
+.panelTitle .dot.green{background:rgba(56,224,143,.40);border-color:rgba(56,224,143,.30)}
+.panelTitle .dot.yellow{background:rgba(255,211,90,.45);border-color:rgba(255,211,90,.34)}
+.panelTitle .dot.red{background:rgba(255,90,115,.45);border-color:rgba(255,90,115,.32)}
+.panelTitle .dot.purple{background:rgba(203,182,255,.45);border-color:rgba(203,182,255,.30)}
+.panelActions{display:flex;gap:8px;flex-wrap:wrap}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{
+  border:1px solid var(--chipLine);
+  background:var(--chipBg);
+  color:var(--muted);
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:12px;
+  display:inline-flex;gap:8px;align-items:center;
+}
+.chip b{color:var(--text)}
+.chip.bad{border-color:rgba(255,90,115,.35);background:rgba(255,90,115,.10);color:#ffe7ec}
+.chip.warn{border-color:rgba(255,211,90,.35);background:rgba(255,211,90,.09);color:#fff2cf}
+.chip.ok{border-color:rgba(56,224,143,.30);background:rgba(56,224,143,.08);color:#e6fff4}
+
+.list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.item{
+  border:1px solid var(--line2);
+  background:rgba(255,255,255,.03);
+  border-radius:16px;
+  padding:10px;
+  display:flex;gap:10px;justify-content:space-between;align-items:flex-start;
+}
+.itemLeft{min-width:0;flex:1}
+.itemTitle{font-weight:1050;font-size:13px;line-height:1.25;word-break:break-word}
+.meta{margin-top:6px;color:var(--muted);font-size:12px;display:flex;gap:8px;flex-wrap:wrap}
+.badge{
+  border:1px solid var(--line2);
+  background:rgba(0,0,0,.14);
+  border-radius:999px;
+  padding:5px 8px;
+  font-size:11px;
+  color:var(--muted);
+  display:inline-flex;gap:6px;align-items:center;
+  white-space:nowrap;
+}
+.badge.blue{border-color:rgba(62,162,255,.28);background:rgba(62,162,255,.10);color:#d9ecff}
+.badge.green{border-color:rgba(56,224,143,.25);background:rgba(56,224,143,.08);color:#ddffef}
+.badge.yellow{border-color:rgba(255,211,90,.28);background:rgba(255,211,90,.08);color:#fff0c9}
+.badge.red{border-color:rgba(255,90,115,.28);background:rgba(255,90,115,.09);color:#ffe1e7}
+.badge.purple{border-color:rgba(203,182,255,.25);background:rgba(203,182,255,.08);color:#efe8ff}
+
+.link{
+  text-decoration:none;color:inherit;
+}
+.link:hover .item{background:rgba(255,255,255,.05)}
+.small{color:var(--muted);font-size:12px;line-height:1.35}
+.hr{height:1px;background:rgba(255,255,255,.10);margin:12px 0}
+.rightStack{display:flex;flex-direction:column;gap:14px}
+
+.footerNote{
+  margin-top:14px;
+  color:var(--muted2);
+  font-size:12px;
+  line-height:1.35;
+  text-align:center;
+  opacity:.9
+}
+
+@media print{
+  body{background:#fff;color:#000}
+  .noPrint{display:none !important}
+  .wrap{max-width:none;padding:0;margin:0}
+  .card{box-shadow:none;border:1px solid #ddd;background:#fff}
+}
 </style>
 </head>
+
 <body>
 <div class="wrap">
-  <header>
+
+  <header class="noPrint">
     <div class="brand">
-      <h1>STOOM Manager</h1>
-      <p>Logiciel local (PC). Toutes les données sont enregistrées sur ce poste. Modules séparés par fichier.</p>
-      <div class="small" style="margin-top:10px">Raccourci clavier : <code class="k">Ctrl</code> + <code class="k">F</code> (recherche dans la page)</div>
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>STOOM Manager — HUB</h1>
+        <p>Vue synthèse : tâches, achats, rappels clients & accès direct au planning. Données enregistrées localement sur ce poste.</p>
+      </div>
     </div>
-    <div class="pill"><span>💾</span><span id="status">Prêt</span></div>
+
+    <div class="topbar">
+      <div class="pill">💾 <span>Statut :</span> <b id="saveStatus">Prêt</b></div>
+      <div class="pill">🕒 <span id="clock">—</span></div>
+      <button class="btn" id="exportBtn">Exporter</button>
+      <button class="btn" id="importBtn">Importer</button>
+      <button class="btn danger" id="resetBtn">Réinitialiser</button>
+    </div>
   </header>
 
   <div class="grid">
+
+    <!-- COLONNE GAUCHE : HERO + LISTES -->
     <div class="card">
-      <h2>Planning</h2>
-      <p>Planning semaine imprimable A4 paysage + retards/absences + édition fin de mois.</p>
-      <div class="row">
-        <a class="btn primary" href="./planning.html">Ouvrir Planning</a>
+      <h2>Tableau de bord</h2>
+      <div class="sub">Priorités du jour + synthèse 7 jours. Clique une carte pour ouvrir le module.</div>
+
+      <div class="hero">
+        <a class="link" href="./taches.html">
+          <div class="kpi" id="kpiTasks">
+            <div class="kpiTop">
+              <div class="kpiTitle">Tâches</div>
+              <div class="kpiIcon">✅</div>
+            </div>
+            <div class="kpiVal" id="kpiTasksVal">—</div>
+            <div class="kpiHint" id="kpiTasksHint">—</div>
+            <div class="kpiBar"><div id="kpiTasksBar"></div></div>
+          </div>
+        </a>
+
+        <a class="link" href="./achats.html">
+          <div class="kpi" id="kpiPurch">
+            <div class="kpiTop">
+              <div class="kpiTitle">Achats magasin</div>
+              <div class="kpiIcon">🛒</div>
+            </div>
+            <div class="kpiVal" id="kpiPurchVal">—</div>
+            <div class="kpiHint" id="kpiPurchHint">—</div>
+            <div class="kpiBar"><div id="kpiPurchBar"></div></div>
+          </div>
+        </a>
+
+        <a class="link" href="./clients.html">
+          <div class="kpi" id="kpiClients">
+            <div class="kpiTop">
+              <div class="kpiTitle">Rappels clients</div>
+              <div class="kpiIcon">📞</div>
+            </div>
+            <div class="kpiVal" id="kpiClientsVal">—</div>
+            <div class="kpiHint" id="kpiClientsHint">—</div>
+            <div class="kpiBar"><div id="kpiClientsBar"></div></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="split">
+
+        <!-- TÂCHES : LISTE -->
+        <div class="panel">
+          <div class="panelHead">
+            <div class="panelTitle"><span class="dot red"></span> Tâches prioritaires</div>
+            <div class="panelActions">
+              <a class="btn warn" href="./taches.html?view=today">Aujourd’hui</a>
+              <a class="btn" href="./taches.html?view=week">Cette semaine</a>
+            </div>
+          </div>
+          <div class="chips" id="tasksChips"></div>
+          <div class="list" id="tasksList"></div>
+          <div class="small" id="tasksEmpty" style="display:none;margin-top:10px">Rien de critique. Tu gères.</div>
+        </div>
+
+        <!-- CLIENTS : LISTE -->
+        <div class="panel">
+          <div class="panelHead">
+            <div class="panelTitle"><span class="dot yellow"></span> Rappels clients</div>
+            <div class="panelActions">
+              <a class="btn warn" href="./clients.html?view=overdue">En retard</a>
+              <a class="btn" href="./clients.html?view=week">7 jours</a>
+            </div>
+          </div>
+          <div class="chips" id="clientsChips"></div>
+          <div class="list" id="clientsList"></div>
+          <div class="small" id="clientsEmpty" style="display:none;margin-top:10px">Aucun rappel urgent.</div>
+        </div>
+
+      </div>
+
+      <div class="hr"></div>
+
+      <!-- ACHATS : LISTE -->
+      <div class="panel">
+        <div class="panelHead">
+          <div class="panelTitle"><span class="dot purple"></span> Achats magasin</div>
+          <div class="panelActions">
+            <a class="btn primary" href="./achats.html?view=todo">À acheter</a>
+            <a class="btn" href="./achats.html?view=received">Reçus</a>
+          </div>
+        </div>
+        <div class="chips" id="purchChips"></div>
+        <div class="list" id="purchList"></div>
+        <div class="small" id="purchEmpty" style="display:none;margin-top:10px">Aucun achat en attente.</div>
+      </div>
+
+      <div class="footerNote">
+        Astuce : si une page (taches/achats/clients) n’existe pas encore, tu peux quand même garder ce HUB : il affichera la synthèse dès que les modules seront ajoutés.
       </div>
     </div>
 
-    <div class="card">
-      <h2>Tâches & rappels magasin</h2>
-      <p>À faire / en retard / fait (+ commentaire) + assignation vendeur + filtres par date + boutons Aujourd’hui / Cette semaine.</p>
-      <div class="row">
-        <a class="btn primary" href="./taches.html">Ouvrir Tâches</a>
+    <!-- COLONNE DROITE : ACCÈS RAPIDES -->
+    <div class="rightStack">
+
+      <div class="card">
+        <h2>Accès rapides</h2>
+        <div class="sub">Un clic → module. (Planning en A4 paysage sur 1 page/semaine.)</div>
+
+        <div class="split">
+          <a class="link" href="./planning.html">
+            <div class="panel">
+              <div class="panelTitle"><span class="dot blue"></span> Planning</div>
+              <div class="small">Semaine + retards/absences + édition fin de mois.</div>
+              <div class="chips" style="margin-top:10px">
+                <span class="chip"><b>Ouvrir</b> planning</span>
+              </div>
+            </div>
+          </a>
+
+          <a class="link" href="./planning.html#eventsSection">
+            <div class="panel">
+              <div class="panelTitle"><span class="dot yellow"></span> Retards / Absences</div>
+              <div class="small">Saisie rapide + impact visible sur planning.</div>
+              <div class="chips" style="margin-top:10px">
+                <span class="chip warn"><b>Ajouter</b> événement</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="split">
+          <a class="link" href="./planning.html#reportSection">
+            <div class="panel">
+              <div class="panelTitle"><span class="dot green"></span> Édition fin de mois</div>
+              <div class="small">Synthèse heures + retards + absences + export CSV.</div>
+              <div class="chips" style="margin-top:10px">
+                <span class="chip ok"><b>Générer</b> + imprimer</span>
+              </div>
+            </div>
+          </a>
+
+          <a class="link" href="./planning.html#settingsSection">
+            <div class="panel">
+              <div class="panelTitle"><span class="dot purple"></span> Paramètres</div>
+              <div class="small">Vendeurs + nom boutique pour impression.</div>
+              <div class="chips" style="margin-top:10px">
+                <span class="chip"><b>Gérer</b> équipe</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
       </div>
+
+      <div class="card">
+        <h2>Statut & données</h2>
+        <div class="sub">Stockage local : export recommandé de temps en temps.</div>
+
+        <div class="panel">
+          <div class="panelTitle"><span class="dot green"></span> Santé des données</div>
+          <div class="chips" id="healthChips" style="margin-top:10px"></div>
+          <div class="small" id="healthHint" style="margin-top:10px"></div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="panel">
+          <div class="panelTitle"><span class="dot red"></span> Sécurité</div>
+          <div class="small">⚠️ “Réinitialiser” efface toutes les données sur ce poste.</div>
+          <div class="chips" style="margin-top:10px">
+            <button class="btn ok" id="exportBtn2">Exporter maintenant</button>
+            <button class="btn danger" id="resetBtn2">Réinitialiser</button>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
-    <div class="card">
-      <h2>Achats magasin</h2>
-      <p>Liste d’achats, priorités, statut, historique rapide.</p>
-      <div class="row">
-        <a class="btn primary" href="./achats.html">Ouvrir Achats</a>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Suivi clients</h2>
-      <p>Rappels clients, motifs, prochaine action, statut (à rappeler / fait / annulé).</p>
-      <div class="row">
-        <a class="btn primary" href="./clients.html">Ouvrir Clients</a>
-      </div>
-    </div>
   </div>
 
-  <div class="hr"></div>
-  <div class="small">Astuce : dans Firefox, pour l’impression en couleurs, active “Imprimer l’arrière-plan / couleurs”.</div>
 </div>
 
 <script>
-(() => {
-  const KEY="stoom_manager_shared_v1";
-  const el=document.getElementById("status");
-  function load(){
-    try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; }
+const HUB_KEY = "stoom_manager_shared_v1";
+const $ = (s)=>document.querySelector(s);
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]))}
+function ymd(d){
+  const x=(d instanceof Date)?d:new Date(d);
+  return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`;
+}
+function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+function clamp(n,a,b){ return Math.max(a, Math.min(b,n)); }
+function fmtDate(iso){
+  const p=(iso||"").split("-");
+  if(p.length!==3) return iso||"";
+  return `${p[2]}/${p[1]}/${p[0]}`;
+}
+function loadState(){
+  try{ return JSON.parse(localStorage.getItem(HUB_KEY)||"{}"); }
+  catch(e){ return {}; }
+}
+function setStatus(t){
+  const el=$("#saveStatus");
+  if(el) el.textContent=t;
+}
+function setBar(id, pct){
+  const el = $(id);
+  if(!el) return;
+  el.style.width = clamp(pct,0,100).toFixed(0) + "%";
+}
+
+function pickText(o, keys){
+  for(const k of keys){
+    if(o && typeof o[k]==="string" && o[k].trim()) return o[k].trim();
   }
-  const s=load();
-  const shop=(s.options && s.options.shopName) ? s.options.shopName : "STOOM Manager";
-  el.textContent = "Prêt — " + shop;
+  return "";
+}
+function getDue(o){
+  const d = pickText(o, ["due","date","when","rappelDate","nextDate","deadline"]);
+  return d || "";
+}
+function getStatus(o){
+  const s = pickText(o, ["status","etat","state"]);
+  return s || "";
+}
+function getDoneAt(o){
+  const d = pickText(o, ["doneAt","done_at","closedAt","completedAt"]);
+  return d || "";
+}
+function getTitle(o){
+  return pickText(o, ["title","name","label","task","objet","client","what","motif","note"]) || "(sans titre)";
+}
+function getVendor(o){
+  return pickText(o, ["vendor","vendeur","staff","who","assignedTo"]);
+}
+function getType(o){
+  return pickText(o, ["type","category","kind","motif"]);
+}
+function scoreUrgency(due, today){
+  if(!due) return 0;
+  if(due < today) return 100 + (today.localeCompare(due) ? 1 : 0);
+  if(due === today) return 80;
+  return 10;
+}
+
+function renderClock(){
+  const d=new Date();
+  const pad=n=>String(n).padStart(2,"0");
+  $("#clock").textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function renderHub(){
+  const s = loadState();
+  const today = ymd(new Date());
+  const weekEnd = ymd(addDays(new Date(), 7));
+
+  const tasks = Array.isArray(s.tasks) ? s.tasks : [];
+  const purchases = Array.isArray(s.purchases) ? s.purchases : [];
+  const clients = Array.isArray(s.clientFollowups) ? s.clientFollowups : [];
+
+  // ====== TÂCHES ======
+  const tasksTodo = tasks.filter(t => (getStatus(t)||"").toLowerCase() === "todo");
+  const tasksDone = tasks.filter(t => (getStatus(t)||"").toLowerCase() === "done");
+
+  const tasksLate = tasksTodo.filter(t => {
+    const due=getDue(t);
+    return due && due < today;
+  });
+  const tasksToday = tasksTodo.filter(t => getDue(t) === today);
+  const tasksWeek = tasksTodo.filter(t => {
+    const due=getDue(t);
+    return due && due >= today && due <= weekEnd;
+  });
+  const tasksDoneToday = tasksDone.filter(t => (getDoneAt(t)||"").startsWith(today));
+
+  $("#kpiTasksVal").textContent = `${tasksLate.length}`;
+  $("#kpiTasksHint").textContent = `en retard • ${tasksToday.length} aujourd’hui • ${tasksWeek.length} sur 7j`;
+  setBar("#kpiTasksBar", tasksTodo.length ? (tasksLate.length / tasksTodo.length * 100) : 0);
+
+  $("#tasksChips").innerHTML = `
+    <span class="chip bad">En retard : <b>${tasksLate.length}</b></span>
+    <span class="chip warn">Aujourd’hui : <b>${tasksToday.length}</b></span>
+    <span class="chip">7 jours : <b>${tasksWeek.length}</b></span>
+    <span class="chip ok">Faites aujourd’hui : <b>${tasksDoneToday.length}</b></span>
+  `;
+
+  const tasksPrior = tasksTodo
+    .slice()
+    .sort((a,b)=>{
+      const da=getDue(a)||"9999-12-31";
+      const db=getDue(b)||"9999-12-31";
+      if(da!==db) return da.localeCompare(db);
+      return scoreUrgency(getDue(b),today)-scoreUrgency(getDue(a),today);
+    })
+    .slice(0,6);
+
+  if(!tasksPrior.length){
+    $("#tasksList").innerHTML = "";
+    $("#tasksEmpty").style.display="block";
+  }else{
+    $("#tasksEmpty").style.display="none";
+    $("#tasksList").innerHTML = tasksPrior.map(t=>{
+      const due=getDue(t);
+      const vendor=getVendor(t);
+      const late = due && due < today;
+      const cls = late ? "red" : (due===today ? "yellow" : "blue");
+      return `
+        <a class="link" href="./taches.html">
+          <div class="item">
+            <div class="itemLeft">
+              <div class="itemTitle">${esc(getTitle(t))}</div>
+              <div class="meta">
+                ${due?`<span class="badge ${cls}">📅 ${esc(fmtDate(due))}${late?" • en retard":(due===today?" • aujourd’hui":"")}</span>`:""}
+                ${vendor?`<span class="badge purple">👤 ${esc(vendor)}</span>`:""}
+                <span class="badge">#${esc(getType(t)||"tâche")}</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      `;
+    }).join("");
+  }
+
+  // ====== ACHATS ======
+  const purchTodo = purchases.filter(p => {
+    const st = (getStatus(p)||"").toLowerCase();
+    return st==="todo" || st==="to_buy" || st==="acheter" || st==="a_acheter";
+  });
+  const purchOrdered = purchases.filter(p => (getStatus(p)||"").toLowerCase().includes("order") || (getStatus(p)||"").toLowerCase().includes("command"));
+  const purchReceived = purchases.filter(p => (getStatus(p)||"").toLowerCase().includes("recu") || (getStatus(p)||"").toLowerCase().includes("received") || (getStatus(p)||"").toLowerCase().includes("done"));
+
+  $("#kpiPurchVal").textContent = `${purchTodo.length}`;
+  $("#kpiPurchHint").textContent = `à acheter • ${purchOrdered.length} commandé(s) • ${purchReceived.length} reçu(s)`;
+  setBar("#kpiPurchBar", purchases.length ? (purchTodo.length / purchases.length * 100) : 0);
+
+  $("#purchChips").innerHTML = `
+    <span class="chip warn">À acheter : <b>${purchTodo.length}</b></span>
+    <span class="chip">Commandés : <b>${purchOrdered.length}</b></span>
+    <span class="chip ok">Reçus : <b>${purchReceived.length}</b></span>
+  `;
+
+  const purchPrior = purchTodo
+    .slice()
+    .sort((a,b)=>{
+      const da=getDue(a)||"9999-12-31";
+      const db=getDue(b)||"9999-12-31";
+      return da.localeCompare(db);
+    })
+    .slice(0,6);
+
+  if(!purchPrior.length){
+    $("#purchList").innerHTML="";
+    $("#purchEmpty").style.display="block";
+  }else{
+    $("#purchEmpty").style.display="none";
+    $("#purchList").innerHTML = purchPrior.map(p=>{
+      const due=getDue(p);
+      const late = due && due < today;
+      const cls = late ? "red" : (due===today ? "yellow" : "blue");
+      return `
+        <a class="link" href="./achats.html">
+          <div class="item">
+            <div class="itemLeft">
+              <div class="itemTitle">${esc(getTitle(p))}</div>
+              <div class="meta">
+                ${due?`<span class="badge ${cls}">📅 ${esc(fmtDate(due))}${late?" • en retard":(due===today?" • aujourd’hui":"")}</span>`:""}
+                <span class="badge purple">🛍️ achat</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      `;
+    }).join("");
+  }
+
+  // ====== CLIENTS ======
+  const clientsTodo = clients.filter(c => (getStatus(c)||"").toLowerCase() === "todo");
+  const clientsDone = clients.filter(c => (getStatus(c)||"").toLowerCase() === "done");
+
+  const clientsLate = clientsTodo.filter(c => {
+    const due=getDue(c);
+    return due && due < today;
+  });
+  const clientsWeek = clientsTodo.filter(c => {
+    const due=getDue(c);
+    return due && due >= today && due <= weekEnd;
+  });
+  const clientsDoneToday = clientsDone.filter(c => (getDoneAt(c)||"").startsWith(today));
+
+  $("#kpiClientsVal").textContent = `${clientsLate.length}`;
+  $("#kpiClientsHint").textContent = `en retard • ${clientsWeek.length} sur 7j • ${clientsDoneToday.length} faits aujourd’hui`;
+  setBar("#kpiClientsBar", clientsTodo.length ? (clientsLate.length / clientsTodo.length * 100) : 0);
+
+  $("#clientsChips").innerHTML = `
+    <span class="chip bad">En retard : <b>${clientsLate.length}</b></span>
+    <span class="chip">7 jours : <b>${clientsWeek.length}</b></span>
+    <span class="chip ok">Faits aujourd’hui : <b>${clientsDoneToday.length}</b></span>
+  `;
+
+  const clientsPrior = clientsTodo
+    .slice()
+    .sort((a,b)=>{
+      const da=getDue(a)||"9999-12-31";
+      const db=getDue(b)||"9999-12-31";
+      return da.localeCompare(db);
+    })
+    .slice(0,6);
+
+  if(!clientsPrior.length){
+    $("#clientsList").innerHTML="";
+    $("#clientsEmpty").style.display="block";
+  }else{
+    $("#clientsEmpty").style.display="none";
+    $("#clientsList").innerHTML = clientsPrior.map(c=>{
+      const due=getDue(c);
+      const late = due && due < today;
+      const cls = late ? "red" : (due===today ? "yellow" : "blue");
+      const vendor = getVendor(c);
+      return `
+        <a class="link" href="./clients.html">
+          <div class="item">
+            <div class="itemLeft">
+              <div class="itemTitle">${esc(getTitle(c))}</div>
+              <div class="meta">
+                ${due?`<span class="badge ${cls}">📅 ${esc(fmtDate(due))}${late?" • en retard":(due===today?" • aujourd’hui":"")}</span>`:""}
+                ${vendor?`<span class="badge purple">👤 ${esc(vendor)}</span>`:""}
+                <span class="badge">📞 rappel</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      `;
+    }).join("");
+  }
+
+  // ====== Santé ======
+  const staff = Array.isArray(s.staff) ? s.staff : [];
+  const events = Array.isArray(s.events) ? s.events : [];
+
+  $("#healthChips").innerHTML = `
+    <span class="chip">Vendeurs : <b>${staff.length || "—"}</b></span>
+    <span class="chip">Événements : <b>${events.length || "—"}</b></span>
+    <span class="chip">Tâches : <b>${tasks.length}</b></span>
+    <span class="chip">Achats : <b>${purchases.length}</b></span>
+    <span class="chip">Rappels : <b>${clients.length}</b></span>
+  `;
+
+  const hasData = (tasks.length+purchases.length+clients.length+events.length+staff.length) > 0;
+  $("#healthHint").textContent = hasData
+    ? "OK — données détectées dans le stockage local. Pense à exporter de temps en temps."
+    : "Aucune donnée détectée pour l’instant (normal si tu débutes le HUB).";
+}
+
+function exportData(){
+  const raw = localStorage.getItem(HUB_KEY) || "{}";
+  const blob=new Blob([raw],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=`stoom-manager-export-${ymd(new Date())}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function importData(){
+  const inp=document.createElement("input");
+  inp.type="file";
+  inp.accept="application/json";
+  inp.addEventListener("change", async ()=>{
+    const f=inp.files && inp.files[0];
+    if(!f) return;
+    const txt=await f.text();
+    try{
+      JSON.parse(txt);
+      localStorage.setItem(HUB_KEY, txt);
+      setStatus("Importé");
+      renderHub();
+      alert("Import réussi.");
+    }catch(e){
+      alert("Fichier invalide.");
+    }
+  });
+  inp.click();
+}
+
+function resetAll(){
+  if(!confirm("Réinitialiser toutes les données locales STOOM Manager sur ce poste ?")) return;
+  localStorage.removeItem(HUB_KEY);
+  setStatus("Réinitialisé");
+  renderHub();
+}
+
+(function init(){
+  renderClock();
+  setInterval(renderClock, 15000);
+
+  $("#exportBtn").addEventListener("click", exportData);
+  $("#exportBtn2").addEventListener("click", exportData);
+  $("#importBtn").addEventListener("click", importData);
+  $("#resetBtn").addEventListener("click", resetAll);
+  $("#resetBtn2").addEventListener("click", resetAll);
+
+  setStatus("Prêt");
+  renderHub();
+
+  window.addEventListener("storage", (e)=>{
+    if(e.key===HUB_KEY){
+      setStatus("Mis à jour");
+      renderHub();
+    }
+  });
 })();
 </script>
+
 </body>
 </html>
