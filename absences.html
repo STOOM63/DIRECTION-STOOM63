@@ -6,153 +6,460 @@
 <title>STOOM Manager — Absences</title>
 
 <style>
+:root{
+  --bg:#0a1222;
+  --panel:#0f1b34;
+  --line:rgba(255,255,255,.10);
+  --text:#e9efff;
+  --muted:#a9b6da;
+  --accent:#3ea2ff;
+  --ok:#38e08f;
+  --warn:#ffd35a;
+  --bad:#ff5a73;
+  --shadow:0 14px 40px rgba(0,0,0,.38);
+  --r1:14px;
+  --font:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box}
 body{
   margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-  background:#0a1222;
-  color:#e9efff;
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
 }
 .wrap{max-width:1200px;margin:auto;padding:20px}
-h1{margin-top:0}
+h1{margin:0 0 6px}
+.sub{margin:0 0 16px;color:var(--muted);font-size:13px;line-height:1.35}
 .card{
-  background:#0f1b34;
+  background:var(--panel);
   border:1px solid rgba(255,255,255,.08);
-  border-radius:14px;
+  border-radius:var(--r1);
   padding:16px;
-  margin-bottom:20px;
+  margin-bottom:16px;
+  box-shadow:var(--shadow);
+}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+label{
+  display:flex;flex-direction:column;gap:6px;
+  font-size:12px;color:var(--muted);
+  min-width:170px
 }
 input,select{
-  padding:8px;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,.1);
+  padding:10px 10px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.12);
   background:#0d1730;
   color:#fff;
+  outline:none;
+  font-size:14px;
+  min-width:170px;
 }
-button{
-  padding:8px 12px;
-  border-radius:8px;
-  border:none;
-  background:#3ea2ff;
+input:focus,select:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25)}
+.small{min-width:150px}
+.tiny{min-width:120px}
+
+.btn{
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
   color:#fff;
   cursor:pointer;
+  font-weight:950;
+  font-size:13px;
+  user-select:none;
 }
-button.danger{background:#ff5a73}
-table{
-  width:100%;
-  border-collapse:collapse;
+.btn:hover{background:rgba(255,255,255,.10)}
+.btn.primary{background:rgba(62,162,255,.22);border-color:rgba(62,162,255,.55)}
+.btn.ok{background:rgba(56,224,143,.14);border-color:rgba(56,224,143,.38)}
+.btn.danger{background:rgba(255,90,115,.18);border-color:rgba(255,90,115,.40)}
+.btn.ghost{background:transparent}
+.pill{
+  display:inline-flex;gap:8px;align-items:center;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  padding:8px 10px;border-radius:999px;
+  font-size:12px;color:var(--muted);
 }
+
+.hr{height:1px;background:rgba(255,255,255,.10);margin:12px 0}
+
+table{width:100%;border-collapse:collapse}
 th,td{
-  padding:8px;
+  padding:10px 8px;
   border-bottom:1px solid rgba(255,255,255,.08);
   font-size:13px;
+  text-align:left;
 }
-a{color:#3ea2ff;text-decoration:none}
+th{color:var(--muted);font-weight:950}
+a{color:var(--accent);text-decoration:none}
+kbd{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  padding:2px 6px;border-radius:6px;
+  font-size:12px;color:var(--text);
+}
+.badge{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);
+  padding:5px 8px;border-radius:999px;
+  font-size:12px;color:var(--muted);
+}
+.badge.retard{border-color:rgba(255,211,90,.35);background:rgba(255,211,90,.10);color:#fff1cc}
+.badge.maladie{border-color:rgba(255,90,115,.30);background:rgba(255,90,115,.10);color:#ffe4ea}
+.badge.conge{border-color:rgba(233,235,240,.35);background:rgba(233,235,240,.10);color:#f1f3ff}
+.badge.formation{border-color:rgba(62,162,255,.35);background:rgba(62,162,255,.10);color:#d9ecff}
+.badge.autre{border-color:rgba(255,211,90,.28);background:rgba(255,211,90,.08);color:#fff1cc}
+.muted{color:var(--muted)}
+.right{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 </style>
 </head>
 
 <body>
 <div class="wrap">
-  <h1>Absences & Retards</h1>
-  <p><a href="index.html">⬅ Retour Hub</a></p>
-
-  <div class="card">
-    <h3>Ajouter un événement</h3>
-
-    <select id="type">
-      <option value="retard">Retard</option>
-      <option value="maladie">Maladie</option>
-      <option value="conge">Congé</option>
-      <option value="formation">Formation</option>
-      <option value="autre">Autre</option>
-    </select>
-
-    <select id="staff"></select>
-
-    <input type="date" id="date">
-    <input type="time" id="start">
-    <input type="time" id="end">
-    <input type="text" id="note" placeholder="Motif">
-
-    <button onclick="addEvent()">Ajouter</button>
+  <div class="row" style="justify-content:space-between;align-items:flex-start">
+    <div>
+      <h1>Absences & Retards</h1>
+      <p class="sub">
+        Tout est enregistré dans le même stockage que le HUB/Planning.
+        Dès que tu ajoutes un événement ici, il apparaît automatiquement sur le planning.
+      </p>
+    </div>
+    <div class="right">
+      <span class="pill">💾 <span id="saveStatus">Prêt</span></span>
+      <a class="btn ghost" href="./index.html">⬅ Retour HUB</a>
+      <a class="btn ghost" href="./planning.html">📅 Planning</a>
+      <a class="btn ghost" href="./edition.html">🧾 Édition</a>
+      <a class="btn ghost" href="./parametres.html">⚙️ Paramètres</a>
+    </div>
   </div>
 
   <div class="card">
-    <h3>Liste</h3>
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <h3 style="margin:0">Ajouter un événement</h3>
+      <div class="badge" title="Astuce">
+        Astuce : <kbd>Entrée</kbd> pour ajouter rapidement
+      </div>
+    </div>
 
-    <input type="month" id="filterMonth" onchange="render()">
+    <div class="hr"></div>
+
+    <div class="row">
+      <label class="small">Type
+        <select id="type">
+          <option value="retard">Retard</option>
+          <option value="maladie">Maladie</option>
+          <option value="conge">Congé</option>
+          <option value="formation">Formation</option>
+          <option value="autre">Autre</option>
+        </select>
+      </label>
+
+      <label>Vendeur
+        <select id="staff"></select>
+      </label>
+
+      <label class="small">Date
+        <input type="date" id="date">
+      </label>
+
+      <label class="tiny">Début
+        <input type="time" id="start">
+      </label>
+
+      <label class="tiny">Fin
+        <input type="time" id="end">
+      </label>
+
+      <label style="min-width:220px">Motif (optionnel)
+        <input type="text" id="note" placeholder="Motif / précision">
+      </label>
+
+      <button class="btn ok" id="addBtn">Ajouter</button>
+      <button class="btn" id="fullDayBtn" title="Renseigne une journée complète sur la plage horaire du planning">Journée entière</button>
+    </div>
+
+    <p class="sub" style="margin-top:10px">
+      Règles : <span class="muted">Fin doit être après Début</span>. Les absences bloquent la peinture sur le planning, les retards restent visibles par dessus.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <h3 style="margin:0">Liste</h3>
+      <div class="row" style="gap:10px;align-items:flex-end">
+        <label class="small">Filtrer (mois)
+          <input type="month" id="filterMonth">
+        </label>
+        <button class="btn primary" id="exportBtn" title="Export CSV des événements">Exporter CSV</button>
+      </div>
+    </div>
+
+    <div class="hr"></div>
 
     <table>
       <thead>
         <tr>
-          <th>Date</th>
-          <th>Vendeur</th>
-          <th>Type</th>
-          <th>Début</th>
-          <th>Fin</th>
-          <th>Durée</th>
-          <th></th>
+          <th style="width:120px">Date</th>
+          <th style="width:120px">Vendeur</th>
+          <th style="width:140px">Type</th>
+          <th style="width:90px">Début</th>
+          <th style="width:90px">Fin</th>
+          <th style="width:90px">Durée</th>
+          <th>Motif</th>
+          <th style="width:80px"></th>
         </tr>
       </thead>
       <tbody id="list"></tbody>
     </table>
+
+    <p class="sub" id="emptyHint" style="display:none;margin-top:10px">
+      Aucun événement pour ce filtre.
+    </p>
   </div>
 </div>
 
 <script>
-const KEY="stoom_manager_ultimate_v2"
-let state=JSON.parse(localStorage.getItem(KEY)||"{}")
-state.events=state.events||[]
-state.staff=state.staff||["Léa","Arnaud","Evan"]
+const $ = (s)=>document.querySelector(s);
 
-function save(){
-  localStorage.setItem(KEY,JSON.stringify(state))
+/* ✅ même clé que HUB + planning */
+const KEY="stoom_manager_shared_v1";
+
+/* -------- util “date locale” (anti +1 jour) -------- */
+function parseLocalYMD(ymd){
+  const p=String(ymd||"").split("-").map(Number);
+  if(p.length!==3 || !p[0] || !p[1] || !p[2]) return new Date();
+  return new Date(p[0], p[1]-1, p[2], 0,0,0,0);
+}
+function ymd(d){
+  const x=(d instanceof Date)?d:new Date(d);
+  const y=x.getFullYear();
+  const m=String(x.getMonth()+1).padStart(2,"0");
+  const a=String(x.getDate()).padStart(2,"0");
+  return `${y}-${m}-${a}`;
+}
+function pad2(n){return String(n).padStart(2,"0")}
+function nowTimeRounded30(){
+  const d=new Date();
+  const mins=d.getMinutes();
+  const r = mins<30 ? 30 : 60;
+  d.setMinutes(r===60?0:30,0,0);
+  if(r===60) d.setHours(d.getHours()+1);
+  return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+}
+function addMinutes(t, add){
+  const [h,m]=String(t||"").split(":").map(Number);
+  if(!Number.isFinite(h) || !Number.isFinite(m)) return "";
+  const total=h*60+m+add;
+  const hh=pad2(Math.floor((total%1440+1440)%1440/60));
+  const mm=pad2((total%60+60)%60);
+  return `${hh}:${mm}`;
+}
+function toMin(t){
+  const p=String(t||"").split(":").map(Number);
+  if(p.length!==2) return null;
+  return p[0]*60+p[1];
+}
+function setSaveStatus(txt){
+  const el=$("#saveStatus");
+  if(!el) return;
+  el.textContent=txt;
+  el.style.opacity="1";
+  clearTimeout(setSaveStatus.t);
+  setSaveStatus.t=setTimeout(()=>{el.style.opacity=".86"},900);
 }
 
-function minutes(e){
-  const a=e.start.split(":").map(Number)
-  const b=e.end.split(":").map(Number)
-  return (b[0]*60+b[1])-(a[0]*60+a[1])
+/* -------- state -------- */
+function normalize(s){
+  s=s||{};
+  s.options=s.options||{};
+  s.staff=Array.isArray(s.staff)&&s.staff.length ? s.staff : ["Léa","Arnaud","Evan"];
+  s.events=Array.isArray(s.events)?s.events:[];
+  s.planning=s.planning||{};
+  if(!s.planning.range) s.planning.range="08:30-19:00";
+  return s;
+}
+function load(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw) return normalize(JSON.parse(raw));
+  }catch(e){}
+  return normalize({});
+}
+let state = load();
+
+function save(){
+  localStorage.setItem(KEY, JSON.stringify(state));
+  setSaveStatus("Sauvegardé");
+}
+
+/* -------- logique événements -------- */
+function minutesEvent(e){
+  const a=toMin(e.start), b=toMin(e.end);
+  if(a===null || b===null) return 0;
+  return Math.max(0, b-a);
+}
+function badgeType(type){
+  const map={
+    retard:["retard","Retard"],
+    maladie:["maladie","Maladie"],
+    conge:["conge","Congé"],
+    formation:["formation","Formation"],
+    autre:["autre","Autre"]
+  };
+  const v=map[type]||["autre","Autre"];
+  return `<span class="badge ${v[0]}">${v[1]}</span>`;
+}
+function parseRange(r){
+  const p=String(r||"08:30-19:00").split("-");
+  return {start:p[0]||"08:30", end:p[1]||"19:00"};
 }
 
 function addEvent(){
-  state.events.unshift({
-    id:Date.now(),
-    type:type.value,
-    staff:staff.value,
-    date:date.value,
-    start:start.value,
-    end:end.value,
-    note:note.value
-  })
-  save()
-  render()
+  const type=$("#type").value;
+  const staff=$("#staff").value;
+  const date=$("#date").value;
+  const start=$("#start").value;
+  const end=$("#end").value;
+  const note=$("#note").value.trim();
+
+  if(!staff){ alert("Choisis un vendeur."); return; }
+  if(!date){ alert("Choisis une date."); return; }
+  if(!start || !end){ alert("Renseigne début et fin."); return; }
+
+  const a=toMin(start), b=toMin(end);
+  if(a===null || b===null){ alert("Heures invalides."); return; }
+  if(b<=a){ alert("La fin doit être après le début."); return; }
+
+  const ev={
+    id: Date.now() + Math.floor(Math.random()*1000),
+    type, staff, date, start, end,
+    note,
+    createdAt: new Date().toISOString()
+  };
+
+  state.events.unshift(ev);
+  save();
+  render();
+
+  // reset rapide (garde date + vendeur)
+  $("#note").value="";
+  $("#start").value = nowTimeRounded30();
+  $("#end").value = addMinutes($("#start").value, 30);
 }
 
-function del(id){
-  state.events=state.events.filter(e=>e.id!=id)
-  save()
-  render()
+function delEvent(id){
+  if(!confirm("Supprimer cet événement ?")) return;
+  state.events = state.events.filter(e=>String(e.id)!==String(id));
+  save();
+  render();
 }
 
+function applyFullDay(){
+  const r=parseRange(state.planning?.range || "08:30-19:00");
+  $("#start").value = r.start;
+  $("#end").value = r.end;
+}
+
+/* -------- UI -------- */
 function render(){
-  staff.innerHTML=state.staff.map(s=>`<option>${s}</option>`).join("")
-  const month=filterMonth.value
-  const rows=state.events.filter(e=>!month||e.date.startsWith(month))
+  // reload state au cas où planning/hub a modifié staff
+  state = load();
 
-  list.innerHTML=rows.map(e=>`
-    <tr>
-      <td>${e.date}</td>
-      <td>${e.staff}</td>
-      <td>${e.type}</td>
-      <td>${e.start}</td>
-      <td>${e.end}</td>
-      <td>${(minutes(e)/60).toFixed(1)} h</td>
-      <td><button class="danger" onclick="del(${e.id})">X</button></td>
-    </tr>
-  `).join("")
+  // staff options
+  $("#staff").innerHTML = state.staff.map(s=>`<option value="${s}">${s}</option>`).join("");
+
+  const month=$("#filterMonth").value;
+  const rows=state.events
+    .slice()
+    .filter(e=>!month || String(e.date||"").startsWith(month))
+    .sort((a,b)=>String(b.date).localeCompare(String(a.date)) || (toMin(b.start)-toMin(a.start)));
+
+  $("#emptyHint").style.display = rows.length ? "none" : "block";
+
+  $("#list").innerHTML = rows.map(e=>{
+    const dur = (minutesEvent(e)/60);
+    return `
+      <tr>
+        <td>${e.date || ""}</td>
+        <td>${e.staff || ""}</td>
+        <td>${badgeType(e.type)}</td>
+        <td>${e.start || ""}</td>
+        <td>${e.end || ""}</td>
+        <td>${dur ? dur.toFixed(1).replace(".",",")+" h" : ""}</td>
+        <td class="muted">${(e.note||"")}</td>
+        <td><button class="btn danger" onclick="delEvent('${String(e.id)}')">X</button></td>
+      </tr>
+    `;
+  }).join("");
+
+  setSaveStatus("Prêt");
 }
 
-render()
+function exportCsv(){
+  const month=$("#filterMonth").value;
+  const rows=state.events.filter(e=>!month || String(e.date||"").startsWith(month));
+
+  const head=["date","staff","type","start","end","hours","note"];
+  const lines=[head.join(";")];
+
+  rows.forEach(e=>{
+    const h=(minutesEvent(e)/60);
+    const line=[
+      e.date||"",
+      e.staff||"",
+      e.type||"",
+      e.start||"",
+      e.end||"",
+      h ? String(h.toFixed(2)).replace(".",",") : "",
+      (e.note||"").replaceAll(";",",")
+    ];
+    lines.push(line.join(";"));
+  });
+
+  const blob=new Blob([lines.join("\n")],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=`evenements-${month || "tout"}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/* -------- init -------- */
+(function init(){
+  // date par défaut = aujourd’hui (locale)
+  $("#date").value = ymd(new Date());
+  $("#start").value = nowTimeRounded30();
+  $("#end").value = addMinutes($("#start").value, 30);
+
+  $("#addBtn").addEventListener("click", addEvent);
+  $("#fullDayBtn").addEventListener("click", applyFullDay);
+  $("#filterMonth").addEventListener("change", render);
+  $("#exportBtn").addEventListener("click", exportCsv);
+
+  // Enter pour ajouter (quand focus dans un champ)
+  window.addEventListener("keydown",(e)=>{
+    if(e.key==="Enter"){
+      const tag=(document.activeElement && document.activeElement.tagName||"").toLowerCase();
+      if(tag==="input" || tag==="select") addEvent();
+    }
+  });
+
+  // synchro live si un autre onglet modifie state
+  window.addEventListener("storage",(e)=>{
+    if(e.key===KEY){
+      state=load();
+      render();
+      setSaveStatus("Mis à jour");
+    }
+  });
+
+  render();
+})();
 </script>
 </body>
 </html>
