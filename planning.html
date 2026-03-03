@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>STOOM Manager</title>
+<title>STOOM Manager — Planning</title>
 
 <style>
 :root{
@@ -26,13 +26,13 @@
   --slotW:12px;
   --slotH:22px;
   --colDay:92px;
-  --colVend:120px;
-  --colSum:58px;
+  --colVend:140px;
+  --colSum:64px;
 
-  --printSlotW:10.6mm;
+  --printSlotW:10.2mm;
   --printSlotH:6.2mm;
   --printColDay:22mm;
-  --printColVend:28mm;
+  --printColVend:30mm;
   --printColSum:14mm;
 }
 
@@ -43,15 +43,13 @@ body{
   font-family:var(--font);
   color:var(--text);
   background:
-    radial-gradient(1000px 520px at 12% -8%, rgba(62,162,255,.20), transparent 58%),
-    radial-gradient(1000px 520px at 88% 10%, rgba(56,224,143,.10), transparent 58%),
+    radial-gradient(1000px 520px at 12% -8%, rgba(62,162,255,.22), transparent 58%),
+    radial-gradient(1000px 520px at 88% 10%, rgba(56,224,143,.12), transparent 58%),
     var(--bg);
 }
 
-.wrap{max-width:1400px;margin:0 auto;padding:18px 16px 42px}
-header{
-  display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px
-}
+.wrap{max-width:1500px;margin:0 auto;padding:18px 16px 42px}
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px;flex-wrap:wrap}
 .brand h1{margin:0;font-size:20px;letter-spacing:.2px}
 .brand p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.35;max-width:980px}
 .topbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
@@ -65,24 +63,21 @@ header{
   box-shadow:var(--shadow);
   display:flex;gap:8px;align-items:center
 }
-
-.nav{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}
-.tab{
+a.tab{
   border:1px solid var(--line);
   background:rgba(255,255,255,.04);
   color:var(--text);
   padding:10px 12px;
   border-radius:999px;
-  cursor:pointer;
+  text-decoration:none;
   font-weight:900;
   font-size:13px;
   transition:transform .05s ease, background .2s ease, border-color .2s ease;
-  outline:none;
 }
-.tab:hover{background:rgba(255,255,255,.06)}
-.tab:active{transform:translateY(1px)}
-.tab:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25)}
-.tab.active{background:rgba(62,162,255,.18);border-color:rgba(62,162,255,.55)}
+a.tab:hover{background:rgba(255,255,255,.06)}
+a.tab:active{transform:translateY(1px)}
+a.tab:focus{outline:none;box-shadow:0 0 0 3px rgba(62,162,255,.25)}
+a.tab.primary{background:rgba(62,162,255,.18);border-color:rgba(62,162,255,.55)}
 
 .card{
   background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
@@ -92,14 +87,6 @@ header{
   padding:14px;
 }
 .card h2{margin:0 0 10px;font-size:16px}
-.card h3{
-  margin:12px 0 10px;
-  font-size:12px;
-  color:var(--muted);
-  font-weight:1000;
-  letter-spacing:.22px;
-  text-transform:uppercase
-}
 
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 label{
@@ -107,7 +94,7 @@ label{
   display:flex;flex-direction:column;gap:6px;
   min-width:170px
 }
-input,select,textarea{
+input,select{
   border:1px solid var(--line);
   background:rgba(13,23,48,.85);
   color:var(--text);
@@ -117,10 +104,9 @@ input,select,textarea{
   font-size:14px;
   min-width:170px
 }
-textarea{min-height:92px;resize:vertical}
-input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25)}
-.small{min-width:130px}
-.tiny{min-width:96px}
+input:focus,select:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25)}
+.small{min-width:160px}
+.tiny{min-width:120px}
 .full{flex:1;min-width:240px}
 
 .btn{
@@ -142,44 +128,9 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25
 .btn.primary{background:rgba(62,162,255,.22);border-color:rgba(62,162,255,.55)}
 .btn.ok{background:rgba(56,224,143,.14);border-color:rgba(56,224,143,.38)}
 .btn.danger{background:rgba(255,90,115,.18);border-color:rgba(255,90,115,.40)}
-.btn.ghost{background:transparent}
 
-.hr{height:1px;background:var(--line);margin:12px 0}
 .hint{color:var(--muted);font-size:12px;line-height:1.35;margin-top:8px}
-
-.section{display:none}
-.section.active{display:block}
-
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media (max-width: 1100px){.grid2{grid-template-columns:1fr}}
-
-.list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
-.item{
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.18);
-  border-radius:14px;
-  padding:10px;
-  display:flex;
-  gap:10px;
-  justify-content:space-between;
-  align-items:flex-start
-}
-.itemLeft{flex:1;min-width:0}
-.itemTitle{font-weight:1000;font-size:14px;line-height:1.25;word-break:break-word}
-.meta{color:var(--muted);font-size:12px;margin-top:6px;display:flex;gap:8px;flex-wrap:wrap}
-.badge{
-  display:inline-flex;gap:6px;align-items:center;
-  padding:5px 8px;border-radius:999px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  color:var(--muted);
-  white-space:nowrap;
-  font-size:11px
-}
-.badge.ok{border-color:rgba(56,224,143,.38);background:rgba(56,224,143,.14);color:#ddffef}
-.badge.warn{border-color:rgba(255,211,90,.40);background:rgba(255,211,90,.12);color:#fff1c9}
-.badge.bad{border-color:rgba(255,90,115,.40);background:rgba(255,90,115,.12);color:#ffe0e6}
-.badge.acc{border-color:rgba(62,162,255,.52);background:rgba(62,162,255,.14);color:#dbeeff}
+.hr{height:1px;background:var(--line);margin:12px 0}
 
 .colorTag{
   width:12px;height:12px;border-radius:4px;display:inline-block;margin-right:8px;transform:translateY(1px);
@@ -215,7 +166,8 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25
 table.pl{
   border-collapse:separate;
   border-spacing:0;
-  width:100%;
+  width:max-content;
+  min-width:100%;
   table-layout:fixed;
   font-size:11px;
   border-radius:12px;
@@ -246,6 +198,7 @@ table.pl{
   letter-spacing:.1px;
   white-space:nowrap;
 }
+
 .pl .dayRow th{
   background:rgba(13,23,48,.96);
   color:var(--text);
@@ -254,8 +207,17 @@ table.pl{
   font-weight:1100;
   border-bottom:1px solid rgba(255,255,255,.12);
 }
+
 .pl .dayCell{padding:8px 8px;color:var(--muted);background:rgba(255,255,255,.02);font-weight:900}
 .pl .vendCell{padding:8px 8px;font-weight:1100;color:var(--text);background:rgba(255,255,255,.03)}
+.pl .sumCell{
+  text-align:center;
+  font-weight:1100;
+  color:var(--text);
+  background:rgba(255,255,255,.02);
+  padding:0 6px;
+}
+
 .pl .slot{
   width:var(--slotW);
   height:var(--slotH);
@@ -264,46 +226,16 @@ table.pl{
   position:relative;
 }
 .pl .slot:hover{background:rgba(255,255,255,.06)}
-
 .pl .slot.work{background:rgba(62,162,255,.35)}
 .pl .slot.work2{background:rgba(56,224,143,.22)}
 
-.pl .slot.abs{
-  background:
-    repeating-linear-gradient(45deg, rgba(255,255,255,.00) 0 6px, rgba(255,255,255,.10) 6px 12px);
-}
-.pl .slot.abs.maladie{background:
-  repeating-linear-gradient(45deg, rgba(255,90,115,.22) 0 6px, rgba(255,90,115,.08) 6px 12px);
-}
-.pl .slot.abs.conge{background:
-  repeating-linear-gradient(45deg, rgba(255,255,255,.14) 0 6px, rgba(255,255,255,.06) 6px 12px);
-}
-.pl .slot.abs.formation{background:
-  repeating-linear-gradient(45deg, rgba(62,162,255,.18) 0 6px, rgba(62,162,255,.08) 6px 12px);
-}
-.pl .slot.abs.autre{background:
-  repeating-linear-gradient(45deg, rgba(255,211,90,.20) 0 6px, rgba(255,211,90,.08) 6px 12px);
-}
-
-.pl .slot.retard::after{
-  content:"";
-  position:absolute;inset:0;
-  background:linear-gradient(90deg, rgba(255,211,90,.25), rgba(255,211,90,.08));
-}
-.pl .slot.retard::before{
-  content:"";
-  position:absolute;left:2px;top:2px;
-  width:6px;height:6px;border-radius:3px;
-  background:rgba(255,211,90,.95);
-}
-
-.pl .sumCell{
-  text-align:center;
-  font-weight:1100;
-  color:var(--text);
-  background:rgba(255,255,255,.02);
-  padding:0 6px;
-}
+.pl .slot.abs{background:repeating-linear-gradient(45deg, rgba(255,255,255,.00) 0 6px, rgba(255,255,255,.10) 6px 12px)}
+.pl .slot.abs.maladie{background:repeating-linear-gradient(45deg, rgba(255,90,115,.22) 0 6px, rgba(255,90,115,.08) 6px 12px)}
+.pl .slot.abs.conge{background:repeating-linear-gradient(45deg, rgba(255,255,255,.14) 0 6px, rgba(255,255,255,.06) 6px 12px)}
+.pl .slot.abs.formation{background:repeating-linear-gradient(45deg, rgba(62,162,255,.18) 0 6px, rgba(62,162,255,.08) 6px 12px)}
+.pl .slot.abs.autre{background:repeating-linear-gradient(45deg, rgba(255,211,90,.20) 0 6px, rgba(255,211,90,.08) 6px 12px)}
+.pl .slot.retard::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg, rgba(255,211,90,.25), rgba(255,211,90,.08))}
+.pl .slot.retard::before{content:"";position:absolute;left:2px;top:2px;width:6px;height:6px;border-radius:3px;background:rgba(255,211,90,.95)}
 
 .plFooter{
   display:flex;
@@ -317,9 +249,7 @@ table.pl{
   background:rgba(255,255,255,.03);
   margin-top:10px;
 }
-.plTotals{
-  display:flex;gap:10px;flex-wrap:wrap;align-items:center
-}
+.plTotals{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .plTotals .chip{
   border:1px solid var(--line);
   background:rgba(255,255,255,.04);
@@ -330,21 +260,20 @@ table.pl{
 }
 .plTotals .chip b{color:var(--text)}
 
-.noPrint{}
-
 @page{size:A4 landscape;margin:6mm}
 @media print{
-  body{background:#fff;color:#000}
-  .noPrint, header, .nav{display:none !important}
+  html,body{background:#fff !important}
+  body{color:#000 !important}
+  *{-webkit-print-color-adjust:exact !important; print-color-adjust:exact !important}
+
+  header, .noPrint{display:none !important}
   .wrap{max-width:none;padding:0;margin:0}
-  .section{display:none !important}
-  #planningSection{display:block !important}
-  #planningSection .card{box-shadow:none;border:none;background:#fff;padding:0}
+  .card{box-shadow:none;border:none;background:#fff;padding:0}
   .plWrap{border:none;background:#fff;padding:0}
   .plTop{margin:0 0 4mm 0}
   .plSub{color:#222}
   .legend .chip{border:1px solid #ddd;background:#fff;color:#222}
-  table.pl{width:100%;table-layout:fixed}
+
   :root{
     --slotW:var(--printSlotW);
     --slotH:var(--printSlotH);
@@ -352,9 +281,12 @@ table.pl{
     --colVend:var(--printColVend);
     --colSum:var(--printColSum);
   }
-  .pl thead th{background:#f2f3f6 !important;color:#333 !important}
+
+  table.pl{width:100%;table-layout:fixed;font-size:9.5px}
+  .pl thead th{position:static !important;background:#f2f3f6 !important;color:#333 !important}
   .pl .dayRow th{background:#f7f8fb !important;color:#111 !important}
   .pl .vendCell,.pl .dayCell,.pl .sumCell{background:#fff !important;color:#111 !important}
+
   .pl .slot.work{background:#8bbff2 !important}
   .pl .slot.work2{background:#bfeedd !important}
   .pl .slot.abs.maladie{background:repeating-linear-gradient(45deg, #f7c0ca 0 6px, #ffdfe6 6px 12px) !important}
@@ -364,26 +296,6 @@ table.pl{
   .pl .slot.retard::after{background:linear-gradient(90deg, #ffe08a, #fff1c7) !important}
   .plFooter{display:none !important}
 }
-
-.reportTable{
-  width:100%;
-  border-collapse:separate;
-  border-spacing:0;
-  overflow:hidden;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.18);
-}
-.reportTable th,.reportTable td{
-  padding:10px 10px;
-  border-bottom:1px solid var(--line2);
-  border-right:1px solid var(--line2);
-  font-size:13px;
-}
-.reportTable th{color:var(--muted);text-align:left;font-weight:1000}
-.reportTable td{color:var(--text);font-weight:800}
-.reportTable tr:last-child td{border-bottom:none}
-.reportTable td:last-child,.reportTable th:last-child{border-right:none}
 </style>
 </head>
 
@@ -391,372 +303,238 @@ table.pl{
 <div class="wrap">
   <header class="noPrint">
     <div class="brand">
-      <h1>STOOM Manager</h1>
-      <p>PC. Données enregistrées localement sur ce poste. Planning imprimable en A4 paysage sur 1 page (semaine). Ajoute retards / maladie / congés pour édition fin de mois.</p>
+      <h1>STOOM Manager — Planning</h1>
+      <p>Peinture rapide : clique + maintiens pour peindre, glisse sur les cases. <b>Shift</b> = effacer. Impression A4 paysage sur 1 page (semaine).</p>
     </div>
     <div class="topbar">
       <div class="pill"><span>💾</span><span id="saveStatus">Prêt</span></div>
+      <a class="tab primary" href="./index.html">⬅ Retour Hub</a>
       <button class="btn" id="exportBtn">Exporter</button>
       <button class="btn" id="importBtn">Importer</button>
       <button class="btn danger" id="resetBtn">Réinitialiser</button>
     </div>
   </header>
 
-  <nav class="nav noPrint">
-    <button class="tab active" data-tab="planningSection">Planning</button>
-    <button class="tab" data-tab="eventsSection">Retards / Absences</button>
-    <button class="tab" data-tab="reportSection">Édition fin de mois</button>
-    <button class="tab" data-tab="settingsSection">Paramètres</button>
-  </nav>
+  <div class="card">
+    <h2>Planning semaine</h2>
 
-  <section id="planningSection" class="section active">
-    <div class="card">
-      <h2>Planning semaine</h2>
+    <div class="row noPrint">
+      <label class="small">Semaine (lundi)
+        <input type="date" id="weekStart">
+      </label>
 
-      <div class="row noPrint">
-        <label class="small">Semaine (lundi)
-          <input type="date" id="weekStart">
-        </label>
-        <label class="small">Horaires
-          <select id="rangeSel">
-            <option value="08:30-19:00">08:30 → 19:00</option>
-            <option value="08:30-19:30">08:30 → 19:30</option>
-            <option value="09:00-19:00">09:00 → 19:00</option>
-            <option value="10:00-19:00">10:00 → 19:00</option>
-          </select>
-        </label>
-        <label class="small">Jours
-          <select id="daysSel">
-            <option value="Lun,Mar,Mer,Jeu,Ven,Sam">Lun → Sam</option>
-            <option value="Lun,Mar,Mer,Jeu,Ven">Lun → Ven</option>
-          </select>
-        </label>
+      <label class="small">Horaires
+        <select id="rangeSel">
+          <option value="08:30-19:00">08:30 → 19:00</option>
+          <option value="08:30-19:30">08:30 → 19:30</option>
+          <option value="09:00-19:00">09:00 → 19:00</option>
+          <option value="10:00-19:00">10:00 → 19:00</option>
+        </select>
+      </label>
 
-        <label class="small">Mode
-          <select id="paintMode">
-            <option value="toggle">Toggle</option>
-            <option value="paintOn">Peindre ON</option>
-            <option value="paintOff">Peindre OFF</option>
-          </select>
-        </label>
+      <label class="small">Jours
+        <select id="daysSel">
+          <option value="Lun,Mar,Mer,Jeu,Ven,Sam">Lun → Sam</option>
+          <option value="Lun,Mar,Mer,Jeu,Ven">Lun → Ven</option>
+        </select>
+      </label>
 
-        <button class="btn" id="clearWeekBtn">Vider semaine</button>
-        <button class="btn ok" id="printWeekBtn">Imprimer A4</button>
+      <label class="tiny">Mode
+        <select id="paintMode">
+          <option value="toggle">Toggle</option>
+          <option value="paintOn">Peindre ON</option>
+          <option value="paintOff">Peindre OFF</option>
+        </select>
+      </label>
+
+      <button class="btn" id="clearWeekBtn">Vider semaine</button>
+      <button class="btn ok" id="printWeekBtn">Imprimer A4</button>
+    </div>
+
+    <div class="plWrap">
+      <div class="plTop">
+        <div>
+          <div class="plTitle" id="printTitle">PLANNING</div>
+          <div class="plSub" id="printSub"></div>
+        </div>
+        <div class="legend" id="legend"></div>
       </div>
 
-      <div class="plWrap">
-        <div class="plTop">
-          <div>
-            <div class="plTitle" id="printTitle">PLANNING</div>
-            <div class="plSub" id="printSub"></div>
-          </div>
-          <div class="legend" id="legend"></div>
-        </div>
+      <div id="planHost"></div>
 
-        <div id="planHost"></div>
-
-        <div class="plFooter noPrint">
-          <div class="plTotals" id="weekTotals"></div>
-          <div class="hint">Astuce : les retards / absences se gèrent dans l’onglet “Retards / Absences” et apparaissent sur le planning + dans l’édition fin de mois.</div>
+      <div class="plFooter noPrint">
+        <div class="plTotals" id="weekTotals"></div>
+        <div class="hint">
+          Si Firefox n’imprime pas les couleurs : dans la fenêtre d’impression, active “Imprimer les arrière-plans / couleurs”.
         </div>
       </div>
     </div>
-  </section>
-
-  <section id="eventsSection" class="section">
-    <div class="grid2">
-      <div class="card">
-        <h2>Ajouter un événement</h2>
-
-        <div class="row">
-          <label class="small">Type
-            <select id="evType">
-              <option value="retard">Retard</option>
-              <option value="maladie">Maladie</option>
-              <option value="conge">Congé</option>
-              <option value="formation">Formation</option>
-              <option value="autre">Autre absence</option>
-            </select>
-          </label>
-          <label class="small">Vendeur
-            <select id="evStaff"></select>
-          </label>
-        </div>
-
-        <div class="row">
-          <label class="small">Date
-            <input type="date" id="evDate">
-          </label>
-          <label class="tiny">Début
-            <input type="time" id="evStart" value="09:00">
-          </label>
-          <label class="tiny">Fin
-            <input type="time" id="evEnd" value="10:00">
-          </label>
-        </div>
-
-        <div class="row">
-          <label class="full">Motif / note
-            <input id="evNote" placeholder="Ex : arrêt maladie / retard bus / RDV médical…">
-          </label>
-        </div>
-
-        <div class="row">
-          <button class="btn primary" id="addEventBtn">Ajouter</button>
-          <button class="btn" id="clearEventBtn">Vider</button>
-        </div>
-
-        <div class="hint">Les événements apparaissent en couleur sur le planning et dans l’édition fin de mois (totaux, heures perdues, retards).</div>
-      </div>
-
-      <div class="card">
-        <h2>Liste / filtres</h2>
-
-        <div class="row">
-          <label class="small">Mois
-            <input type="month" id="evMonth">
-          </label>
-          <label class="small">Vendeur
-            <select id="evFilterStaff"></select>
-          </label>
-          <label class="small">Type
-            <select id="evFilterType">
-              <option value="all">Tous</option>
-              <option value="retard">Retard</option>
-              <option value="maladie">Maladie</option>
-              <option value="conge">Congé</option>
-              <option value="formation">Formation</option>
-              <option value="autre">Autre</option>
-            </select>
-          </label>
-        </div>
-
-        <div class="list" id="evList"></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="reportSection" class="section">
-    <div class="card">
-      <h2>Édition fin de mois</h2>
-
-      <div class="row noPrint">
-        <label class="small">Mois
-          <input type="month" id="repMonth">
-        </label>
-        <button class="btn primary" id="buildReportBtn">Générer</button>
-        <button class="btn" id="exportCsvBtn">Exporter CSV</button>
-        <button class="btn ok" id="printReportBtn">Imprimer</button>
-      </div>
-
-      <div class="hr"></div>
-      <div id="reportHost"></div>
-    </div>
-  </section>
-
-  <section id="settingsSection" class="section">
-    <div class="grid2">
-      <div class="card">
-        <h2>Vendeurs</h2>
-        <div class="row">
-          <label class="full">Ajouter
-            <input id="staffInput" placeholder="Ex : Léa">
-          </label>
-          <button class="btn primary" id="addStaffBtn">Ajouter</button>
-        </div>
-        <div class="list" id="staffList"></div>
-      </div>
-
-      <div class="card">
-        <h2>Options</h2>
-        <div class="row">
-          <label class="full">Nom boutique (impression)
-            <input id="shopName" placeholder="Ex : STOOM Michelin">
-          </label>
-        </div>
-        <div class="row">
-          <button class="btn primary" id="saveOptionsBtn">Enregistrer</button>
-        </div>
-        <div class="hint">Le nom boutique s’affiche sur l’impression planning + édition fin de mois.</div>
-      </div>
-    </div>
-  </section>
+  </div>
 </div>
 
 <script>
-const $ = (s)=>document.querySelector(s)
-const $$ = (s)=>Array.from(document.querySelectorAll(s))
-const KEY="stoom_manager_ultimate_v2"
+const $=(s)=>document.querySelector(s);
+const $$=(s)=>Array.from(document.querySelectorAll(s));
+const KEY="stoom_manager_ultimate_v2";
 
 function uid(){return Math.random().toString(16).slice(2)+"-"+Date.now().toString(16)}
 function nowISO(){return new Date().toISOString()}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]))}
+function setSaveStatus(txt){
+  const el=$("#saveStatus"); if(!el) return;
+  el.textContent=txt; el.style.opacity="1";
+  clearTimeout(setSaveStatus.t);
+  setSaveStatus.t=setTimeout(()=>{el.style.opacity=".86"},900);
+}
+
+function localDate(iso){
+  if(!iso) return null;
+  const p=String(iso).split("-").map(Number);
+  if(p.length!==3) return null;
+  return new Date(p[0], p[1]-1, p[2]);
+}
 function ymd(d){
-  const x=(d instanceof Date)?d:new Date(d)
-  const y=x.getFullYear()
-  const m=String(x.getMonth()+1).padStart(2,"0")
-  const a=String(x.getDate()).padStart(2,"0")
-  return `${y}-${m}-${a}`
+  const x=(d instanceof Date)?d:new Date(d);
+  const y=x.getFullYear();
+  const m=String(x.getMonth()+1).padStart(2,"0");
+  const a=String(x.getDate()).padStart(2,"0");
+  return `${y}-${m}-${a}`;
 }
 function startOfWeekMonday(d=new Date()){
-  const x=new Date(d)
-  const day=(x.getDay()+6)%7
-  x.setDate(x.getDate()-day)
-  x.setHours(0,0,0,0)
-  return x
+  const x=new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const day=(x.getDay()+6)%7;
+  x.setDate(x.getDate()-day);
+  x.setHours(0,0,0,0);
+  return x;
 }
 function addDays(d,n){
-  const x=new Date(d)
-  x.setDate(x.getDate()+n)
-  return x
+  const x=new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  x.setDate(x.getDate()+n);
+  return x;
 }
 function toMinutes(t){
-  if(!t) return null
-  const p=t.split(":").map(Number)
-  if(p.length!==2) return null
-  return p[0]*60+p[1]
+  if(!t) return null;
+  const p=String(t).split(":").map(Number);
+  if(p.length!==2) return null;
+  return p[0]*60+p[1];
 }
 function minutesToTime(m){
-  const h=String(Math.floor(m/60)).padStart(2,"0")
-  const mm=String(m%60).padStart(2,"0")
-  return `${h}:${mm}`
+  const h=String(Math.floor(m/60)).padStart(2,"0");
+  const mm=String(m%60).padStart(2,"0");
+  return `${h}:${mm}`;
 }
 function frDateLabel(iso){
-  const p=(iso||"").split("-")
-  if(p.length!==3) return iso||""
-  return `${p[2]}/${p[1]}/${p[0]}`
-}
-function setSaveStatus(txt){
-  const el=$("#saveStatus")
-  if(!el) return
-  el.textContent=txt
-  el.style.opacity="1"
-  clearTimeout(setSaveStatus.t)
-  setSaveStatus.t=setTimeout(()=>{el.style.opacity=".86"},900)
+  const p=(iso||"").split("-");
+  if(p.length!==3) return iso||"";
+  return `${p[2]}/${p[1]}/${p[0]}`;
 }
 function clamp(n,a,b){return Math.max(a,Math.min(b,n))}
 
 function normalize(s){
-  s=s||{}
-  s.options=s.options||{}
-  if(!s.options.shopName) s.options.shopName="STOOM Manager"
-  s.staff=Array.isArray(s.staff)&&s.staff.length?s.staff:["Léa","Arnaud","Evan"]
-  s.staffColors=s.staffColors||{}
+  s=s||{};
+  s.options=s.options||{};
+  if(!s.options.shopName) s.options.shopName="STOOM Manager";
+  s.staff=Array.isArray(s.staff)&&s.staff.length?s.staff:["Léa","Arnaud","Evan"];
+  s.staffColors=s.staffColors||{};
   s.staff.forEach((n,i)=>{
     if(!s.staffColors[n]){
-      const palette=["#ffe36e","#78a6ff","#73e3b4","#ff9ab0","#cbb6ff","#ffd0a8"]
-      s.staffColors[n]=palette[i%palette.length]
+      const palette=["#ffe36e","#78a6ff","#73e3b4","#ff9ab0","#cbb6ff","#ffd0a8"];
+      s.staffColors[n]=palette[i%palette.length];
     }
-  })
-  s.planning=s.planning||{weekStart:ymd(startOfWeekMonday()),range:"08:30-19:00",days:"Lun,Mar,Mer,Jeu,Ven,Sam",grid:{}}
-  if(!s.planning.weekStart) s.planning.weekStart=ymd(startOfWeekMonday())
-  if(!s.planning.range) s.planning.range="08:30-19:00"
-  if(!s.planning.days) s.planning.days="Lun,Mar,Mer,Jeu,Ven,Sam"
-  s.planning.grid=s.planning.grid||{}
-  s.events=Array.isArray(s.events)?s.events:[]
-  return s
+  });
+  s.planning=s.planning||{weekStart:ymd(startOfWeekMonday()),range:"08:30-19:00",days:"Lun,Mar,Mer,Jeu,Ven,Sam",grid:{}};
+  if(!s.planning.weekStart) s.planning.weekStart=ymd(startOfWeekMonday());
+  if(!s.planning.range) s.planning.range="08:30-19:00";
+  if(!s.planning.days) s.planning.days="Lun,Mar,Mer,Jeu,Ven,Sam";
+  s.planning.grid=s.planning.grid||{};
+  s.events=Array.isArray(s.events)?s.events:[];
+  return s;
 }
-
 function load(){
   try{
-    const raw=localStorage.getItem(KEY)
-    if(raw) return normalize(JSON.parse(raw))
+    const raw=localStorage.getItem(KEY);
+    if(raw) return normalize(JSON.parse(raw));
   }catch(e){}
-  return normalize({})
+  return normalize({});
 }
-let state=load()
+let state=load();
 
+let saveTimer=null;
+function saveDebounced(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>save(),220);
+}
 function save(){
-  localStorage.setItem(KEY,JSON.stringify(state))
-  setSaveStatus("Sauvegardé")
-}
-
-function bindTabs(){
-  $$(".tab").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const id=btn.getAttribute("data-tab")
-      $$(".tab").forEach(b=>b.classList.toggle("active",b===btn))
-      $$(".section").forEach(s=>s.classList.toggle("active",s.id===id))
-      refresh()
-      window.scrollTo({top:0,behavior:"smooth"})
-    })
-  })
-}
-
-function ensureGrid(){
-  state.planning.grid=state.planning.grid||{}
-  const days=planDays()
-  state.staff.forEach(st=>{
-    if(!state.planning.grid[st]) state.planning.grid[st]={}
-    days.forEach(d=>{
-      if(!state.planning.grid[st][d]) state.planning.grid[st][d]={}
-    })
-  })
+  localStorage.setItem(KEY,JSON.stringify(state));
+  setSaveStatus("Sauvegardé");
 }
 
 function planDays(){
-  return (state.planning.days||"Lun,Mar,Mer,Jeu,Ven,Sam").split(",").map(x=>x.trim()).filter(Boolean)
+  return (state.planning.days||"Lun,Mar,Mer,Jeu,Ven,Sam").split(",").map(x=>x.trim()).filter(Boolean);
 }
 function parseRange(r){
-  const p=(r||"08:30-19:00").split("-")
-  return {start:toMinutes(p[0]),end:toMinutes(p[1])}
+  const p=(r||"08:30-19:00").split("-");
+  return {start:toMinutes(p[0]),end:toMinutes(p[1])};
 }
 function buildSlots(){
-  const {start,end}=parseRange(state.planning.range)
-  const slots=[]
-  for(let m=start;m<end;m+=30) slots.push(m)
-  return slots
+  const {start,end}=parseRange(state.planning.range);
+  const slots=[];
+  for(let m=start;m<end;m+=30) slots.push(m);
+  return slots;
 }
-function dayHeaderLabel(dayIndex){
-  const monday=new Date(state.planning.weekStart+"T00:00:00")
-  const d=addDays(monday,dayIndex)
-  const daysShort=["LUN","MAR","MER","JEU","VEN","SAM","DIM"]
-  const wd=daysShort[(d.getDay()+6)%7]
-  return `${wd} — ${frDateLabel(ymd(d))}`
+function ensureGrid(){
+  state.planning.grid=state.planning.grid||{};
+  const days=planDays();
+  state.staff.forEach(st=>{
+    if(!state.planning.grid[st]) state.planning.grid[st]={};
+    days.forEach(d=>{
+      if(!state.planning.grid[st][d]) state.planning.grid[st][d]={};
+    });
+  });
 }
 function weekSubLabel(){
-  const monday=new Date(state.planning.weekStart+"T00:00:00")
-  const days=planDays()
-  const last=addDays(monday,days.length-1)
-  return `SEMAINE DU ${frDateLabel(ymd(monday))} AU ${frDateLabel(ymd(last))}`
+  const monday=localDate(state.planning.weekStart);
+  const days=planDays();
+  const last=addDays(monday,days.length-1);
+  return `SEMAINE DU ${frDateLabel(ymd(monday))} AU ${frDateLabel(ymd(last))}`;
+}
+function dayHeaderLabel(dayIndex){
+  const monday=localDate(state.planning.weekStart);
+  const d=addDays(monday,dayIndex);
+  const daysShort=["LUN","MAR","MER","JEU","VEN","SAM","DIM"];
+  const wd=daysShort[(d.getDay()+6)%7];
+  return `${wd} — ${frDateLabel(ymd(d))}`;
 }
 
-function toggleCell(staff,day,idx,force=null){
-  ensureGrid()
-  const cur=!!state.planning.grid?.[staff]?.[day]?.[idx]
-  const nxt=(force===null)?!cur:!!force
-  if(nxt) state.planning.grid[staff][day][idx]=1
-  else delete state.planning.grid[staff][day][idx]
+function toggleCell(staff,day,idx,force){
+  ensureGrid();
+  const cur=!!state.planning.grid?.[staff]?.[day]?.[idx];
+  const nxt=(force===null)?!cur:!!force;
+  if(nxt) state.planning.grid[staff][day][idx]=1;
+  else delete state.planning.grid[staff][day][idx];
+  return nxt;
 }
-
 function dayWorkMinutes(staff,day){
-  ensureGrid()
-  const obj=state.planning.grid?.[staff]?.[day]||{}
-  return Object.keys(obj).length*30
+  ensureGrid();
+  const obj=state.planning.grid?.[staff]?.[day]||{};
+  return Object.keys(obj).length*30;
 }
 function weekWorkMinutes(staff){
-  ensureGrid()
-  let tot=0
+  ensureGrid();
+  let tot=0;
   planDays().forEach(d=>{
-    const obj=state.planning.grid?.[staff]?.[d]||{}
-    tot+=Object.keys(obj).length*30
-  })
-  return tot
+    const obj=state.planning.grid?.[staff]?.[d]||{};
+    tot+=Object.keys(obj).length*30;
+  });
+  return tot;
 }
 
-function eventLabel(type){
-  if(type==="retard") return "Retard"
-  if(type==="maladie") return "Maladie"
-  if(type==="conge") return "Congé"
-  if(type==="formation") return "Formation"
-  return "Autre"
-}
 function eventClass(type){
-  if(type==="retard") return "retard"
-  if(type==="maladie") return "abs maladie"
-  if(type==="conge") return "abs conge"
-  if(type==="formation") return "abs formation"
-  return "abs autre"
+  if(type==="retard") return "retard";
+  if(type==="maladie") return "abs maladie";
+  if(type==="conge") return "abs conge";
+  if(type==="formation") return "abs formation";
+  return "abs autre";
 }
 function legendData(){
   return [
@@ -767,83 +545,73 @@ function legendData(){
     {lab:"Congé", sw:"#e9ebf0"},
     {lab:"Formation", sw:"#cfe6ff"},
     {lab:"Autre", sw:"#ffe7ad"}
-  ]
-}
-
-function eventsForWeek(){
-  const days=planDays()
-  const monday=new Date(state.planning.weekStart+"T00:00:00")
-  const start=ymd(monday)
-  const end=ymd(addDays(monday,days.length-1))
-  return state.events.filter(e=>e.date>=start && e.date<=end)
-}
-
-function slotIndexFromTime(t, slots){
-  const m=toMinutes(t)
-  if(m===null) return null
-  const {start}=parseRange(state.planning.range)
-  const idx=Math.floor((m-start)/30)
-  return clamp(idx,0,slots.length)
-}
-
-function buildOverlayMap(){
-  const days=planDays()
-  const slots=buildSlots()
-  const weekE=eventsForWeek()
-  const map={}
-  weekE.forEach(e=>{
-    if(!e.staff || !e.date) return
-    const staff=e.staff
-    const day=dayFromDate(e.date, days)
-    if(!day) return
-    const i0=slotIndexFromTime(e.start||minutesToTime(slots[0]), slots)
-    const i1=slotIndexFromTime(e.end||minutesToTime(slots[slots.length-1]+30), slots)
-    if(i0===null || i1===null) return
-    const a=Math.min(i0,i1)
-    const b=Math.max(i0,i1)
-    for(let i=a;i<b;i++){
-      map[`${staff}|${day}|${i}`]=e.type
-    }
-  })
-  return map
+  ];
 }
 
 function dayFromDate(iso, days){
-  if(!iso) return null
-
-  const parts = iso.split("-").map(Number)
-  if(parts.length !== 3) return null
-
-  const d = new Date(parts[0], parts[1]-1, parts[2]) // ← LOCAL TIME
-
-  const names=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"]
-  const n=names[(d.getDay()+6)%7]
-
-  return days.includes(n)?n:null
+  const d=localDate(iso);
+  if(!d) return null;
+  const names=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+  const n=names[(d.getDay()+6)%7];
+  return days.includes(n)?n:null;
 }
+function slotIndexFromTime(t, slots){
+  const m=toMinutes(t);
+  if(m===null) return null;
+  const {start}=parseRange(state.planning.range);
+  const idx=Math.floor((m-start)/30);
+  return clamp(idx,0,slots.length);
+}
+function eventsForWeek(){
+  const days=planDays();
+  const monday=localDate(state.planning.weekStart);
+  const start=ymd(monday);
+  const end=ymd(addDays(monday,days.length-1));
+  return state.events.filter(e=>e.date>=start && e.date<=end);
+}
+function buildOverlayMap(){
+  const days=planDays();
+  const slots=buildSlots();
+  const weekE=eventsForWeek();
+  const map={};
+  weekE.forEach(e=>{
+    if(!e.staff || !e.date) return;
+    const day=dayFromDate(e.date, days);
+    if(!day) return;
+    const i0=slotIndexFromTime(e.start||minutesToTime(slots[0]), slots);
+    const i1=slotIndexFromTime(e.end||minutesToTime(slots[slots.length-1]+30), slots);
+    if(i0===null || i1===null) return;
+    const a=Math.min(i0,i1), b=Math.max(i0,i1);
+    for(let i=a;i<b;i++) map[`${e.staff}|${day}|${i}`]=e.type;
+  });
+  return map;
+}
+
+let overlayMap=null;
 function renderPlanning(){
-  ensureGrid()
-  $("#weekStart").value=state.planning.weekStart
-  $("#rangeSel").value=state.planning.range
-  $("#daysSel").value=state.planning.days
+  ensureGrid();
 
-  $("#printTitle").textContent=(state.options.shopName||"STOOM Manager")
-  $("#printSub").textContent=weekSubLabel()
+  $("#weekStart").value=state.planning.weekStart;
+  $("#rangeSel").value=state.planning.range;
+  $("#daysSel").value=state.planning.days;
 
-  const legend=$("#legend")
+  $("#printTitle").textContent=(state.options.shopName||"STOOM Manager");
+  $("#printSub").textContent=weekSubLabel();
+
+  const legend=$("#legend");
   legend.innerHTML=legendData().map(x=>`
     <div class="chip"><span class="swatch" style="background:${esc(x.sw)}"></span>${esc(x.lab)}</div>
-  `).join("")
+  `).join("");
 
-  const days=planDays()
-  const slots=buildSlots()
-  const overlay=buildOverlayMap()
+  const days=planDays();
+  const slots=buildSlots();
+  overlayMap=buildOverlayMap();
 
   const timeHeaders=slots.map(m=>{
-    const a=minutesToTime(m).replace(":","h")
-    const b=minutesToTime(m+30).replace(":","h")
-    return `<th class="thTime"><div>${esc(a)}-${esc(b)}</div></th>`
-  }).join("")
+    const a=minutesToTime(m).replace(":","h");
+    const b=minutesToTime(m+30).replace(":","h");
+    return `<th class="thTime"><div>${esc(a)}-${esc(b)}</div></th>`;
+  }).join("");
 
   let html=`<table class="pl">
     <thead>
@@ -854,603 +622,275 @@ function renderPlanning(){
         <th class="thSum">H/j</th>
       </tr>
     </thead>
-    <tbody>`
+    <tbody>`;
 
   days.forEach((day,di)=>{
-    html+=`<tr class="dayRow"><th colspan="${2+slots.length+1}">${esc(dayHeaderLabel(di))}</th></tr>`
-    state.staff.forEach(st=>{
-      const col=state.staffColors[st]||"#78a6ff"
-      html+=`<tr>`
-      html+=`<td class="dayCell">${esc(day)}</td>`
-      html+=`<td class="vendCell"><span class="colorTag" style="background:${esc(col)}"></span>${esc(st)}</td>`
+    html+=`<tr class="dayRow"><th colspan="${2+slots.length+1}">${esc(dayHeaderLabel(di))}</th></tr>`;
+    state.staff.forEach((st,si)=>{
+      const col=state.staffColors[st]||"#78a6ff";
+      html+=`<tr>`;
+      html+=`<td class="dayCell">${esc(day)}</td>`;
+      html+=`<td class="vendCell"><span class="colorTag" style="background:${esc(col)}"></span>${esc(st)}</td>`;
       for(let i=0;i<slots.length;i++){
-        const k=`${st}|${day}|${i}`
-        const has=!!state.planning.grid?.[st]?.[day]?.[i]
-        const ov=overlay[k]||""
-        const clsBase=has ? (st===state.staff[0] ? "slot work2" : "slot work") : "slot"
-        const cls = ov ? `slot ${eventClass(ov)}` : clsBase
-        html+=`<td><div class="${cls}" data-p="${esc(st)}|${esc(day)}|${i}" tabindex="0" role="button" aria-label="${esc(st)} ${esc(day)} ${esc(minutesToTime(slots[i]))}"></div></td>`
+        const k=`${st}|${day}|${i}`;
+        const has=!!state.planning.grid?.[st]?.[day]?.[i];
+        const ov=overlayMap[k]||"";
+        const base=has ? (si===0 ? "slot work2" : "slot work") : "slot";
+        const cls=ov ? `slot ${eventClass(ov)}` : base;
+        html+=`<td><div class="${cls}" data-p="${esc(st)}|${esc(day)}|${i}" role="button" tabindex="0"></div></td>`;
       }
-      const h=(dayWorkMinutes(st,day)/60)
-      html+=`<td class="sumCell">${(Math.round(h*10)/10).toString().replace(".",",")}</td>`
-      html+=`</tr>`
-    })
-  })
+      const h=(dayWorkMinutes(st,day)/60);
+      html+=`<td class="sumCell" data-sum="${esc(st)}|${esc(day)}">${(Math.round(h*10)/10).toString().replace(".",",")}</td>`;
+      html+=`</tr>`;
+    });
+  });
 
-  html+=`</tbody></table>`
-  $("#planHost").innerHTML=html
+  html+=`</tbody></table>`;
+  $("#planHost").innerHTML=html;
 
   const chips=state.staff.map(s=>{
-    const h=weekWorkMinutes(s)/60
-    return `<span class="chip">${esc(s)} : <b>${(Math.round(h*10)/10).toString().replace(".",",")}h</b></span>`
-  }).join("")
-  $("#weekTotals").innerHTML=chips
+    const h=weekWorkMinutes(s)/60;
+    return `<span class="chip">${esc(s)} : <b>${(Math.round(h*10)/10).toString().replace(".",",")}h</b></span>`;
+  }).join("");
+  $("#weekTotals").innerHTML=chips;
+}
 
-  let down=false
-  function modeForce(){
-    const pm=$("#paintMode").value
-    if(pm==="paintOn") return true
-    if(pm==="paintOff") return false
-    return null
+function setCellVisual(cell, staff, day, idx){
+  const ov=overlayMap?.[`${staff}|${day}|${idx}`]||"";
+  if(ov){
+    cell.className=`slot ${eventClass(ov)}`;
+    return;
   }
-  function applyCell(el){
-    const v=el.getAttribute("data-p")
-    if(!v) return
-    const parts=v.split("|")
-    const staff=parts[0], day=parts[1], idx=Number(parts[2])
-    const overlayHere=overlay[`${staff}|${day}|${idx}`]
-    if(overlayHere && overlayHere!=="retard"){
-      alert("Cette case est couverte par une absence (maladie/congé/formation/autre). Modifie l’événement dans l’onglet “Retards / Absences”.")
-      return
+  const has=!!state.planning.grid?.[staff]?.[day]?.[idx];
+  const si=Math.max(0, state.staff.indexOf(staff));
+  cell.className = has ? (si===0 ? "slot work2" : "slot work") : "slot";
+}
+
+function updateDaySum(staff, day){
+  const sumEl=document.querySelector(`[data-sum="${CSS.escape(staff)}|${CSS.escape(day)}"]`);
+  if(!sumEl) return;
+  const h=(dayWorkMinutes(staff,day)/60);
+  sumEl.textContent=(Math.round(h*10)/10).toString().replace(".",",");
+}
+function updateWeekTotals(){
+  const chips=state.staff.map(s=>{
+    const h=weekWorkMinutes(s)/60;
+    return `<span class="chip">${esc(s)} : <b>${(Math.round(h*10)/10).toString().replace(".",",")}h</b></span>`;
+  }).join("");
+  $("#weekTotals").innerHTML=chips;
+}
+
+function modeForce(){
+  const pm=$("#paintMode").value;
+  if(pm==="paintOn") return true;
+  if(pm==="paintOff") return false;
+  return null;
+}
+
+let painting=false;
+let paintForce=null;
+let seen=null;
+
+function canEditCell(staff, day, idx){
+  const ov=overlayMap?.[`${staff}|${day}|${idx}`];
+  if(ov && ov!=="retard") return false;
+  return true;
+}
+function applyPaint(cell, forceOverride=null){
+  const v=cell.getAttribute("data-p");
+  if(!v) return;
+  const parts=v.split("|");
+  const staff=parts[0], day=parts[1], idx=Number(parts[2]);
+
+  if(!canEditCell(staff,day,idx)){
+    return;
+  }
+
+  const key=`${staff}|${day}|${idx}`;
+  if(seen && seen.has(key)) return;
+  if(seen) seen.add(key);
+
+  const f=(forceOverride===null)?paintForce:forceOverride;
+  toggleCell(staff,day,idx,f);
+  setCellVisual(cell, staff, day, idx);
+  updateDaySum(staff, day);
+}
+
+function bindPainting(){
+  const host=$("#planHost");
+
+  host.addEventListener("pointerdown",(e)=>{
+    const cell=e.target.closest("[data-p]");
+    if(!cell) return;
+
+    const v=cell.getAttribute("data-p");
+    const parts=v.split("|");
+    const staff=parts[0], day=parts[1], idx=Number(parts[2]);
+
+    if(!canEditCell(staff,day,idx)){
+      alert("Cette case est couverte par une absence (maladie/congé/formation/autre). Modifie l’événement dans le module retards/absences.");
+      return;
     }
-    toggleCell(staff,day,idx,modeForce())
-    save()
-    renderPlanning()
-  }
 
-  $("#planHost").querySelectorAll("[data-p]").forEach(el=>{
-    el.addEventListener("click",()=>applyCell(el))
-    el.addEventListener("mousedown",()=>{down=true;applyCell(el)})
-    el.addEventListener("mouseenter",()=>{if(down) applyCell(el)})
-    el.addEventListener("keydown",(e)=>{
-      if(e.key==="Enter"||e.key===" "){e.preventDefault();applyCell(el)}
-    })
-  })
-  window.addEventListener("mouseup",()=>{down=false},{once:true})
+    e.preventDefault();
+    host.setPointerCapture(e.pointerId);
+
+    painting=true;
+    seen=new Set();
+
+    if(e.shiftKey){
+      paintForce=false;
+    }else{
+      const mf=modeForce();
+      if(mf===null){
+        const cur=!!state.planning.grid?.[staff]?.[day]?.[idx];
+        paintForce=!cur;
+      }else{
+        paintForce=mf;
+      }
+    }
+
+    applyPaint(cell);
+    saveDebounced();
+  });
+
+  host.addEventListener("pointermove",(e)=>{
+    if(!painting) return;
+    const cell=e.target.closest("[data-p]");
+    if(!cell) return;
+    applyPaint(cell);
+    saveDebounced();
+  });
+
+  host.addEventListener("pointerup",()=>{
+    if(!painting) return;
+    painting=false;
+    seen=null;
+    save();
+    updateWeekTotals();
+  });
+
+  host.addEventListener("pointercancel",()=>{
+    if(!painting) return;
+    painting=false;
+    seen=null;
+    save();
+    updateWeekTotals();
+  });
+
+  host.addEventListener("keydown",(e)=>{
+    const cell=e.target.closest("[data-p]");
+    if(!cell) return;
+    if(e.key==="Enter"||e.key===" "){
+      e.preventDefault();
+      const v=cell.getAttribute("data-p");
+      const parts=v.split("|");
+      const staff=parts[0], day=parts[1], idx=Number(parts[2]);
+      if(!canEditCell(staff,day,idx)){
+        alert("Cette case est couverte par une absence (maladie/congé/formation/autre). Modifie l’événement dans le module retards/absences.");
+        return;
+      }
+      const mf=modeForce();
+      const force=(e.shiftKey)?false:mf;
+      toggleCell(staff,day,idx,force);
+      setCellVisual(cell, staff, day, idx);
+      updateDaySum(staff, day);
+      save();
+      updateWeekTotals();
+    }
+  });
 }
 
 function clearWeek(){
-  if(!confirm("Vider toutes les cases de la semaine ?")) return
-  state.planning.grid={}
-  ensureGrid()
-  save()
-  renderPlanning()
-}
-
-function fillStaffSelects(){
-  const staffOpts=state.staff.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("")
-  $("#evStaff").innerHTML=staffOpts
-  $("#evFilterStaff").innerHTML=`<option value="all">Tous</option>${staffOpts}`
-}
-
-function clearEventForm(){
-  $("#evType").value="retard"
-  $("#evDate").value=ymd(new Date())
-  $("#evStart").value="09:00"
-  $("#evEnd").value="10:00"
-  $("#evNote").value=""
-  $("#evStaff").value=state.staff[0]||""
-}
-
-function addEvent(){
-  const type=$("#evType").value
-  const staff=$("#evStaff").value
-  const date=$("#evDate").value
-  const start=$("#evStart").value
-  const end=$("#evEnd").value
-  const note=($("#evNote").value||"").trim()
-  if(!staff) return alert("Vendeur requis.")
-  if(!date) return alert("Date requise.")
-  if(!start || !end) return alert("Heures requises.")
-  if(toMinutes(end)===toMinutes(start)) return alert("La durée ne peut pas être nulle.")
-  state.events.unshift({id:uid(),type,staff,date,start,end,note,createdAt:nowISO()})
-  save()
-  renderEvents()
-  renderPlanning()
-  renderReport(false)
-}
-
-function eventMinutes(e){
-  const a=toMinutes(e.start), b=toMinutes(e.end)
-  if(a===null || b===null) return 0
-  return Math.max(0, Math.abs(b-a))
-}
-
-function renderEvents(){
-  const host=$("#evList")
-  const month=$("#evMonth").value
-  const st=$("#evFilterStaff").value
-  const type=$("#evFilterType").value
-
-  let rows=state.events.slice()
-
-  if(month){
-    rows=rows.filter(e=>String(e.date||"").startsWith(month))
-  }
-  if(st && st!=="all"){
-    rows=rows.filter(e=>e.staff===st)
-  }
-  if(type && type!=="all"){
-    rows=rows.filter(e=>e.type===type)
-  }
-
-  if(!rows.length){
-    host.innerHTML=`<div class="hint">Aucun événement.</div>`
-    return
-  }
-
-  host.innerHTML=rows.map(e=>{
-    const mins=eventMinutes(e)
-    const h=(mins/60)
-    const b = e.type==="retard" ? "warn" : (e.type==="maladie" ? "bad" : "acc")
-    return `
-      <div class="item">
-        <div class="itemLeft">
-          <div class="itemTitle">${esc(e.staff)} — ${esc(eventLabel(e.type))}</div>
-          <div class="meta">
-            <span class="badge">${esc(frDateLabel(e.date))}</span>
-            <span class="badge ${b}">${esc(e.start)} → ${esc(e.end)}</span>
-            <span class="badge">${esc((Math.round(h*10)/10).toString().replace(".",","))}h</span>
-          </div>
-          ${e.note?`<div class="hint" style="margin-top:8px">${esc(e.note)}</div>`:""}
-        </div>
-        <div class="noPrint">
-          <button class="btn" data-edit="${esc(e.id)}">Éditer</button>
-          <button class="btn danger" data-del="${esc(e.id)}">Supprimer</button>
-        </div>
-      </div>
-    `
-  }).join("")
-
-  host.querySelectorAll("[data-del]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const id=btn.getAttribute("data-del")
-      if(!confirm("Supprimer cet événement ?")) return
-      state.events=state.events.filter(x=>x.id!==id)
-      save()
-      renderEvents()
-      renderPlanning()
-      renderReport(false)
-    })
-  })
-  host.querySelectorAll("[data-edit]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const id=btn.getAttribute("data-edit")
-      const e=state.events.find(x=>x.id===id)
-      if(!e) return
-      const ntype=prompt("Type (retard/maladie/conge/formation/autre) :", e.type)
-      if(ntype===null) return
-      const nstart=prompt("Début (HH:MM) :", e.start)
-      if(nstart===null) return
-      const nend=prompt("Fin (HH:MM) :", e.end)
-      if(nend===null) return
-      const nnote=prompt("Note :", e.note||"")
-      if(nnote===null) return
-      const t=String(ntype||"").trim()
-      if(!["retard","maladie","conge","formation","autre"].includes(t)) return alert("Type invalide.")
-      e.type=t
-      e.start=String(nstart||"").trim()
-      e.end=String(nend||"").trim()
-      e.note=String(nnote||"").trim()
-      save()
-      renderEvents()
-      renderPlanning()
-      renderReport(false)
-    })
-  })
-}
-
-function monthDefault(){
-  const d=new Date()
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`
-}
-
-function calcMonthReport(month){
-  const rows={}
-  state.staff.forEach(s=>{
-    rows[s]={
-      staff:s,
-      plannedMin:0,
-      tardyMin:0,
-      maladieMin:0,
-      congeMin:0,
-      formationMin:0,
-      autreMin:0,
-      tardyCount:0,
-      absCount:0
-    }
-  })
-
-  const monthEvents=state.events.filter(e=>String(e.date||"").startsWith(month))
-  monthEvents.forEach(e=>{
-    if(!rows[e.staff]) return
-    const mins=eventMinutes(e)
-    if(e.type==="retard"){rows[e.staff].tardyMin+=mins;rows[e.staff].tardyCount+=1}
-    else{
-      rows[e.staff].absCount+=1
-      if(e.type==="maladie") rows[e.staff].maladieMin+=mins
-      else if(e.type==="conge") rows[e.staff].congeMin+=mins
-      else if(e.type==="formation") rows[e.staff].formationMin+=mins
-      else rows[e.staff].autreMin+=mins
-    }
-  })
-
-  const plannedFromGrid = computePlannedMinutesFromGrid(month)
-  Object.keys(plannedFromGrid).forEach(s=>{
-    if(rows[s]) rows[s].plannedMin=plannedFromGrid[s]
-  })
-
-  return Object.values(rows)
-}
-
-function computePlannedMinutesFromGrid(month){
-  const out={}
-  state.staff.forEach(s=>out[s]=0)
-
-  const allDays=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"]
-  const slotsForRange=(range)=>{
-    const p=(range||"08:30-19:00").split("-")
-    const start=toMinutes(p[0]); const end=toMinutes(p[1])
-    const count=Math.max(0, Math.floor((end-start)/30))
-    return count
-  }
-
-  const countSlots=slotsForRange(state.planning.range)
-
-  Object.keys(state.planning.grid||{}).forEach(st=>{
-    const staffDays=state.planning.grid[st]||{}
-    Object.keys(staffDays).forEach(dayName=>{
-      const dayGrid=staffDays[dayName]||{}
-      const keys=Object.keys(dayGrid)
-      if(!keys.length) return
-      const matchingDates = datesInMonthForDayName(month, dayName, allDays)
-      matchingDates.forEach(date=>{
-        keys.forEach(k=>{
-          const idx=Number(k)
-          if(Number.isFinite(idx) && idx>=0 && idx<countSlots){
-            out[st]=(out[st]||0)+30
-          }
-        })
-      })
-    })
-  })
-
-  return out
-}
-
-function datesInMonthForDayName(month, dayName, allDays){
-  const y=Number(month.split("-")[0])
-  const m=Number(month.split("-")[1])
-  if(!y || !m) return []
-  const first=new Date(`${month}-01T00:00:00`)
-  const last=new Date(y, m, 0)
-  const targetIdx=allDays.indexOf(dayName)
-  if(targetIdx<0) return []
-  const out=[]
-  for(let d=new Date(first); d<=last; d.setDate(d.getDate()+1)){
-    const idx=(d.getDay()+6)%7
-    if(idx===targetIdx) out.push(ymd(d))
-  }
-  return out
-}
-
-function fmtH(mins){
-  const h=mins/60
-  return (Math.round(h*10)/10).toString().replace(".",",")
-}
-
-function renderReport(showAlert){
-  const month=$("#repMonth").value
-  if(!month){
-    $("#reportHost").innerHTML=`<div class="hint">Choisis un mois, puis “Générer”.</div>`
-    return
-  }
-  const data=calcMonthReport(month)
-
-  const total={
-    plannedMin:0,tardyMin:0,maladieMin:0,congeMin:0,formationMin:0,autreMin:0,tardyCount:0,absCount:0
-  }
-  data.forEach(r=>{
-    total.plannedMin+=r.plannedMin
-    total.tardyMin+=r.tardyMin
-    total.maladieMin+=r.maladieMin
-    total.congeMin+=r.congeMin
-    total.formationMin+=r.formationMin
-    total.autreMin+=r.autreMin
-    total.tardyCount+=r.tardyCount
-    total.absCount+=r.absCount
-  })
-
-  const shop=state.options.shopName||"STOOM Manager"
-
-  let html=`
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap">
-      <div>
-        <div class="plTitle">${esc(shop)} — ÉDITION FIN DE MOIS</div>
-        <div class="plSub">Mois : ${esc(month)}</div>
-      </div>
-      <div class="legend">
-        <div class="chip"><span class="swatch" style="background:#8bbff2"></span>Planifié</div>
-        <div class="chip"><span class="swatch" style="background:#ffe08a"></span>Retard</div>
-        <div class="chip"><span class="swatch" style="background:#f7c0ca"></span>Maladie</div>
-        <div class="chip"><span class="swatch" style="background:#e9ebf0"></span>Congé</div>
-        <div class="chip"><span class="swatch" style="background:#cfe6ff"></span>Formation</div>
-        <div class="chip"><span class="swatch" style="background:#ffe7ad"></span>Autre</div>
-      </div>
-    </div>
-    <div class="hr"></div>
-  `
-
-  html+=`
-    <table class="reportTable">
-      <thead>
-        <tr>
-          <th>Vendeur</th>
-          <th>Heures planifiées</th>
-          <th>Retards</th>
-          <th>Heures retard</th>
-          <th>Maladie (h)</th>
-          <th>Congé (h)</th>
-          <th>Formation (h)</th>
-          <th>Autre (h)</th>
-          <th>Absences (nb)</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${data.map(r=>`
-          <tr>
-            <td><span class="colorTag" style="background:${esc(state.staffColors[r.staff]||"#78a6ff")}"></span>${esc(r.staff)}</td>
-            <td>${esc(fmtH(r.plannedMin))}</td>
-            <td>${esc(String(r.tardyCount))}</td>
-            <td>${esc(fmtH(r.tardyMin))}</td>
-            <td>${esc(fmtH(r.maladieMin))}</td>
-            <td>${esc(fmtH(r.congeMin))}</td>
-            <td>${esc(fmtH(r.formationMin))}</td>
-            <td>${esc(fmtH(r.autreMin))}</td>
-            <td>${esc(String(r.absCount))}</td>
-          </tr>
-        `).join("")}
-        <tr>
-          <td style="font-weight:1100">TOTAL</td>
-          <td>${esc(fmtH(total.plannedMin))}</td>
-          <td>${esc(String(total.tardyCount))}</td>
-          <td>${esc(fmtH(total.tardyMin))}</td>
-          <td>${esc(fmtH(total.maladieMin))}</td>
-          <td>${esc(fmtH(total.congeMin))}</td>
-          <td>${esc(fmtH(total.formationMin))}</td>
-          <td>${esc(fmtH(total.autreMin))}</td>
-          <td>${esc(String(total.absCount))}</td>
-        </tr>
-      </tbody>
-    </table>
-  `
-
-  const ev=state.events.filter(e=>String(e.date||"").startsWith(month)).slice().sort((a,b)=>(a.date||"").localeCompare(b.date||""))
-  html+=`<div class="hr"></div><h3>Détail des événements</h3>`
-  if(!ev.length){
-    html+=`<div class="hint">Aucun événement sur ce mois.</div>`
-  }else{
-    html+=`<div class="list">`+ev.map(e=>{
-      const mins=eventMinutes(e)
-      return `
-        <div class="item">
-          <div class="itemLeft">
-            <div class="itemTitle">${esc(e.staff)} — ${esc(eventLabel(e.type))}</div>
-            <div class="meta">
-              <span class="badge">${esc(frDateLabel(e.date))}</span>
-              <span class="badge ${e.type==="retard"?"warn":"acc"}">${esc(e.start)} → ${esc(e.end)}</span>
-              <span class="badge">${esc(fmtH(mins))}h</span>
-            </div>
-            ${e.note?`<div class="hint" style="margin-top:8px">${esc(e.note)}</div>`:""}
-          </div>
-        </div>
-      `
-    }).join("")+`</div>`
-  }
-
-  $("#reportHost").innerHTML=html
-  if(showAlert) alert("Édition générée.")
-}
-
-function exportReportCsv(){
-  const month=$("#repMonth").value
-  if(!month) return alert("Choisis un mois.")
-  const data=calcMonthReport(month)
-  const head=["Vendeur","Heures_planifiées","Nb_retards","Heures_retard","Maladie_h","Congé_h","Formation_h","Autre_h","Nb_absences"]
-  const lines=[head.join(";")]
-  data.forEach(r=>{
-    lines.push([
-      r.staff,
-      fmtH(r.plannedMin),
-      r.tardyCount,
-      fmtH(r.tardyMin),
-      fmtH(r.maladieMin),
-      fmtH(r.congeMin),
-      fmtH(r.formationMin),
-      fmtH(r.autreMin),
-      r.absCount
-    ].join(";"))
-  })
-  const blob=new Blob([lines.join("\n")],{type:"text/csv;charset=utf-8"})
-  const url=URL.createObjectURL(blob)
-  const a=document.createElement("a")
-  a.href=url
-  a.download=`edition-fin-de-mois-${month}.csv`
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
-  URL.revokeObjectURL(url)
-}
-
-function renderStaff(){
-  const host=$("#staffList")
-  host.innerHTML=state.staff.map(n=>{
-    const col=state.staffColors[n]||"#78a6ff"
-    return `
-      <div class="item">
-        <div class="itemLeft">
-          <div class="itemTitle"><span class="colorTag" style="background:${esc(col)}"></span>${esc(n)}</div>
-          <div class="meta"><span class="badge">Vendeur</span></div>
-        </div>
-        <div class="noPrint">
-          <button class="btn danger" data-delstaff="${esc(n)}">Supprimer</button>
-        </div>
-      </div>
-    `
-  }).join("")
-  host.querySelectorAll("[data-delstaff]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const n=btn.getAttribute("data-delstaff")
-      if(!confirm(`Supprimer ${n} ?`)) return
-      state.staff=state.staff.filter(x=>x!==n)
-      delete state.staffColors[n]
-      state.events=state.events.filter(e=>e.staff!==n)
-      if(state.planning.grid?.[n]) delete state.planning.grid[n]
-      save()
-      fillStaffSelects()
-      renderStaff()
-      renderEvents()
-      renderPlanning()
-      renderReport(false)
-    })
-  })
+  if(!confirm("Vider toutes les cases de la semaine ?")) return;
+  state.planning.grid={};
+  ensureGrid();
+  save();
+  renderPlanning();
+  updateWeekTotals();
 }
 
 function exportData(){
-  const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"})
-  const url=URL.createObjectURL(blob)
-  const a=document.createElement("a")
-  a.href=url
-  a.download=`stoom-manager-export-${ymd(new Date())}.json`
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
-  URL.revokeObjectURL(url)
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=`stoom-manager-export-${ymd(new Date())}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
 function importData(){
-  const inp=document.createElement("input")
-  inp.type="file"
-  inp.accept="application/json"
+  const inp=document.createElement("input");
+  inp.type="file";
+  inp.accept="application/json";
   inp.addEventListener("change",async()=>{
-    const f=inp.files&&inp.files[0]
-    if(!f) return
-    const txt=await f.text()
+    const f=inp.files&&inp.files[0];
+    if(!f) return;
+    const txt=await f.text();
     try{
-      state=normalize(JSON.parse(txt))
-      save()
-      refresh()
-      alert("Import réussi.")
+      state=normalize(JSON.parse(txt));
+      save();
+      refresh();
+      alert("Import réussi.");
     }catch(e){
-      alert("Fichier invalide.")
+      alert("Fichier invalide.");
     }
-  })
-  inp.click()
+  });
+  inp.click();
 }
 function resetAll(){
-  if(!confirm("Réinitialiser toutes les données locales ?")) return
-  localStorage.removeItem(KEY)
-  state=normalize({})
-  save()
-  refresh()
+  if(!confirm("Réinitialiser toutes les données locales ?")) return;
+  localStorage.removeItem(KEY);
+  state=normalize({});
+  save();
+  refresh();
 }
 
 function refresh(){
-  $("#shopName").value=state.options.shopName||"STOOM Manager"
-  $("#weekStart").value=state.planning.weekStart
-  $("#rangeSel").value=state.planning.range
-  $("#daysSel").value=state.planning.days
-
-  fillStaffSelects()
-
-  if(!$("#evMonth").value) $("#evMonth").value=monthDefault()
-  if(!$("#repMonth").value) $("#repMonth").value=monthDefault()
-  if(!$("#evDate").value) $("#evDate").value=ymd(new Date())
-
-  renderPlanning()
-  renderEvents()
-  renderStaff()
-  if(!$("#reportHost").innerHTML.trim()) renderReport(false)
-  setSaveStatus("Prêt")
+  ensureGrid();
+  $("#weekStart").value=state.planning.weekStart;
+  $("#rangeSel").value=state.planning.range;
+  $("#daysSel").value=state.planning.days;
+  renderPlanning();
+  bindPainting();
+  setSaveStatus("Prêt");
 }
 
 function bind(){
-  bindTabs()
-
   $("#weekStart").addEventListener("input",()=>{
-    state.planning.weekStart=$("#weekStart").value||ymd(startOfWeekMonday())
-    save(); renderPlanning()
-  })
+    state.planning.weekStart=$("#weekStart").value||ymd(startOfWeekMonday());
+    save();
+    renderPlanning();
+    bindPainting();
+  });
   $("#rangeSel").addEventListener("change",()=>{
-    state.planning.range=$("#rangeSel").value
-    save(); renderPlanning()
-  })
+    state.planning.range=$("#rangeSel").value;
+    save();
+    renderPlanning();
+    bindPainting();
+  });
   $("#daysSel").addEventListener("change",()=>{
-    state.planning.days=$("#daysSel").value
-    save(); renderPlanning()
-  })
-  $("#clearWeekBtn").addEventListener("click",clearWeek)
-  $("#printWeekBtn").addEventListener("click",()=>window.print())
+    state.planning.days=$("#daysSel").value;
+    save();
+    renderPlanning();
+    bindPainting();
+  });
 
-  $("#addEventBtn").addEventListener("click",addEvent)
-  $("#clearEventBtn").addEventListener("click",clearEventForm)
-  $("#evMonth").addEventListener("input",renderEvents)
-  $("#evFilterStaff").addEventListener("change",renderEvents)
-  $("#evFilterType").addEventListener("change",renderEvents)
-
-  $("#buildReportBtn").addEventListener("click",()=>renderReport(true))
-  $("#exportCsvBtn").addEventListener("click",exportReportCsv)
-  $("#printReportBtn").addEventListener("click",()=>{
-    const sec=$("#reportSection")
-    const cur=$$(".section").find(s=>s.classList.contains("active"))
-    $$(".section").forEach(s=>s.classList.remove("active"))
-    sec.classList.add("active")
-    window.print()
-    if(cur){sec.classList.remove("active");cur.classList.add("active")}
-  })
-  $("#repMonth").addEventListener("input",()=>renderReport(false))
-
-  $("#addStaffBtn").addEventListener("click",()=>{
-    const n=($("#staffInput").value||"").trim()
-    if(!n) return
-    if(state.staff.includes(n)) return alert("Déjà présent.")
-    state.staff.push(n)
-    const palette=["#ffe36e","#78a6ff","#73e3b4","#ff9ab0","#cbb6ff","#ffd0a8"]
-    state.staffColors[n]=palette[state.staff.length%palette.length]
-    $("#staffInput").value=""
-    save()
-    refresh()
-  })
-
-  $("#saveOptionsBtn").addEventListener("click",()=>{
-    state.options.shopName=($("#shopName").value||"STOOM Manager").trim()||"STOOM Manager"
-    save()
-    renderPlanning()
-    renderReport(false)
-    alert("Options enregistrées.")
-  })
-
-  $("#exportBtn").addEventListener("click",exportData)
-  $("#importBtn").addEventListener("click",importData)
-  $("#resetBtn").addEventListener("click",resetAll)
+  $("#clearWeekBtn").addEventListener("click",clearWeek);
+  $("#printWeekBtn").addEventListener("click",()=>window.print());
+  $("#exportBtn").addEventListener("click",exportData);
+  $("#importBtn").addEventListener("click",importData);
+  $("#resetBtn").addEventListener("click",resetAll);
 }
 
 (function init(){
-  ensureGrid()
-  save()
-  bind()
-  clearEventForm()
-  refresh()
-})()
+  state=normalize(state);
+  save();
+  bind();
+  refresh();
+})();
 </script>
 </body>
 </html>
