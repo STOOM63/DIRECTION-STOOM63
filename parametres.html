@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>STOOM Manager — Paramètres</title>
+<style>
+body{margin:0;font-family:system-ui;background:#0a1222;color:#fff}
+.wrap{max-width:800px;margin:auto;padding:20px}
+.card{background:#0f1b34;padding:16px;border-radius:12px;margin-bottom:20px}
+button{padding:8px 12px;border:none;border-radius:8px;background:#3ea2ff;color:#fff}
+button.danger{background:#ff5a73}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Paramètres</h1>
+<p><a href="index.html">⬅ Retour Hub</a></p>
+
+<div class="card">
+  <h3>Vendeurs</h3>
+  <input type="text" id="newStaff" placeholder="Nom">
+  <button onclick="add()">Ajouter</button>
+  <ul id="list"></ul>
+</div>
+</div>
+
+<script>
+const KEY="stoom_manager_ultimate_v2"
+let state=JSON.parse(localStorage.getItem(KEY)||"{}")
+state.staff=state.staff||[]
+
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+
+function add(){
+  if(!newStaff.value) return
+  state.staff.push(newStaff.value)
+  newStaff.value=""
+  save()
+  render()
+}
+
+function del(i){
+  state.staff.splice(i,1)
+  save()
+  render()
+}
+
+function render(){
+  list.innerHTML=state.staff.map((s,i)=>`
+    <li>${s} <button class="danger" onclick="del(${i})">Supprimer</button></li>
+  `).join("")
+}
+
+render()
+</script>
+</body>
+</html>
