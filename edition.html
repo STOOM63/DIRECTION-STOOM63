@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>STOOM Manager — Éditions</title>
+<style>
+body{margin:0;font-family:system-ui;background:#0a1222;color:#fff}
+.wrap{max-width:1000px;margin:auto;padding:20px}
+.card{background:#0f1b34;padding:16px;border-radius:12px;margin-bottom:20px}
+button{padding:8px 12px;border:none;border-radius:8px;background:#3ea2ff;color:#fff}
+table{width:100%;border-collapse:collapse}
+th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,.1)}
+@media print{
+  body{background:#fff;color:#000}
+  button,a{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Éditions</h1>
+<p><a href="index.html">⬅ Retour Hub</a></p>
+
+<div class="card">
+  <h3>Édition individuelle</h3>
+  <input type="month" id="month">
+  <select id="staff"></select>
+  <button onclick="build()">Générer</button>
+  <button onclick="window.print()">Imprimer</button>
+</div>
+
+<div id="output"></div>
+</div>
+
+<script>
+const KEY="stoom_manager_ultimate_v2"
+let state=JSON.parse(localStorage.getItem(KEY)||"{}")
+state.events=state.events||[]
+state.staff=state.staff||[]
+
+staff.innerHTML=state.staff.map(s=>`<option>${s}</option>`).join("")
+
+function build(){
+  const m=month.value
+  const s=staff.value
+  const ev=state.events.filter(e=>e.staff===s && e.date.startsWith(m))
+
+  output.innerHTML=`
+    <div class="card">
+      <h2>${s} — ${m}</h2>
+      <table>
+        <tr><th>Date</th><th>Type</th><th>Début</th><th>Fin</th><th>Durée</th></tr>
+        ${
+          ev.map(e=>{
+            const a=e.start.split(":").map(Number)
+            const b=e.end.split(":").map(Number)
+            const h=((b[0]*60+b[1])-(a[0]*60+a[1]))/60
+            return `<tr>
+              <td>${e.date}</td>
+              <td>${e.type}</td>
+              <td>${e.start}</td>
+              <td>${e.end}</td>
+              <td>${h.toFixed(1)} h</td>
+            </tr>`
+          }).join("")
+        }
+      </table>
+    </div>
+  `
+}
+</script>
+</body>
+</html>
