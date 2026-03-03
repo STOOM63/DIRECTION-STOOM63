@@ -809,12 +809,18 @@ function buildOverlayMap(){
 }
 
 function dayFromDate(iso, days){
-  const d=new Date(iso+"T00:00:00")
+  if(!iso) return null
+
+  const parts = iso.split("-").map(Number)
+  if(parts.length !== 3) return null
+
+  const d = new Date(parts[0], parts[1]-1, parts[2]) // ← LOCAL TIME
+
   const names=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"]
   const n=names[(d.getDay()+6)%7]
+
   return days.includes(n)?n:null
 }
-
 function renderPlanning(){
   ensureGrid()
   $("#weekStart").value=state.planning.weekStart
