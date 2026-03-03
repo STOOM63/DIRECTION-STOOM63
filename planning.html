@@ -666,44 +666,44 @@ function updateOneCellDOM(host, staff, day, idx){
 }
 
 function applyToRange(staff, day, a, b, mode){
-  // ✅ fin INCLUSE (on inclut aussi la case du 2e clic)
-  const start = Math.min(a,b);
-  const endInclusive = Math.max(a,b);
+  if(!Number.isFinite(a) || !Number.isFinite(b)) return;
 
-  // si l'utilisateur clique 2 fois sur la même case => 1 slot
-  const end = endInclusive + 1; // <-- IMPORTANT
+  let start = Math.min(a,b);
+  let endInc = Math.max(a,b);
 
-  // décider la valeur à appliquer
+  start = clamp(start, 0, slots.length - 1);
+  endInc = clamp(endInc, 0, slots.length - 1);
+
+  const end = endInc + 1; // ✅ inclut la case du 2e clic
+
   let target = true;
-  if(mode==="toggle"){
-    target = !getCell(staff,day,start);
-  }else if(mode==="dragOn"){
-    target = true;
-  }else if(mode==="dragOff"){
-    target = false;
-  }else{
-    target = !getCell(staff,day,start);
-  }
+  if(mode==="dragOn") target = true;
+  else if(mode==="dragOff") target = false;
+  else target = !getCell(staff, day, start);
 
-  const host=$("#planHost");
-  for(let i=start;i<end;i++){
+  const host = $("#planHost");
+
+  for(let i=start; i<end; i++){
     if(cellIsBlockedByAbsence(staff,day,i)) continue;
-    setCell(staff,day,i,target);
 
-    const el = host.querySelector(`[data-cell="${CSS.escape(slotKey(staff,day,i))}"]`);
+    setCell(staff, day, i, target);
+
+    const key = slotKey(staff,day,i);
+    const el = host.querySelector(`[data-cell="${CSS.escape(key)}"]`); // ✅ backticks
     if(el){
-      const ov=overlay[slotKey(staff,day,i)]||"";
+      const ov = overlay[key] || "";
       const si = state.staff.indexOf(staff);
       const has = getCell(staff,day,i);
-      const clsBase = has ? (si%2? "slot work2":"slot work") : "slot";
+      const clsBase = has ? (si%2 ? "slot work2" : "slot work") : "slot";
       el.className = ov ? `slot ${eventClass(ov)}` : clsBase;
       el.classList.remove("selStart");
     }
   }
+
   save();
   renderTotals();
 }
-
+  
 function buildTable(){
   ensureGrid();
   overlay = buildOverlayMap();
@@ -819,7 +819,7 @@ function bindCells(){
       rangeSelect = {active:false, staff:"", day:"", startIdx:null};
       showRangeHint(null,null);
 
-      applyRange(staff,day,a,b,"toggle");
+      applyToRange(staff,day,a,b,"toggle");
       return;
     }
 
