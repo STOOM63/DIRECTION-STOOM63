@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>STOOM Manager — Absences</title>
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:#0a1222;
+  color:#e9efff;
+}
+.wrap{max-width:1200px;margin:auto;padding:20px}
+h1{margin-top:0}
+.card{
+  background:#0f1b34;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:20px;
+}
+input,select{
+  padding:8px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,.1);
+  background:#0d1730;
+  color:#fff;
+}
+button{
+  padding:8px 12px;
+  border-radius:8px;
+  border:none;
+  background:#3ea2ff;
+  color:#fff;
+  cursor:pointer;
+}
+button.danger{background:#ff5a73}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th,td{
+  padding:8px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  font-size:13px;
+}
+a{color:#3ea2ff;text-decoration:none}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <h1>Absences & Retards</h1>
+  <p><a href="index.html">⬅ Retour Hub</a></p>
+
+  <div class="card">
+    <h3>Ajouter un événement</h3>
+
+    <select id="type">
+      <option value="retard">Retard</option>
+      <option value="maladie">Maladie</option>
+      <option value="conge">Congé</option>
+      <option value="formation">Formation</option>
+      <option value="autre">Autre</option>
+    </select>
+
+    <select id="staff"></select>
+
+    <input type="date" id="date">
+    <input type="time" id="start">
+    <input type="time" id="end">
+    <input type="text" id="note" placeholder="Motif">
+
+    <button onclick="addEvent()">Ajouter</button>
+  </div>
+
+  <div class="card">
+    <h3>Liste</h3>
+
+    <input type="month" id="filterMonth" onchange="render()">
+
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Vendeur</th>
+          <th>Type</th>
+          <th>Début</th>
+          <th>Fin</th>
+          <th>Durée</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="list"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const KEY="stoom_manager_ultimate_v2"
+let state=JSON.parse(localStorage.getItem(KEY)||"{}")
+state.events=state.events||[]
+state.staff=state.staff||["Léa","Arnaud","Evan"]
+
+function save(){
+  localStorage.setItem(KEY,JSON.stringify(state))
+}
+
+function minutes(e){
+  const a=e.start.split(":").map(Number)
+  const b=e.end.split(":").map(Number)
+  return (b[0]*60+b[1])-(a[0]*60+a[1])
+}
+
+function addEvent(){
+  state.events.unshift({
+    id:Date.now(),
+    type:type.value,
+    staff:staff.value,
+    date:date.value,
+    start:start.value,
+    end:end.value,
+    note:note.value
+  })
+  save()
+  render()
+}
+
+function del(id){
+  state.events=state.events.filter(e=>e.id!=id)
+  save()
+  render()
+}
+
+function render(){
+  staff.innerHTML=state.staff.map(s=>`<option>${s}</option>`).join("")
+  const month=filterMonth.value
+  const rows=state.events.filter(e=>!month||e.date.startsWith(month))
+
+  list.innerHTML=rows.map(e=>`
+    <tr>
+      <td>${e.date}</td>
+      <td>${e.staff}</td>
+      <td>${e.type}</td>
+      <td>${e.start}</td>
+      <td>${e.end}</td>
+      <td>${(minutes(e)/60).toFixed(1)} h</td>
+      <td><button class="danger" onclick="del(${e.id})">X</button></td>
+    </tr>
+  `).join("")
+}
+
+render()
+</script>
+</body>
+</html>
