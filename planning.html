@@ -665,21 +665,40 @@ function updateOneCellDOM(host, staff, day, idx){
   el.className = ov ? `slot ${eventClass(ov)}` : clsBase;
 }
 
-function applyRange(staff,day,a,b,mode){
-  const start=Math.min(a,b);
-  const end=Math.max(a,b);
-  if(start===end) return;
+function applyToRange(staff, day, a, b, mode){
+  // ✅ fin INCLUSE (on inclut aussi la case du 2e clic)
+  const start = Math.min(a,b);
+  const endInclusive = Math.max(a,b);
 
-  let target=true;
-  if(mode==="dragOn") target=true;
-  else if(mode==="dragOff") target=false;
-  else target = !getCell(staff,day,start); // toggle intelligent
+  // si l'utilisateur clique 2 fois sur la même case => 1 slot
+  const end = endInclusive + 1; // <-- IMPORTANT
+
+  // décider la valeur à appliquer
+  let target = true;
+  if(mode==="toggle"){
+    target = !getCell(staff,day,start);
+  }else if(mode==="dragOn"){
+    target = true;
+  }else if(mode==="dragOff"){
+    target = false;
+  }else{
+    target = !getCell(staff,day,start);
+  }
 
   const host=$("#planHost");
   for(let i=start;i<end;i++){
-    if(cellIsBlockedByAbsence(staff,day,i,overlay)) continue;
+    if(cellIsBlockedByAbsence(staff,day,i)) continue;
     setCell(staff,day,i,target);
-    updateOneCellDOM(host, staff, day, i);
+
+    const el = host.querySelector(`[data-cell="${CSS.escape(slotKey(staff,day,i))}"]`);
+    if(el){
+      const ov=overlay[slotKey(staff,day,i)]||"";
+      const si = state.staff.indexOf(staff);
+      const has = getCell(staff,day,i);
+      const clsBase = has ? (si%2? "slot work2":"slot work") : "slot";
+      el.className = ov ? `slot ${eventClass(ov)}` : clsBase;
+      el.classList.remove("selStart");
+    }
   }
   save();
   renderTotals();
