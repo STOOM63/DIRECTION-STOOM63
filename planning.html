@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>STOOM Manager — Planning</title>
 
 <style>
@@ -10,299 +10,120 @@
   --bg:#0a1222;
   --panel:#0f1b34;
   --line:rgba(255,255,255,.10);
-  --line2:rgba(255,255,255,.06);
   --text:#e9efff;
   --muted:#a9b6da;
-  --accent:#3ea2ff;
-  --ok:#38e08f;
-  --warn:#ffd35a;
-  --bad:#ff5a73;
-  --shadow:0 14px 40px rgba(0,0,0,.38);
-  --r1:18px;
-  --font:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  --blue:#3ea2ff;
+  --green:#38e08f;
+  --yellow:#ffd35a;
+  --red:#ff5a73;
 
-  /* écran */
   --slotW:12px;
   --slotH:22px;
-  --colDay:92px;
+  --colDay:90px;
   --colVend:140px;
   --colSum:60px;
 
-  /* impression A4 paysage (ajusté pour tenir 1 page) */
-  --printSlotW:9.8mm;
-  --printSlotH:5.6mm;
+  --printSlotW:9.5mm;
+  --printSlotH:5.5mm;
   --printColDay:20mm;
   --printColVend:32mm;
   --printColSum:14mm;
 }
 
 *{box-sizing:border-box}
-html,body{height:100%}
 body{
   margin:0;
-  font-family:var(--font);
+  font-family:system-ui;
+  background:var(--bg);
   color:var(--text);
-  background:
-    radial-gradient(1000px 520px at 12% -8%, rgba(62,162,255,.20), transparent 58%),
-    radial-gradient(1000px 520px at 88% 10%, rgba(56,224,143,.10), transparent 58%),
-    var(--bg);
 }
+.wrap{max-width:1500px;margin:auto;padding:20px}
 
-.wrap{max-width:1400px;margin:0 auto;padding:18px 16px 42px}
 header{
-  display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px;flex-wrap:wrap
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
 }
-.brand h1{margin:0;font-size:20px;letter-spacing:.2px}
-.brand p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.35;max-width:980px}
 
-.topbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-.pill{
+.tab{
   border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  padding:9px 10px;
-  border-radius:999px;
-  font-size:12px;
-  color:var(--muted);
-  box-shadow:var(--shadow);
-  display:flex;gap:8px;align-items:center
-}
-a.tab{
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  color:var(--text);
-  padding:10px 12px;
+  padding:8px 12px;
   border-radius:999px;
   text-decoration:none;
-  font-weight:950;
-  font-size:13px;
-  transition:transform .05s ease, background .2s ease, border-color .2s ease;
-}
-a.tab:hover{background:rgba(255,255,255,.07)}
-a.tab:active{transform:translateY(1px)}
-
-.card{
-  background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
-  border:1px solid var(--line);
-  border-radius:var(--r1);
-  box-shadow:var(--shadow);
-  padding:14px;
-}
-
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
-label{
-  font-size:12px;color:var(--muted);
-  display:flex;flex-direction:column;gap:6px;
-  min-width:170px
-}
-input,select{
-  border:1px solid var(--line);
-  background:rgba(13,23,48,.85);
   color:var(--text);
-  padding:10px 10px;
-  border-radius:12px;
-  outline:none;
-  font-size:14px;
-  min-width:170px
+  font-weight:700;
 }
-input:focus,select:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25)}
-.small{min-width:160px}
-.tiny{min-width:130px}
 
 .btn{
   border:1px solid var(--line);
-  background:rgba(255,255,255,.06);
-  color:var(--text);
-  padding:10px 12px;
-  border-radius:12px;
+  padding:8px 12px;
+  border-radius:10px;
+  background:rgba(255,255,255,.05);
   cursor:pointer;
-  font-weight:950;
-  font-size:13px;
-  outline:none;
-  transition:transform .05s ease, background .2s ease, border-color .2s ease;
-  user-select:none;
+  font-weight:700;
 }
-.btn:hover{background:rgba(255,255,255,.10)}
-.btn:active{transform:translateY(1px)}
-.btn:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25)}
-.btn.primary{background:rgba(62,162,255,.22);border-color:rgba(62,162,255,.55)}
-.btn.ok{background:rgba(56,224,143,.14);border-color:rgba(56,224,143,.38)}
-.btn.danger{background:rgba(255,90,115,.18);border-color:rgba(255,90,115,.40)}
-.btn.ghost{background:transparent}
-
-.hr{height:1px;background:var(--line);margin:12px 0}
-.hint{color:var(--muted);font-size:12px;line-height:1.35;margin-top:8px}
 
 .plWrap{
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.18);
+  background:rgba(255,255,255,.04);
+  padding:12px;
   border-radius:14px;
   overflow:auto;
-  padding:10px;
 }
 
-.plTop{
-  display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px 0
-}
-.plTitle{font-weight:1100;font-size:14px;letter-spacing:.2px}
-.plSub{color:var(--muted);font-size:12px}
-
-.legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.legend .chip{
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  border-radius:999px;
-  padding:6px 10px;
-  font-size:12px;
-  color:var(--muted);
-  display:flex;align-items:center;gap:8px
-}
-.swatch{width:14px;height:14px;border-radius:4px;border:1px solid rgba(255,255,255,.22)}
-
-table.pl{
-  border-collapse:separate;
-  border-spacing:0;
-  width:100%;
+table{
+  border-collapse:collapse;
   table-layout:fixed;
+  width:100%;
   font-size:11px;
-  border-radius:12px;
-  overflow:hidden;
-  background:rgba(255,255,255,.02);
 }
-.pl th,.pl td{border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:0}
-.pl thead th{
-  position:sticky; top:0; z-index:4;
-  background:rgba(15,27,52,.96);
-  color:var(--muted);
-  font-weight:1100;
+
+th,td{
+  border:1px solid rgba(255,255,255,.05);
+  padding:0;
 }
-.pl .thDay{width:var(--colDay);padding:8px 8px;text-align:left;color:var(--text)}
-.pl .thVend{width:var(--colVend);padding:8px 8px;text-align:left;color:var(--text)}
-.pl .thSum{width:var(--colSum);padding:8px 6px;text-align:center;color:var(--text)}
-.pl .thTime{width:var(--slotW);height:54px;vertical-align:bottom}
-.pl .thTime > div{
+
+th{
+  background:rgba(255,255,255,.05);
+  font-weight:800;
+}
+
+.thTime{
+  width:var(--slotW);
   writing-mode:vertical-rl;
   transform:rotate(180deg);
-  padding:8px 0 8px 0;
-  text-align:left;
-  margin:auto;
   font-size:10px;
-  letter-spacing:.1px;
-  white-space:nowrap;
 }
 
-.pl .dayRow th{
-  background:rgba(13,23,48,.96);
-  color:var(--text);
-  padding:8px 10px;
-  text-align:left;
-  font-weight:1100;
-  border-bottom:1px solid rgba(255,255,255,.12);
-}
-
-.pl .dayCell{padding:8px 8px;color:var(--muted);background:rgba(255,255,255,.02);font-weight:900}
-.pl .vendCell{padding:8px 8px;font-weight:1100;color:var(--text);background:rgba(255,255,255,.03)}
-.colorTag{
-  width:12px;height:12px;border-radius:4px;display:inline-block;margin-right:8px;transform:translateY(1px);
-  border:1px solid rgba(255,255,255,.18)
-}
-.pl .slot{
+.slot{
   width:var(--slotW);
   height:var(--slotH);
   cursor:pointer;
-  background:transparent;
-  position:relative;
-}
-.pl .slot:hover{background:rgba(255,255,255,.06)}
-.pl .slot.work{background:rgba(62,162,255,.35)}
-.pl .slot.work2{background:rgba(56,224,143,.22)}
-
-/* surbrillance sélection (début) */
-.pl .slot.selStart::after{
-  content:"";
-  position:absolute; inset:1px;
-  border:2px solid rgba(255,255,255,.85);
-  border-radius:4px;
-  pointer-events:none;
 }
 
-/* overlay événements (si tu l’utilises avec absences.html) */
-.pl .slot.abs{
-  background:
-    repeating-linear-gradient(45deg, rgba(255,255,255,.00) 0 6px, rgba(255,255,255,.10) 6px 12px);
-}
-.pl .slot.abs.maladie{background:
-  repeating-linear-gradient(45deg, rgba(255,90,115,.22) 0 6px, rgba(255,90,115,.08) 6px 12px);
-}
-.pl .slot.abs.conge{background:
-  repeating-linear-gradient(45deg, rgba(255,255,255,.14) 0 6px, rgba(255,255,255,.06) 6px 12px);
-}
-.pl .slot.abs.formation{background:
-  repeating-linear-gradient(45deg, rgba(62,162,255,.18) 0 6px, rgba(62,162,255,.08) 6px 12px);
-}
-.pl .slot.abs.autre{background:
-  repeating-linear-gradient(45deg, rgba(255,211,90,.20) 0 6px, rgba(255,211,90,.08) 6px 12px);
-}
-.pl .slot.retard::after{
-  content:"";
-  position:absolute;inset:0;
-  background:linear-gradient(90deg, rgba(255,211,90,.25), rgba(255,211,90,.08));
-}
-.pl .slot.retard::before{
-  content:"";
-  position:absolute;left:2px;top:2px;
-  width:6px;height:6px;border-radius:3px;
-  background:rgba(255,211,90,.95);
+.slot.work{
+  background:rgba(62,162,255,.45);
 }
 
-.pl .sumCell{
+.slot.work2{
+  background:rgba(56,224,143,.35);
+}
+
+.slot.sel{
+  outline:2px solid white;
+}
+
+.sum{
   text-align:center;
-  font-weight:1100;
-  color:var(--text);
-  background:rgba(255,255,255,.02);
-  padding:0 6px;
+  font-weight:900;
 }
-
-.plFooter{
-  display:flex;
-  justify-content:space-between;
-  gap:14px;
-  flex-wrap:wrap;
-  align-items:center;
-  padding:10px 10px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:rgba(255,255,255,.03);
-  margin-top:10px;
-}
-.plTotals{
-  display:flex;gap:10px;flex-wrap:wrap;align-items:center
-}
-.plTotals .chip{
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  border-radius:999px;
-  padding:6px 10px;
-  font-size:12px;
-  color:var(--muted);
-}
-.plTotals .chip b{color:var(--text)}
 
 @page{size:A4 landscape;margin:5mm}
 @media print{
-  /* important pour garder les couleurs */
   *{
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  body{background:#fff;color:#000}
-  .noPrint, header{display:none !important}
-  .wrap{max-width:none;padding:0;margin:0}
-  .card{box-shadow:none;border:none;background:#fff;padding:0}
-  .plWrap{border:none;background:#fff;padding:0}
-  .plTop{margin:0 0 3mm 0}
-  .plSub{color:#222}
-  .legend .chip{border:1px solid #ddd;background:#fff;color:#222}
-  table.pl{width:100%;table-layout:fixed}
   :root{
     --slotW:var(--printSlotW);
     --slotH:var(--printSlotH);
@@ -310,652 +131,183 @@ table.pl{
     --colVend:var(--printColVend);
     --colSum:var(--printColSum);
   }
-  .pl thead th{background:#f2f3f6 !important;color:#333 !important}
-  .pl .dayRow th{background:#f7f8fb !important;color:#111 !important}
-  .pl .vendCell,.pl .dayCell,.pl .sumCell{background:#fff !important;color:#111 !important}
-  .plFooter{display:none !important}
+  header{display:none}
 }
 </style>
 </head>
-
 <body>
 <div class="wrap">
-  <header class="noPrint">
-    <div class="brand">
-      <h1>STOOM Manager — Planning</h1>
-      <p>
-        Planning semaine (A4 paysage 1 page) + peinture rapide par plages.
-        Astuce : clique une heure de début puis une heure de fin (sur la même ligne vendeur + jour).
-        Tu peux faire 08h30→10h puis 12h→19h : ça marche (2 paires de clics).
-      </p>
-    </div>
-    <div class="topbar">
-      <div class="pill"><span>💾</span><span id="saveStatus">Prêt</span></div>
-      <a class="tab" href="./index.html">⬅ Retour HUB</a>
-      <a class="tab" href="./absences.html">⏱️ Absences</a>
-      <a class="tab" href="./edition.html">🧾 Édition</a>
-      <a class="tab" href="./parametres.html">⚙️ Paramètres</a>
-    </div>
-  </header>
 
-  <section class="card">
-    <h2 style="margin:0 0 10px;font-size:16px">Planning semaine</h2>
+<header>
+  <div><b>STOOM Manager — Planning</b></div>
+  <div>
+    <a class="tab" href="index.html">Retour HUB</a>
+  </div>
+</header>
 
-    <div class="row noPrint">
-      <label class="small">Semaine (lundi)
-        <input type="date" id="weekStart">
-      </label>
+<div class="plWrap">
+  <div style="margin-bottom:10px;display:flex;gap:10px;flex-wrap:wrap;">
+    <input type="date" id="weekStart">
+    <select id="paintMode">
+      <option value="range">Plage (2 clics)</option>
+      <option value="dragOn">Drag ON</option>
+      <option value="dragOff">Drag OFF</option>
+      <option value="toggle">30 min</option>
+    </select>
+    <button class="btn" onclick="window.print()">Imprimer</button>
+  </div>
+  <div id="tableHost"></div>
+</div>
 
-      <label class="small">Horaires
-        <select id="rangeSel">
-          <option value="08:30-19:00">08:30 → 19:00</option>
-          <option value="08:30-19:30">08:30 → 19:30</option>
-          <option value="09:00-19:00">09:00 → 19:00</option>
-          <option value="10:00-19:00">10:00 → 19:00</option>
-        </select>
-      </label>
-
-      <label class="small">Jours
-        <select id="daysSel">
-          <option value="Lun,Mar,Mer,Jeu,Ven,Sam">Lun → Sam</option>
-          <option value="Lun,Mar,Mer,Jeu,Ven">Lun → Ven</option>
-        </select>
-      </label>
-
-      <label class="tiny">Mode
-        <select id="paintMode">
-          <option value="range">Plage (2 clics)</option>
-          <option value="dragOn">Drag ON</option>
-          <option value="dragOff">Drag OFF</option>
-          <option value="toggle">Clic 30 min</option>
-        </select>
-      </label>
-
-      <button class="btn" id="clearWeekBtn">Vider semaine</button>
-      <button class="btn ok" id="printWeekBtn">Imprimer A4</button>
-      <button class="btn primary" id="exportXlsBtn" title="Export CSV (ouvrable dans Excel)">Exporter CSV</button>
-    </div>
-
-    <div class="plWrap">
-      <div class="plTop">
-        <div>
-          <div class="plTitle" id="printTitle">PLANNING</div>
-          <div class="plSub" id="printSub"></div>
-        </div>
-        <div class="legend" id="legend"></div>
-      </div>
-
-      <div id="planHost"></div>
-
-      <div class="plFooter noPrint">
-        <div class="plTotals" id="weekTotals"></div>
-        <div class="hint">
-          Mode “Plage (2 clics)” : clic début → clic fin (même ligne) = remplissage.
-          Recommence pour ajouter une 2e plage.
-        </div>
-      </div>
-    </div>
-  </section>
 </div>
 
 <script>
-const $ = (s)=>document.querySelector(s);
-const $$ = (s)=>Array.from(document.querySelectorAll(s));
+const KEY="stoom_manager_shared_v1";
+const $=s=>document.querySelector(s);
 
-/* IMPORTANT : on utilise la même clé que ton HUB pour rester synchro */
-const KEY = "stoom_manager_shared_v1";
-
-/* ------------------ util ------------------ */
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]))}
-function uid(){return Math.random().toString(16).slice(2)+"-"+Date.now().toString(16)}
-function nowISO(){return new Date().toISOString()}
-
-/* Date locale sans décalage (corrige le “+1 jour”) */
-function parseLocalYMD(ymd){
-  const p=String(ymd||"").split("-").map(Number);
-  if(p.length!==3 || !p[0] || !p[1] || !p[2]) return new Date();
-  return new Date(p[0], p[1]-1, p[2], 0,0,0,0);
-}
 function ymd(d){
-  const x=(d instanceof Date)?d:new Date(d);
-  const y=x.getFullYear();
-  const m=String(x.getMonth()+1).padStart(2,"0");
-  const a=String(x.getDate()).padStart(2,"0");
-  return `${y}-${m}-${a}`;
-}
-function startOfWeekMonday(d=new Date()){
   const x=new Date(d);
-  const day=(x.getDay()+6)%7; // lundi=0
-  x.setDate(x.getDate()-day);
-  x.setHours(0,0,0,0);
+  return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`;
+}
+function parseYMD(s){
+  const p=s.split("-");
+  return new Date(p[0],p[1]-1,p[2]);
+}
+function addDays(d,n){
+  const x=new Date(d);
+  x.setDate(x.getDate()+n);
   return x;
 }
-function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
-function frDateLabel(iso){
-  const p=(iso||"").split("-");
-  if(p.length!==3) return iso||"";
-  return `${p[2]}/${p[1]}/${p[0]}`;
-}
-function toMinutes(t){
-  if(!t) return null;
-  const p=t.split(":").map(Number);
-  if(p.length!==2) return null;
-  return p[0]*60+p[1];
-}
-function minutesToTime(m){
-  const h=String(Math.floor(m/60)).padStart(2,"0");
-  const mm=String(m%60).padStart(2,"0");
-  return `${h}:${mm}`;
-}
-function clamp(n,a,b){return Math.max(a,Math.min(b,n))}
 
-function setSaveStatus(txt){
-  const el=$("#saveStatus");
-  if(!el) return;
-  el.textContent=txt;
-  el.style.opacity="1";
-  clearTimeout(setSaveStatus.t);
-  setSaveStatus.t=setTimeout(()=>{el.style.opacity=".86"},900);
-}
+let state=JSON.parse(localStorage.getItem(KEY)||"{}");
+if(!state.staff) state.staff=["Arnaud","Léa","Evan"];
+if(!state.planning) state.planning={weekStart:ymd(new Date()),grid:{}};
 
-/* ------------------ state ------------------ */
-function normalize(s){
-  s=s||{};
-  s.options=s.options||{};
-  if(!s.options.shopName) s.options.shopName="STOOM Manager";
+let rangeSel=null;
 
-  s.staff=Array.isArray(s.staff)&&s.staff.length ? s.staff : ["Léa","Arnaud","Evan"];
-  s.staffColors=s.staffColors||{};
-  s.staff.forEach((n,i)=>{
-    if(!s.staffColors[n]){
-      const palette=["#ffe36e","#78a6ff","#73e3b4","#ff9ab0","#cbb6ff","#ffd0a8"];
-      s.staffColors[n]=palette[i%palette.length];
-    }
-  });
-
-  s.planning=s.planning||{weekStart:ymd(startOfWeekMonday()),range:"08:30-19:00",days:"Lun,Mar,Mer,Jeu,Ven,Sam",grid:{}};
-  if(!s.planning.weekStart) s.planning.weekStart=ymd(startOfWeekMonday());
-  if(!s.planning.range) s.planning.range="08:30-19:00";
-  if(!s.planning.days) s.planning.days="Lun,Mar,Mer,Jeu,Ven,Sam";
-  s.planning.grid=s.planning.grid||{};
-
-  /* events (absences/retards) si tu les utilises via absences.html */
-  s.events=Array.isArray(s.events)?s.events:[];
-  return s;
-}
-function load(){
-  try{
-    const raw=localStorage.getItem(KEY);
-    if(raw) return normalize(JSON.parse(raw));
-  }catch(e){}
-  return normalize({});
-}
-let state = load();
 function save(){
-  localStorage.setItem(KEY, JSON.stringify(state));
-  setSaveStatus("Sauvegardé");
+  localStorage.setItem(KEY,JSON.stringify(state));
 }
 
-/* ------------------ planning helpers ------------------ */
-function planDays(){
-  return (state.planning.days||"Lun,Mar,Mer,Jeu,Ven,Sam").split(",").map(x=>x.trim()).filter(Boolean);
-}
-function parseRange(r){
-  const p=(r||"08:30-19:00").split("-");
-  return {start:toMinutes(p[0]), end:toMinutes(p[1])};
-}
 function buildSlots(){
-  const {start,end}=parseRange(state.planning.range);
-  const slots=[];
-  for(let m=start;m<end;m+=30) slots.push(m);
-  return slots;
-}
-function ensureGrid(){
-  state.planning.grid=state.planning.grid||{};
-  const days=planDays();
-  state.staff.forEach(st=>{
-    if(!state.planning.grid[st]) state.planning.grid[st]={};
-    days.forEach(d=>{
-      if(!state.planning.grid[st][d]) state.planning.grid[st][d]={};
-    });
-  });
-}
-function dayHeaderLabel(dayIndex){
-  const monday=parseLocalYMD(state.planning.weekStart);
-  const d=addDays(monday,dayIndex);
-  const daysShort=["LUN","MAR","MER","JEU","VEN","SAM","DIM"];
-  const wd=daysShort[(d.getDay()+6)%7];
-  return `${wd} — ${frDateLabel(ymd(d))}`;
-}
-function weekSubLabel(){
-  const monday=parseLocalYMD(state.planning.weekStart);
-  const days=planDays();
-  const last=addDays(monday,days.length-1);
-  return `SEMAINE DU ${frDateLabel(ymd(monday))} AU ${frDateLabel(ymd(last))}`;
-}
-function slotKey(staff, day, idx){ return `${staff}|${day}|${idx}`; }
-
-function getCell(staff,day,idx){
-  return !!state.planning.grid?.[staff]?.[day]?.[idx];
-}
-function setCell(staff,day,idx,val){
-  ensureGrid();
-  if(val) state.planning.grid[staff][day][idx]=1;
-  else delete state.planning.grid[staff][day][idx];
+  const start=8*60+30;
+  const end=19*60;
+  let arr=[];
+  for(let m=start;m<end;m+=30) arr.push(m);
+  return arr;
 }
 
-function dayWorkMinutes(staff,day){
-  ensureGrid();
-  const obj=state.planning.grid?.[staff]?.[day]||{};
-  return Object.keys(obj).length*30;
-}
-function weekWorkMinutes(staff){
-  ensureGrid();
-  let tot=0;
-  planDays().forEach(d=>{
-    const obj=state.planning.grid?.[staff]?.[d]||{};
-    tot+=Object.keys(obj).length*30;
-  });
-  return tot;
+function slotKey(s,d,i){return s+"|"+d+"|"+i}
+
+function getCell(s,d,i){
+  return state.planning.grid?.[s]?.[d]?.[i];
 }
 
-/* ------------------ overlay events (optionnel) ------------------ */
-function eventClass(type){
-  if(type==="retard") return "retard";
-  if(type==="maladie") return "abs maladie";
-  if(type==="conge") return "abs conge";
-  if(type==="formation") return "abs formation";
-  return "abs autre";
+function setCell(s,d,i,val){
+  state.planning.grid[s]??={};
+  state.planning.grid[s][d]??={};
+  if(val) state.planning.grid[s][d][i]=1;
+  else delete state.planning.grid[s][d][i];
 }
-function dayFromDate(iso, days){
-  const d=parseLocalYMD(iso); // <= corrige le +1 jour
-  const names=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
-  const n=names[(d.getDay()+6)%7];
-  return days.includes(n)?n:null;
-}
-function slotIndexFromTime(t, slots){
-  const m=toMinutes(t);
-  if(m===null) return null;
-  const {start}=parseRange(state.planning.range);
-  const idx=Math.floor((m-start)/30);
-  return clamp(idx,0,slots.length);
-}
-function eventMinutes(e){
-  const a=toMinutes(e.start), b=toMinutes(e.end);
-  if(a===null || b===null) return 0;
-  return Math.max(0, Math.abs(b-a));
-}
-function eventsForWeek(){
-  const days=planDays();
-  const monday=parseLocalYMD(state.planning.weekStart);
-  const start=ymd(monday);
-  const end=ymd(addDays(monday,days.length-1));
-  return state.events.filter(e=>e.date>=start && e.date<=end);
-}
-function buildOverlayMap(){
-  const days=planDays();
+
+function build(){
   const slots=buildSlots();
-  const weekE=eventsForWeek();
-  const map={};
-  weekE.forEach(e=>{
-    if(!e.staff || !e.date) return;
-    const staff=e.staff;
-    const day=dayFromDate(e.date, days);
-    if(!day) return;
-
-    const i0=slotIndexFromTime(e.start||minutesToTime(slots[0]), slots);
-    const i1=slotIndexFromTime(e.end||minutesToTime(slots[slots.length-1]+30), slots);
-    if(i0===null || i1===null) return;
-    const a=Math.min(i0,i1);
-    const b=Math.max(i0,i1);
-
-    for(let i=a;i<b;i++){
-      map[slotKey(staff,day,i)] = e.type;
-    }
+  const monday=parseYMD(state.planning.weekStart);
+  let html="<table><thead><tr><th>Jour</th><th>Vendeur</th>";
+  slots.forEach(m=>{
+    const h=Math.floor(m/60);
+    const mm=m%60;
+    html+=`<th class="thTime">${h}:${mm==0?"00":mm}</th>`;
   });
-  return map;
-}
+  html+="<th>Total</th></tr></thead><tbody>";
 
-/* ------------------ UI render ------------------ */
-function legendData(){
-  return [
-    {lab:"Présence", sw:"#8bbff2"},
-    {lab:"Retard", sw:"#ffe08a"},
-    {lab:"Maladie", sw:"#f7c0ca"},
-    {lab:"Congé", sw:"#e9ebf0"},
-    {lab:"Formation", sw:"#cfe6ff"},
-    {lab:"Autre", sw:"#ffe7ad"}
-  ];
-}
-
-let overlay = {};
-let slots = [];
-let rangeSelect = { active:false, staff:"", day:"", startIdx:null };
-
-function buildTable(){
-  ensureGrid();
-  overlay = buildOverlayMap();
-  slots = buildSlots();
-
-  $("#weekStart").value = state.planning.weekStart;
-  $("#rangeSel").value = state.planning.range;
-  $("#daysSel").value = state.planning.days;
-
-  $("#printTitle").textContent = (state.options.shopName||"STOOM Manager");
-  $("#printSub").textContent = weekSubLabel();
-
-  $("#legend").innerHTML = legendData().map(x=>`
-    <div class="chip"><span class="swatch" style="background:${esc(x.sw)}"></span>${esc(x.lab)}</div>
-  `).join("");
-
-  const days=planDays();
-
-  const timeHeaders=slots.map(m=>{
-    const a=minutesToTime(m).replace(":","h");
-    const b=minutesToTime(m+30).replace(":","h");
-    return `<th class="thTime"><div>${esc(a)}-${esc(b)}</div></th>`;
-  }).join("");
-
-  let html=`<table class="pl">
-    <thead>
-      <tr>
-        <th class="thDay">Jour</th>
-        <th class="thVend">Vendeur</th>
-        ${timeHeaders}
-        <th class="thSum">H/j</th>
-      </tr>
-    </thead>
-    <tbody>`;
-
-  days.forEach((day,di)=>{
-    html+=`<tr class="dayRow"><th colspan="${2+slots.length+1}">${esc(dayHeaderLabel(di))}</th></tr>`;
-    state.staff.forEach((st,si)=>{
-      const col=state.staffColors[st]||"#78a6ff";
-      html+=`<tr>`;
-      html+=`<td class="dayCell">${esc(day)}</td>`;
-      html+=`<td class="vendCell"><span class="colorTag" style="background:${esc(col)}"></span>${esc(st)}</td>`;
-
-      for(let i=0;i<slots.length;i++){
-        const k=slotKey(st,day,i);
-        const has=getCell(st,day,i);
-        const ov=overlay[k]||"";
-        const clsBase = has ? (si%2? "slot work2":"slot work") : "slot";
-        const cls = ov ? `slot ${eventClass(ov)}` : clsBase;
-        html+=`<td><div class="${cls}" data-cell="${esc(k)}" tabindex="0" role="button"></div></td>`;
-      }
-      const h=(dayWorkMinutes(st,day)/60);
-      html+=`<td class="sumCell">${(Math.round(h*10)/10).toString().replace(".",",")}</td>`;
-      html+=`</tr>`;
+  ["Lun","Mar","Mer","Jeu","Ven","Sam"].forEach((day,di)=>{
+    html+=`<tr><td colspan="${slots.length+3}" style="background:#111;padding:6px;font-weight:900">${day}</td></tr>`;
+    state.staff.forEach((staff,si)=>{
+      html+="<tr>";
+      html+=`<td>${day}</td><td>${staff}</td>`;
+      let total=0;
+      slots.forEach((m,i)=>{
+        const k=slotKey(staff,day,i);
+        const active=getCell(staff,day,i);
+        const cls=active?(si%2?"slot work2":"slot work"):"slot";
+        if(active) total+=30;
+        html+=`<td><div class="${cls}" data-k="${k}"></div></td>`;
+      });
+      html+=`<td class="sum">${(total/60)}</td>`;
+      html+="</tr>";
     });
   });
-
-  html+=`</tbody></table>`;
-  $("#planHost").innerHTML = html;
-
-  renderTotals();
-  bindCells();
+  html+="</tbody></table>";
+  $("#tableHost").innerHTML=html;
+  bind();
 }
 
-function renderTotals(){
-  const chips = state.staff.map(s=>{
-    const h=weekWorkMinutes(s)/60;
-    return `<span class="chip">${esc(s)} : <b>${(Math.round(h*10)/10).toString().replace(".",",")}h</b></span>`;
-  }).join("");
-  $("#weekTotals").innerHTML = chips;
-}
-
-function cellIsBlockedByAbsence(staff,day,idx){
-  const k=slotKey(staff,day,idx);
-  const ov=overlay[k];
-  return !!ov && ov!=="retard";
-}
-
-function applyToRange(staff, day, a, b, mode){
-  // convention planning : début inclus, fin exclue
-  const start = Math.min(a,b);
-  const end = Math.max(a,b);
-  if(start===end) return;
-
-  // si mode “toggle” sur une plage, on décide la valeur à appliquer depuis la première case
-  let target = true;
-  if(mode==="toggle"){
-    target = !getCell(staff,day,start);
-  }else if(mode==="dragOn"){
-    target = true;
-  }else if(mode==="dragOff"){
-    target = false;
-  }else{
-    // mode range par défaut => toggle intelligent
-    target = !getCell(staff,day,start);
-  }
-
-  const host=$("#planHost");
+function applyRange(s,d,a,b){
+  let start=Math.min(a,b);
+  let end=Math.max(a,b)+1; // FIN INCLUSIVE
+  const val=!getCell(s,d,start);
   for(let i=start;i<end;i++){
-    if(cellIsBlockedByAbsence(staff,day,i)) continue;
-    setCell(staff,day,i,target);
-
-    const el = host.querySelector(`[data-cell="${CSS.escape(slotKey(staff,day,i))}"]`);
-    if(el){
-      // recalcul classe sans rerender complet
-      const ov=overlay[slotKey(staff,day,i)]||"";
-      const si = state.staff.indexOf(staff);
-      const has = getCell(staff,day,i);
-      const clsBase = has ? (si%2? "slot work2":"slot work") : "slot";
-      el.className = ov ? `slot ${eventClass(ov)}` : clsBase;
-      el.classList.remove("selStart");
-    }
+    setCell(s,d,i,val);
   }
   save();
-  renderTotals();
+  build();
 }
 
-function clearSelectionMarker(){
-  $("#planHost").querySelectorAll(".selStart").forEach(x=>x.classList.remove("selStart"));
-}
-
-function bindCells(){
-  const pmSel = $("#paintMode");
-  const host = $("#planHost");
-
+function bind(){
+  const mode=$("#paintMode").value;
   let dragging=false;
-  let dragTarget = null; // true/false
+  let dragVal=null;
 
-  function parseKey(k){
-    const parts=k.split("|");
-    return {staff:parts[0], day:parts[1], idx:Number(parts[2])};
-  }
+  document.querySelectorAll(".slot").forEach(el=>{
+    const [s,d,i]=el.dataset.k.split("|");
 
-  function setOne(staff,day,idx,val){
-    if(cellIsBlockedByAbsence(staff,day,idx)) return;
-    setCell(staff,day,idx,val);
-    const el = host.querySelector(`[data-cell="${CSS.escape(slotKey(staff,day,idx))}"]`);
-    if(el){
-      const ov=overlay[slotKey(staff,day,idx)]||"";
-      const si = state.staff.indexOf(staff);
-      const has = getCell(staff,day,idx);
-      const clsBase = has ? (si%2? "slot work2":"slot work") : "slot";
-      el.className = ov ? `slot ${eventClass(ov)}` : clsBase;
-    }
-  }
-
-  function clickCell(k){
-    const {staff,day,idx}=parseKey(k);
-    const mode = pmSel.value;
-
-    if(mode==="range"){
-      // 2 clics sur la même ligne vendeur+jour
-      if(!rangeSelect.active){
-        rangeSelect = {active:true, staff, day, startIdx:idx};
-        clearSelectionMarker();
-        const el = host.querySelector(`[data-cell="${CSS.escape(k)}"]`);
-        if(el) el.classList.add("selStart");
-        return;
-      }else{
-        // si pas même staff/day => on redémarre
-        if(rangeSelect.staff!==staff || rangeSelect.day!==day){
-          rangeSelect = {active:true, staff, day, startIdx:idx};
-          clearSelectionMarker();
-          const el = host.querySelector(`[data-cell="${CSS.escape(k)}"]`);
-          if(el) el.classList.add("selStart");
-          return;
+    el.onclick=()=>{
+      if(mode==="range"){
+        if(!rangeSel){
+          rangeSel={s,d,i:Number(i)};
+          el.classList.add("sel");
+        }else{
+          if(rangeSel.s===s && rangeSel.d===d){
+            applyRange(s,d,rangeSel.i,Number(i));
+          }
+          rangeSel=null;
         }
-        // appliquer plage
-        const a = rangeSelect.startIdx;
-        const b = idx;
-        clearSelectionMarker();
-        rangeSelect = {active:false, staff:"", day:"", startIdx:null};
-        applyToRange(staff,day,a,b,"toggle"); // toggle intelligent
-        return;
+      }else if(mode==="toggle"){
+        setCell(s,d,i,!getCell(s,d,i));
+        save();
+        build();
       }
-    }
+    };
 
-    // toggle 30 minutes
-    if(mode==="toggle"){
-      const target = !getCell(staff,day,idx);
-      setOne(staff,day,idx,target);
-      save();
-      renderTotals();
-      return;
-    }
-  }
-
-  // click
-  host.querySelectorAll("[data-cell]").forEach(el=>{
-    const k=el.getAttribute("data-cell");
-
-    el.addEventListener("click",()=>clickCell(k));
-
-    el.addEventListener("keydown",(e)=>{
-      if(e.key==="Enter"||e.key===" "){
-        e.preventDefault();
-        clickCell(k);
+    el.onmousedown=()=>{
+      if(mode==="dragOn"||mode==="dragOff"){
+        dragging=true;
+        dragVal=(mode==="dragOn");
+        setCell(s,d,i,dragVal);
+        save();
+        build();
       }
-    });
-
-    // drag paint
-    el.addEventListener("mousedown",(e)=>{
-      const mode = pmSel.value;
-      if(mode!=="dragOn" && mode!=="dragOff") return;
-
-      dragging=true;
-      const {staff,day,idx}=parseKey(k);
-      dragTarget = (mode==="dragOn");
-      setOne(staff,day,idx,dragTarget);
-      e.preventDefault();
-    });
-
-    el.addEventListener("mouseenter",()=>{
-      if(!dragging) return;
-      const mode = pmSel.value;
-      if(mode!=="dragOn" && mode!=="dragOff") return;
-
-      const {staff,day,idx}=parseKey(k);
-      setOne(staff,day,idx,dragTarget);
-    });
+    };
   });
 
-  window.addEventListener("mouseup",()=>{
-    if(dragging){
-      dragging=false;
-      dragTarget=null;
-      save();
-      renderTotals();
+  window.onmouseup=()=>dragging=false;
+
+  window.onkeydown=(e)=>{
+    if(e.key==="Escape"){
+      rangeSel=null;
+      build();
     }
-  });
+  };
 }
 
-/* ------------------ actions ------------------ */
-function clearWeek(){
-  if(!confirm("Vider toutes les cases de la semaine ?")) return;
-  state.planning.grid={};
-  ensureGrid();
+$("#weekStart").value=state.planning.weekStart;
+$("#weekStart").oninput=()=>{
+  state.planning.weekStart=$("#weekStart").value;
   save();
-  buildTable();
-}
-function exportCsv(){
-  // export “planning semaine” (ouvrable dans Excel)
-  const days=planDays();
-  const slots=buildSlots();
-  const head=["Jour","Vendeur"].concat(slots.map(m=>minutesToTime(m))).concat(["Total_h"]);
-  const lines=[head.join(";")];
+};
 
-  days.forEach(day=>{
-    state.staff.forEach(st=>{
-      const row=[day, st];
-      let mins=0;
-      for(let i=0;i<slots.length;i++){
-        const v = getCell(st,day,i) ? 1 : 0;
-        row.push(String(v));
-        if(v) mins+=30;
-      }
-      row.push((mins/60).toString().replace(".",","));
-      lines.push(row.join(";"));
-    });
-  });
-
-  const blob=new Blob([lines.join("\n")],{type:"text/csv;charset=utf-8"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url;
-  a.download=`planning-semaine-${state.planning.weekStart}.csv`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
-/* ------------------ init ------------------ */
-function refresh(){
-  $("#weekStart").value=state.planning.weekStart;
-  $("#rangeSel").value=state.planning.range;
-  $("#daysSel").value=state.planning.days;
-  $("#printTitle").textContent=(state.options.shopName||"STOOM Manager");
-  $("#printSub").textContent=weekSubLabel();
-  buildTable();
-  setSaveStatus("Prêt");
-}
-
-(function init(){
-  ensureGrid();
-  save();
-
-  $("#weekStart").addEventListener("input",()=>{
-    state.planning.weekStart=$("#weekStart").value || ymd(startOfWeekMonday());
-    save();
-    buildTable();
-  });
-  $("#rangeSel").addEventListener("change",()=>{
-    state.planning.range=$("#rangeSel").value;
-    save();
-    buildTable();
-  });
-  $("#daysSel").addEventListener("change",()=>{
-    state.planning.days=$("#daysSel").value;
-    save();
-    buildTable();
-  });
-
-  $("#paintMode").addEventListener("change",()=>{
-    // reset sélection plage quand on change de mode
-    rangeSelect={active:false, staff:"", day:"", startIdx:null};
-    clearSelectionMarker();
-  });
-
-  $("#clearWeekBtn").addEventListener("click",clearWeek);
-  $("#printWeekBtn").addEventListener("click",()=>window.print());
-  $("#exportXlsBtn").addEventListener("click",exportCsv);
-
-  // si autre onglet modifie les données (hub/absences/paramètres), on se met à jour
-  window.addEventListener("storage",(e)=>{
-    if(e.key===KEY){
-      state=load();
-      refresh();
-      setSaveStatus("Mis à jour");
-    }
-  });
-
-  refresh();
-})();
+build();
 </script>
 </body>
 </html>
