@@ -315,6 +315,63 @@ table.pl{
   .pl .vendCell,.pl .dayCell,.pl .sumCell{background:#fff !important;color:#111 !important}
   .plFooter{display:none !important}
 }
+  /* --- OVERLAYS ABSENCES : priorité + contraste --- */
+.pl .slot.abs,
+.pl .slot.abs.maladie,
+.pl .slot.abs.conge,
+.pl .slot.abs.formation,
+.pl .slot.abs.autre{
+  background-image: none !important; /* on repart clean */
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.18);
+}
+
+/* Base absence (si "autre" ou fallback) */
+.pl .slot.abs{
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(255,255,255,.00) 0 6px,
+      rgba(255,255,255,.18) 6px 12px
+    ) !important;
+}
+
+/* Maladie (plus rouge, plus contrasté) */
+.pl .slot.abs.maladie{
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(255,90,115,.45) 0 6px,
+      rgba(255,90,115,.16) 6px 12px
+    ) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,90,115,.55),
+    inset 0 0 0 999px rgba(255,90,115,.08);
+}
+
+/* Congé */
+.pl .slot.abs.conge{
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(255,255,255,.30) 0 6px,
+      rgba(255,255,255,.10) 6px 12px
+    ) !important;
+}
+
+/* Formation */
+.pl .slot.abs.formation{
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(62,162,255,.40) 0 6px,
+      rgba(62,162,255,.12) 6px 12px
+    ) !important;
+}
+
+/* Autre */
+.pl .slot.abs.autre{
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(255,211,90,.45) 0 6px,
+      rgba(255,211,90,.14) 6px 12px
+    ) !important;
+}
 </style>
 </head>
 
