@@ -427,11 +427,16 @@ function ymd(d){
   return `${y}-${m}-${a}`;
 }
 function startOfWeekMonday(d=new Date()){
-  const x=new Date(d);
-  const day=(x.getDay()+6)%7;
-  x.setDate(x.getDate()-day);
+  const x = new Date(d);
+  const day = (x.getDay() + 6) % 7; // lun=0 ... dim=6
+  x.setDate(x.getDate() - day);
   x.setHours(0,0,0,0);
   return x;
+}
+  function dayNameFrFromISO(iso){
+  const d = parseLocalYMD(iso);
+  const names = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+  return names[(d.getDay() + 6) % 7];
 }
 function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
 function frDateLabel(iso){
@@ -565,10 +570,8 @@ function eventClass(type){
   return "abs autre";
 }
 function dayFromDate(iso, days){
-  const d=parseLocalYMD(iso);
-  const names=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
-  const n=names[(d.getDay()+6)%7];
-  return days.includes(n)?n:null;
+  const n = dayNameFrFromISO(iso);
+  return days.includes(n) ? n : null;
 }
 function slotIndexFromTime(t, slots){
   const m=toMinutes(t);
