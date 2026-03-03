@@ -1,225 +1,101 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>STOOM Manager — HUB</title>
+
 <style>
 :root{
-  --bg0:#070a14;
-  --bg1:#0b1230;
-  --panel:rgba(255,255,255,.06);
-  --panel2:rgba(255,255,255,.04);
-  --line:rgba(255,255,255,.10);
+  --bg:#0c1226;
+  --panel:#141c36;
+  --border:rgba(255,255,255,.08);
   --text:#eef2ff;
-  --muted:#b8c3ee;
+  --muted:#aab6e6;
 
   --blue:#3ea2ff;
   --green:#38e08f;
   --yellow:#ffd35a;
   --red:#ff5a73;
 
-  --shadow:0 16px 52px rgba(0,0,0,.45);
-  --shadow2:0 10px 28px rgba(0,0,0,.35);
-  --r1:18px;
-  --r2:14px;
-  --font:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  --radius:18px;
+  --shadow:0 18px 50px rgba(0,0,0,.45);
 }
 
 *{box-sizing:border-box}
-html,body{height:100%}
 body{
   margin:0;
-  font-family:var(--font);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:linear-gradient(180deg,#0a0f20,#121a36);
   color:var(--text);
-  background:
-    radial-gradient(900px 520px at 15% -10%, rgba(62,162,255,.22), transparent 58%),
-    radial-gradient(900px 520px at 85% 10%, rgba(56,224,143,.14), transparent 58%),
-    linear-gradient(180deg, var(--bg0), var(--bg1));
 }
 
-.wrap{max-width:1280px;margin:0 auto;padding:18px 16px 44px}
+.wrap{max-width:1200px;margin:auto;padding:24px}
 
-header{
-  display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;
-  margin-bottom:14px;
-}
-.brand{
-  display:flex;gap:12px;align-items:flex-start;
-}
-.logo{
-  width:40px;height:40px;border-radius:14px;
-  background:linear-gradient(135deg, rgba(62,162,255,.35), rgba(56,224,143,.20));
-  border:1px solid rgba(255,255,255,.12);
-  box-shadow:var(--shadow2);
-}
-.brand h1{margin:0;font-size:18px;letter-spacing:.2px}
-.brand p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.35;max-width:860px}
-
-.topbar{
-  display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;
-}
-.pill{
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.05);
-  padding:9px 12px;border-radius:999px;
-  font-size:12px;color:var(--muted);
-  box-shadow:var(--shadow2);
-  display:flex;gap:8px;align-items:center;
-}
-.pill b{color:var(--text)}
-
-.btn{
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.06);
-  color:var(--text);
-  padding:10px 12px;border-radius:14px;
-  cursor:pointer;font-weight:950;font-size:13px;
-  outline:none;
-  transition:transform .06s ease, background .18s ease, border-color .18s ease;
-}
-.btn:hover{background:rgba(255,255,255,.10)}
-.btn:active{transform:translateY(1px)}
-.btn:focus{box-shadow:0 0 0 3px rgba(62,162,255,.25)}
-.btn.primary{border-color:rgba(62,162,255,.55);background:rgba(62,162,255,.16)}
-.btn.ok{border-color:rgba(56,224,143,.45);background:rgba(56,224,143,.12)}
-.btn.warn{border-color:rgba(255,211,90,.48);background:rgba(255,211,90,.12)}
-.btn.danger{border-color:rgba(255,90,115,.48);background:rgba(255,90,115,.12)}
-.btn.ghost{background:transparent}
-
-.card{
-  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035));
-  border:1px solid var(--line);
-  border-radius:var(--r1);
-  box-shadow:var(--shadow);
-  padding:14px;
-}
+h1{margin:0 0 6px 0;font-size:20px}
+.subtitle{color:var(--muted);font-size:13px;margin-bottom:20px}
 
 .kpis{
   display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:12px;
-  margin-bottom:14px;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+  margin-bottom:24px;
 }
-@media (max-width: 980px){.kpis{grid-template-columns:1fr}}
 
 .kpi{
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(0,0,0,.16);
-  border-radius:18px;
-  padding:12px;
-  box-shadow:var(--shadow2);
-  display:flex;gap:12px;align-items:center;justify-content:space-between;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:var(--shadow);
 }
-.kpiLeft{min-width:0}
-.kpiTitle{color:var(--muted);font-size:12px;font-weight:950;letter-spacing:.2px}
-.kpiVal{font-size:26px;font-weight:1100;margin-top:3px}
-.kpiSub{color:var(--muted);font-size:12px;margin-top:2px}
-.kpiDot{
-  width:12px;height:12px;border-radius:6px;
-  border:1px solid rgba(255,255,255,.14);
-}
-.dotRed{background:rgba(255,90,115,.60);border-color:rgba(255,90,115,.35)}
-.dotYellow{background:rgba(255,211,90,.60);border-color:rgba(255,211,90,.35)}
-.dotBlue{background:rgba(62,162,255,.60);border-color:rgba(62,162,255,.35)}
-.dotGreen{background:rgba(56,224,143,.55);border-color:rgba(56,224,143,.30)}
 
-.main{
+.kpiTitle{font-size:12px;color:var(--muted);margin-bottom:4px}
+.kpiVal{font-size:28px;font-weight:800}
+.kpiSub{font-size:12px;color:var(--muted);margin-top:4px}
+
+.grid{
   display:grid;
-  grid-template-columns:1.25fr .75fr;
-  gap:14px;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:16px;
 }
-@media (max-width: 1100px){.main{grid-template-columns:1fr}}
 
-.sectionTitle{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
-  margin-bottom:10px;
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px;
+  box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
 }
-.sectionTitle h2{margin:0;font-size:14px;letter-spacing:.2px}
-.sectionTitle .hint{color:var(--muted);font-size:12px}
 
-.stack{display:flex;flex-direction:column;gap:12px}
+.card h3{margin:0 0 6px 0;font-size:14px}
+.card p{margin:0 0 14px 0;color:var(--muted);font-size:12px;line-height:1.4}
 
-.panel{
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(0,0,0,.14);
-  border-radius:18px;
-  padding:12px;
-  box-shadow:var(--shadow2);
-}
-.panelHead{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
-  margin-bottom:8px;
-}
-.panelHead .title{
-  display:flex;gap:10px;align-items:center;
-  font-weight:1050;font-size:13px;
-}
-.badge{
-  font-size:11px;
-  color:var(--muted);
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.04);
-  padding:5px 8px;border-radius:999px;
-  display:inline-flex;gap:6px;align-items:center;
-}
-.badge.red{border-color:rgba(255,90,115,.25);background:rgba(255,90,115,.10);color:#ffe4ea}
-.badge.yellow{border-color:rgba(255,211,90,.25);background:rgba(255,211,90,.10);color:#fff1cc}
-.badge.blue{border-color:rgba(62,162,255,.25);background:rgba(62,162,255,.10);color:#d9ecff}
-.badge.green{border-color:rgba(56,224,143,.22);background:rgba(56,224,143,.08);color:#e6fff4}
-
-.list{display:flex;flex-direction:column;gap:8px}
-.rowItem{
-  display:flex;justify-content:space-between;gap:10px;align-items:flex-start;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.03);
-  border-radius:14px;
-  padding:10px;
-}
-.rowItem:hover{background:rgba(255,255,255,.05)}
-.rowLeft{min-width:0;flex:1}
-.rowTitle{
-  font-weight:1050;font-size:13px;line-height:1.25;
-  word-break:break-word;
-}
-.rowMeta{margin-top:6px;color:var(--muted);font-size:12px;display:flex;gap:8px;flex-wrap:wrap}
-a.link{color:inherit;text-decoration:none}
-
-.small{color:var(--muted);font-size:12px;line-height:1.35}
-.hr{height:1px;background:rgba(255,255,255,.10);margin:12px 0}
-
-.quickGrid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:10px;
-}
-.quick{
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(0,0,0,.14);
-  border-radius:18px;
-  padding:12px;
-  box-shadow:var(--shadow2);
-}
-.quickTop{
-  display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;
-}
-.quick h3{margin:0;font-size:13px}
-.quick p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.35}
-.quickActions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
-
-.footerNote{
-  margin-top:12px;
-  color:var(--muted);
-  font-size:12px;
+.btn{
+  padding:10px 14px;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  font-weight:700;
+  font-size:13px;
+  text-decoration:none;
   text-align:center;
-  opacity:.9;
 }
 
-@media print{
-  body{background:#fff;color:#000}
-  .noPrint{display:none !important}
-  .wrap{max-width:none;padding:0;margin:0}
-  .card{box-shadow:none;border:1px solid #ddd;background:#fff}
+.btn.blue{background:var(--blue);color:#fff}
+.btn.green{background:var(--green);color:#000}
+.btn.yellow{background:var(--yellow);color:#000}
+.btn.red{background:var(--red);color:#fff}
+.btn.dark{background:#1d2548;color:#fff;border:1px solid var(--border)}
+
+.footer{
+  margin-top:30px;
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
 }
 </style>
 </head>
@@ -227,454 +103,129 @@ a.link{color:inherit;text-decoration:none}
 <body>
 <div class="wrap">
 
-  <header class="noPrint">
-    <div class="brand">
-      <div class="logo" aria-hidden="true"></div>
-      <div>
-        <h1>STOOM Manager — HUB</h1>
-        <p>Vue claire : urgences, rappels et accès directs. Données enregistrées localement sur ce poste.</p>
-      </div>
-    </div>
+  <h1>STOOM Manager — HUB</h1>
+  <div class="subtitle">Centre de contrôle — Vue synthétique & accès directs</div>
 
-    <div class="topbar">
-      <div class="pill">💾 Statut : <b id="saveStatus">Prêt</b></div>
-      <div class="pill">🕒 <b id="clock">—</b></div>
-      <button class="btn" id="exportBtn">Exporter</button>
-      <button class="btn" id="importBtn">Importer</button>
-      <button class="btn danger" id="resetBtn">Réinitialiser</button>
-    </div>
-  </header>
-
-  <!-- KPI : 3 cartes seulement -->
   <div class="kpis">
     <div class="kpi">
-      <div class="kpiLeft">
-        <div class="kpiTitle">Tâches</div>
-        <div class="kpiVal" id="kpiTasksVal">—</div>
-        <div class="kpiSub" id="kpiTasksHint">—</div>
-      </div>
-      <div class="kpiDot dotRed" title="Indicateur"></div>
+      <div class="kpiTitle">Tâches en retard</div>
+      <div class="kpiVal" id="kTasks">0</div>
+      <div class="kpiSub">Priorité immédiate</div>
     </div>
 
     <div class="kpi">
-      <div class="kpiLeft">
-        <div class="kpiTitle">Achats magasin</div>
-        <div class="kpiVal" id="kpiPurchVal">—</div>
-        <div class="kpiSub" id="kpiPurchHint">—</div>
-      </div>
-      <div class="kpiDot dotBlue" title="Indicateur"></div>
+      <div class="kpiTitle">Achats à commander</div>
+      <div class="kpiVal" id="kPurch">0</div>
+      <div class="kpiSub">Magasin</div>
     </div>
 
     <div class="kpi">
-      <div class="kpiLeft">
-        <div class="kpiTitle">Rappels clients</div>
-        <div class="kpiVal" id="kpiClientsVal">—</div>
-        <div class="kpiSub" id="kpiClientsHint">—</div>
-      </div>
-      <div class="kpiDot dotYellow" title="Indicateur"></div>
+      <div class="kpiTitle">Rappels clients en retard</div>
+      <div class="kpiVal" id="kClients">0</div>
+      <div class="kpiSub">Suivi commercial</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpiTitle">Événements RH ce mois</div>
+      <div class="kpiVal" id="kEvents">0</div>
+      <div class="kpiSub">Absences / Retards</div>
     </div>
   </div>
 
-  <div class="main">
+  <div class="grid">
 
-    <!-- GAUCHE : URGENCES -->
     <div class="card">
-      <div class="sectionTitle">
-        <h2>Urgences & priorités</h2>
-        <div class="hint">Top 5 par module (en retard puis à venir)</div>
+      <div>
+        <h3>Planning</h3>
+        <p>Construction semaine — Peinture rapide — Impression A4 paysage.</p>
       </div>
-
-      <div class="stack">
-
-        <div class="panel">
-          <div class="panelHead">
-            <div class="title">✅ Tâches</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <span class="badge red" id="chipTasksLate">En retard : —</span>
-              <span class="badge yellow" id="chipTasksToday">Aujourd’hui : —</span>
-              <span class="badge green" id="chipTasksDone">Faites : —</span>
-            </div>
-          </div>
-          <div class="list" id="tasksList"></div>
-          <div class="small" id="tasksEmpty" style="display:none">Aucune tâche urgente.</div>
-          <div class="hr"></div>
-          <a class="btn warn link" href="./taches.html?view=today">Ouvrir les tâches</a>
-        </div>
-
-        <div class="panel">
-          <div class="panelHead">
-            <div class="title">🛒 Achats magasin</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <span class="badge blue" id="chipPurchTodo">À acheter : —</span>
-              <span class="badge" id="chipPurchOrd">Commandés : —</span>
-              <span class="badge green" id="chipPurchRec">Reçus : —</span>
-            </div>
-          </div>
-          <div class="list" id="purchList"></div>
-          <div class="small" id="purchEmpty" style="display:none">Aucun achat prioritaire.</div>
-          <div class="hr"></div>
-          <a class="btn primary link" href="./achats.html?view=todo">Ouvrir les achats</a>
-        </div>
-
-        <div class="panel">
-          <div class="panelHead">
-            <div class="title">📞 Rappels clients</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <span class="badge red" id="chipClientsLate">En retard : —</span>
-              <span class="badge yellow" id="chipClientsWeek">7 jours : —</span>
-              <span class="badge green" id="chipClientsDone">Faits : —</span>
-            </div>
-          </div>
-          <div class="list" id="clientsList"></div>
-          <div class="small" id="clientsEmpty" style="display:none">Aucun rappel urgent.</div>
-          <div class="hr"></div>
-          <a class="btn warn link" href="./clients.html?view=overdue">Ouvrir les rappels</a>
-        </div>
-
-      </div>
-
-      <div class="footerNote">
-       
-      </div>
+      <a href="planning.html" class="btn blue">Ouvrir</a>
     </div>
 
-    <!-- DROITE : ACCÈS RAPIDES + DONNÉES -->
-    <div class="stack">
-
-      <div class="card">
-        <div class="sectionTitle">
-          <h2>Accès rapides</h2>
-          <div class="hint">Planning A4 paysage / semaine</div>
-        </div>
-
-        <div class="quickGrid">
-          <div class="quick">
-            <div class="quickTop">
-              <div>
-                <h3>Planning</h3>
-                <p>Semaine + impression A4 1 page.</p>
-              </div>
-              <a class="btn primary link" href="./planning.html">Ouvrir</a>
-            </div>
-          </div>
-
-          <div class="quick">
-            <div class="quickTop">
-              <div>
-                <h3>Retards / Absences</h3>
-                <p>Saisie rapide + impact sur le planning.</p>
-              </div>
-              <a class="btn warn link" href="./planning.html#eventsSection">Ajouter</a>
-            </div>
-          </div>
-
-          <div class="quick">
-            <div class="quickTop">
-              <div>
-                <h3>Édition fin de mois</h3>
-                <p>Synthèse + export CSV + impression.</p>
-              </div>
-              <a class="btn ok link" href="./planning.html#reportSection">Générer</a>
-            </div>
-          </div>
-
-          <div class="quick">
-            <div class="quickTop">
-              <div>
-                <h3>Paramètres</h3>
-                <p>Vendeurs + nom boutique impression.</p>
-              </div>
-              <a class="btn link" href="./planning.html#settingsSection">Gérer</a>
-            </div>
-          </div>
-        </div>
+    <div class="card">
+      <div>
+        <h3>Absences & Retards</h3>
+        <p>Gestion des retards, maladie, congés, formation.</p>
       </div>
-
-      <div class="card">
-        <div class="sectionTitle">
-          <h2>Données</h2>
-          <div class="hint">Stockage local</div>
-        </div>
-
-        <div class="panel">
-          <div class="panelHead">
-            <div class="title">📦 Santé</div>
-            <span class="badge green" id="healthState">OK</span>
-          </div>
-          <div class="small" id="healthHint">—</div>
-          <div class="hr"></div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <span class="badge" id="hStaff">Vendeurs : —</span>
-            <span class="badge" id="hEvents">Événements : —</span>
-            <span class="badge" id="hTasks">Tâches : —</span>
-            <span class="badge" id="hPurch">Achats : —</span>
-            <span class="badge" id="hClients">Rappels : —</span>
-          </div>
-        </div>
-
-        <div class="hr"></div>
-
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn ok" id="exportBtn2">Exporter maintenant</button>
-          <button class="btn danger" id="resetBtn2">Réinitialiser</button>
-        </div>
-      </div>
-
+      <a href="absences.html" class="btn yellow">Gérer</a>
     </div>
 
+    <div class="card">
+      <div>
+        <h3>Éditions mensuelles</h3>
+        <p>Récap global + édition individuelle salarié.</p>
+      </div>
+      <a href="edition.html" class="btn green">Générer</a>
+    </div>
+
+    <div class="card">
+      <div>
+        <h3>Achats magasin</h3>
+        <p>Commandes fournisseurs & suivi réception.</p>
+      </div>
+      <a href="achats.html" class="btn blue">Ouvrir</a>
+    </div>
+
+    <div class="card">
+      <div>
+        <h3>Tâches internes</h3>
+        <p>Organisation quotidienne & rappels.</p>
+      </div>
+      <a href="taches.html" class="btn dark">Ouvrir</a>
+    </div>
+
+    <div class="card">
+      <div>
+        <h3>Rappels clients</h3>
+        <p>Suivi post-vente & relances.</p>
+      </div>
+      <a href="clients.html" class="btn red">Ouvrir</a>
+    </div>
+
+    <div class="card">
+      <div>
+        <h3>Paramètres</h3>
+        <p>Vendeurs & configuration générale.</p>
+      </div>
+      <a href="parametres.html" class="btn dark">Configurer</a>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Données enregistrées localement sur ce poste.
   </div>
 
 </div>
 
 <script>
-const HUB_KEY = "stoom_manager_shared_v1";
-const $ = (s)=>document.querySelector(s);
+const KEY="stoom_manager_ultimate_v2"
+const state=JSON.parse(localStorage.getItem(KEY)||"{}")
 
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]))}
 function ymd(d){
-  const x=(d instanceof Date)?d:new Date(d);
-  return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`;
-}
-function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
-function loadState(){
-  try{ return JSON.parse(localStorage.getItem(HUB_KEY)||"{}"); }
-  catch(e){ return {}; }
-}
-function setStatus(t){ const el=$("#saveStatus"); if(el) el.textContent=t; }
-function fmtDate(iso){
-  const p=(iso||"").split("-");
-  if(p.length!==3) return iso||"";
-  return `${p[2]}/${p[1]}/${p[0]}`;
-}
-function pickText(o, keys){
-  for(const k of keys){
-    if(o && typeof o[k]==="string" && o[k].trim()) return o[k].trim();
-  }
-  return "";
-}
-function getDue(o){ return pickText(o, ["due","date","when","rappelDate","nextDate","deadline"]); }
-function getStatusField(o){ return pickText(o, ["status","etat","state"]); }
-function getDoneAt(o){ return pickText(o, ["doneAt","done_at","closedAt","completedAt"]); }
-function getTitle(o){
-  return pickText(o, ["title","name","label","task","objet","client","what","motif","note"]) || "(sans titre)";
-}
-function getVendor(o){ return pickText(o, ["vendor","vendeur","staff","who","assignedTo"]); }
-
-function renderClock(){
-  const d=new Date();
-  const pad=n=>String(n).padStart(2,"0");
-  $("#clock").textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const x=new Date(d)
+  return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0")
 }
 
-function rowHtml(item, kind){
-  const due = getDue(item);
-  const vendor = getVendor(item);
-  const today = ymd(new Date());
-  const late = due && due < today;
-  const soon = due === today;
+const today=ymd(new Date())
 
-  const tag = late ? `<span class="badge red">📅 ${esc(fmtDate(due))} • en retard</span>`
-           : soon ? `<span class="badge yellow">📅 ${esc(fmtDate(due))} • aujourd’hui</span>`
-           : due  ? `<span class="badge blue">📅 ${esc(fmtDate(due))}</span>`
-           : `<span class="badge">📅 —</span>`;
+const tasks=(state.tasks||[])
+const purchases=(state.purchases||[])
+const clients=(state.clientFollowups||[])
+const events=(state.events||[])
 
-  const who = vendor ? `<span class="badge">👤 ${esc(vendor)}</span>` : ``;
+document.getElementById("kTasks").textContent=
+  tasks.filter(t=>t.status==="todo" && t.due && t.due<today).length
 
-  const href = kind==="tasks" ? "./taches.html"
-            : kind==="purch" ? "./achats.html"
-            : "./clients.html";
+document.getElementById("kPurch").textContent=
+  purchases.filter(p=>p.status==="todo").length
 
-  return `
-    <a class="link" href="${href}">
-      <div class="rowItem">
-        <div class="rowLeft">
-          <div class="rowTitle">${esc(getTitle(item))}</div>
-          <div class="rowMeta">
-            ${tag}
-            ${who}
-          </div>
-        </div>
-      </div>
-    </a>
-  `;
-}
+document.getElementById("kClients").textContent=
+  clients.filter(c=>c.status==="todo" && c.due && c.due<today).length
 
-function renderHub(){
-  const s = loadState();
-  const today = ymd(new Date());
-  const weekEnd = ymd(addDays(new Date(), 7));
-
-  const tasks = Array.isArray(s.tasks) ? s.tasks : [];
-  const purchases = Array.isArray(s.purchases) ? s.purchases : [];
-  const clients = Array.isArray(s.clientFollowups) ? s.clientFollowups : [];
-  const staff = Array.isArray(s.staff) ? s.staff : [];
-  const events = Array.isArray(s.events) ? s.events : [];
-
-  // ----- TÂCHES -----
-  const tTodo = tasks.filter(t => (getStatusField(t)||"").toLowerCase()==="todo");
-  const tDone = tasks.filter(t => (getStatusField(t)||"").toLowerCase()==="done");
-  const tLate = tTodo.filter(t => (getDue(t)||"") && getDue(t) < today);
-  const tToday = tTodo.filter(t => getDue(t) === today);
-  const tDoneToday = tDone.filter(t => (getDoneAt(t)||"").startsWith(today));
-  const tWeek = tTodo.filter(t => {
-    const d=getDue(t)||"";
-    return d && d>=today && d<=weekEnd;
-  });
-
-  $("#kpiTasksVal").textContent = String(tLate.length);
-  $("#kpiTasksHint").textContent = `${tToday.length} aujourd’hui • ${tWeek.length} sur 7 jours`;
-  $("#chipTasksLate").textContent = `En retard : ${tLate.length}`;
-  $("#chipTasksToday").textContent = `Aujourd’hui : ${tToday.length}`;
-  $("#chipTasksDone").textContent = `Faites : ${tDoneToday.length}`;
-
-  const tPrior = tTodo.slice().sort((a,b)=>{
-    const da=getDue(a)||"9999-12-31";
-    const db=getDue(b)||"9999-12-31";
-    return da.localeCompare(db);
-  }).slice(0,5);
-
-  if(!tPrior.length){
-    $("#tasksList").innerHTML="";
-    $("#tasksEmpty").style.display="block";
-  }else{
-    $("#tasksEmpty").style.display="none";
-    $("#tasksList").innerHTML = tPrior.map(x=>rowHtml(x,"tasks")).join("");
-  }
-
-  // ----- ACHATS -----
-  const pTodo = purchases.filter(p => {
-    const st=(getStatusField(p)||"").toLowerCase();
-    return st==="todo" || st==="to_buy" || st==="acheter" || st==="a_acheter";
-  });
-  const pOrd = purchases.filter(p => {
-    const st=(getStatusField(p)||"").toLowerCase();
-    return st.includes("order") || st.includes("command") || st.includes("commande");
-  });
-  const pRec = purchases.filter(p => {
-    const st=(getStatusField(p)||"").toLowerCase();
-    return st.includes("recu") || st.includes("received") || st.includes("done");
-  });
-  $("#kpiPurchVal").textContent = String(pTodo.length);
-  $("#kpiPurchHint").textContent = `${pOrd.length} commandé(s) • ${pRec.length} reçu(s)`;
-  $("#chipPurchTodo").textContent = `À acheter : ${pTodo.length}`;
-  $("#chipPurchOrd").textContent = `Commandés : ${pOrd.length}`;
-  $("#chipPurchRec").textContent = `Reçus : ${pRec.length}`;
-
-  const pPrior = pTodo.slice().sort((a,b)=>{
-    const da=getDue(a)||"9999-12-31";
-    const db=getDue(b)||"9999-12-31";
-    return da.localeCompare(db);
-  }).slice(0,5);
-
-  if(!pPrior.length){
-    $("#purchList").innerHTML="";
-    $("#purchEmpty").style.display="block";
-  }else{
-    $("#purchEmpty").style.display="none";
-    $("#purchList").innerHTML = pPrior.map(x=>rowHtml(x,"purch")).join("");
-  }
-
-  // ----- CLIENTS -----
-  const cTodo = clients.filter(c => (getStatusField(c)||"").toLowerCase()==="todo");
-  const cDone = clients.filter(c => (getStatusField(c)||"").toLowerCase()==="done");
-  const cLate = cTodo.filter(c => (getDue(c)||"") && getDue(c) < today);
-  const cWeek = cTodo.filter(c => {
-    const d=getDue(c)||"";
-    return d && d>=today && d<=weekEnd;
-  });
-  const cDoneToday = cDone.filter(c => (getDoneAt(c)||"").startsWith(today));
-
-  $("#kpiClientsVal").textContent = String(cLate.length);
-  $("#kpiClientsHint").textContent = `${cWeek.length} sur 7 jours • ${cDoneToday.length} faits aujourd’hui`;
-  $("#chipClientsLate").textContent = `En retard : ${cLate.length}`;
-  $("#chipClientsWeek").textContent = `7 jours : ${cWeek.length}`;
-  $("#chipClientsDone").textContent = `Faits : ${cDoneToday.length}`;
-
-  const cPrior = cTodo.slice().sort((a,b)=>{
-    const da=getDue(a)||"9999-12-31";
-    const db=getDue(b)||"9999-12-31";
-    return da.localeCompare(db);
-  }).slice(0,5);
-
-  if(!cPrior.length){
-    $("#clientsList").innerHTML="";
-    $("#clientsEmpty").style.display="block";
-  }else{
-    $("#clientsEmpty").style.display="none";
-    $("#clientsList").innerHTML = cPrior.map(x=>rowHtml(x,"clients")).join("");
-  }
-
-  // ----- Santé -----
-  $("#hStaff").textContent = `Vendeurs : ${staff.length || 0}`;
-  $("#hEvents").textContent = `Événements : ${events.length || 0}`;
-  $("#hTasks").textContent = `Tâches : ${tasks.length || 0}`;
-  $("#hPurch").textContent = `Achats : ${purchases.length || 0}`;
-  $("#hClients").textContent = `Rappels : ${clients.length || 0}`;
-
-  const hasData = (staff.length+events.length+tasks.length+purchases.length+clients.length)>0;
-  $("#healthState").textContent = hasData ? "OK" : "VIDE";
-  $("#healthState").className = hasData ? "badge green" : "badge";
-  $("#healthHint").textContent = hasData
-    ? "Données détectées. Pense à exporter régulièrement."
-    : "Aucune donnée détectée pour l’instant (normal au début).";
-}
-
-function exportData(){
-  const raw = localStorage.getItem(HUB_KEY) || "{}";
-  const blob=new Blob([raw],{type:"application/json"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url;
-  a.download=`stoom-manager-export-${ymd(new Date())}.json`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-function importData(){
-  const inp=document.createElement("input");
-  inp.type="file";
-  inp.accept="application/json";
-  inp.addEventListener("change", async ()=>{
-    const f=inp.files && inp.files[0];
-    if(!f) return;
-    const txt=await f.text();
-    try{
-      JSON.parse(txt);
-      localStorage.setItem(HUB_KEY, txt);
-      setStatus("Importé");
-      renderHub();
-      alert("Import réussi.");
-    }catch(e){
-      alert("Fichier invalide.");
-    }
-  });
-  inp.click();
-}
-function resetAll(){
-  if(!confirm("Réinitialiser toutes les données locales sur ce poste ?")) return;
-  localStorage.removeItem(HUB_KEY);
-  setStatus("Réinitialisé");
-  renderHub();
-}
-
-(function init(){
-  renderClock();
-  setInterval(renderClock, 15000);
-
-  $("#exportBtn").addEventListener("click", exportData);
-  $("#exportBtn2").addEventListener("click", exportData);
-  $("#importBtn").addEventListener("click", importData);
-  $("#resetBtn").addEventListener("click", resetAll);
-  $("#resetBtn2").addEventListener("click", resetAll);
-
-  setStatus("Prêt");
-  renderHub();
-
-  window.addEventListener("storage", (e)=>{
-    if(e.key===HUB_KEY){ setStatus("Mis à jour"); renderHub(); }
-  });
-})();
+document.getElementById("kEvents").textContent=
+  events.filter(e=>e.date && e.date.startsWith(today.slice(0,7))).length
 </script>
+
 </body>
 </html>
