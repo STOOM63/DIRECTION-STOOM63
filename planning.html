@@ -428,12 +428,13 @@ function ymd(d){
 }
 function startOfWeekMonday(d=new Date()){
   const x = new Date(d);
-  const day = (x.getDay() + 6) % 7; // lun=0 ... dim=6
-  x.setDate(x.getDate() - day);
+  const day = x.getDay(); // 0 = dimanche
+  const diff = day === 0 ? -6 : 1 - day; 
+  x.setDate(x.getDate() + diff);
   x.setHours(0,0,0,0);
   return x;
 }
-  function dayNameFrFromISO(iso){
+ function dayNameFrFromISO(iso){
   const d = parseLocalYMD(iso);
   const names = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
   return names[(d.getDay() + 6) % 7];
@@ -944,10 +945,14 @@ function refresh(){
   ensureGrid();
   save();
 
-  $("#weekStart").addEventListener("input",()=>{
-    state.planning.weekStart=$("#weekStart").value || ymd(startOfWeekMonday());
-    save(); buildTable();
-  });
+ $("#weekStart").addEventListener("input",()=>{
+  const selected = parseLocalYMD($("#weekStart").value);
+  const monday = startOfWeekMonday(selected);
+  state.planning.weekStart = ymd(monday);
+  save();
+  buildTable();
+});
+  
   $("#rangeSel").addEventListener("change",()=>{
     state.planning.range=$("#rangeSel").value;
     save(); buildTable();
